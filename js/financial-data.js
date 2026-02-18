@@ -218,59 +218,67 @@ const financialData = {
   },
 
   // Growth Scenarios for 2026
+  // Target: £10M annual revenue, 70:30 NHS:Private mix (from April), 90:10 ADHD:Autism
+  // No NHS until April 2026
   scenarios: {
     pessimistic: {
       name: "Pessimistic",
-      description: "Conservative growth from 300 to 750 patients/month (50% of target)",
+      description: "Conservative growth to £5M annual (50% of target)",
       projections_2026: {
-        january: { b2c_adhd: 280, b2c_asd: 8, nhs_adhd: 15, nhs_asd: 2 },
-        february: { b2c_adhd: 390, b2c_asd: 15, nhs_adhd: 40, nhs_asd: 10 },
-        march: { b2c_adhd: 380, b2c_asd: 20, nhs_adhd: 70, nhs_asd: 18 },
-        april: { b2c_adhd: 350, b2c_asd: 25, nhs_adhd: 120, nhs_asd: 30 },
-        may: { b2c_adhd: 320, b2c_asd: 30, nhs_adhd: 200, nhs_asd: 50 },
-        june: { b2c_adhd: 300, b2c_asd: 35, nhs_adhd: 280, nhs_asd: 70 },
-        july: { b2c_adhd: 280, b2c_asd: 40, nhs_adhd: 350, nhs_asd: 88 },
-        august: { b2c_adhd: 260, b2c_asd: 43, nhs_adhd: 385, nhs_asd: 96 },
-        september: { b2c_adhd: 180, b2c_asd: 45, nhs_adhd: 420, nhs_asd: 105 },
-        october: { b2c_adhd: 180, b2c_asd: 45, nhs_adhd: 420, nhs_asd: 105 },
-        november: { b2c_adhd: 180, b2c_asd: 45, nhs_adhd: 420, nhs_asd: 105 },
-        december: { b2c_adhd: 180, b2c_asd: 45, nhs_adhd: 420, nhs_asd: 105 }
+        // Jan-Mar: B2C only (no NHS)
+        january: { b2c_adhd: 182, b2c_asd: 3, nhs_adhd: 0, nhs_asd: 0 },   // Actual: 185 patients
+        february: { b2c_adhd: 180, b2c_asd: 20, nhs_adhd: 0, nhs_asd: 0 },
+        march: { b2c_adhd: 180, b2c_asd: 20, nhs_adhd: 0, nhs_asd: 0 },
+        // Apr onwards: NHS starts, 70:30 NHS:Private, 90:10 ADHD:Autism
+        april: { b2c_adhd: 72, b2c_asd: 8, nhs_adhd: 162, nhs_asd: 18 },
+        may: { b2c_adhd: 81, b2c_asd: 9, nhs_adhd: 180, nhs_asd: 20 },
+        june: { b2c_adhd: 90, b2c_asd: 10, nhs_adhd: 198, nhs_asd: 22 },
+        july: { b2c_adhd: 99, b2c_asd: 11, nhs_adhd: 216, nhs_asd: 24 },
+        august: { b2c_adhd: 108, b2c_asd: 12, nhs_adhd: 234, nhs_asd: 26 },
+        september: { b2c_adhd: 117, b2c_asd: 13, nhs_adhd: 252, nhs_asd: 28 },
+        october: { b2c_adhd: 117, b2c_asd: 13, nhs_adhd: 252, nhs_asd: 28 },
+        november: { b2c_adhd: 117, b2c_asd: 13, nhs_adhd: 252, nhs_asd: 28 },
+        december: { b2c_adhd: 117, b2c_asd: 13, nhs_adhd: 252, nhs_asd: 28 }
       }
     },
     realistic: {
       name: "Realistic",
-      description: "Growing from 300 to 1500 patients/month by mid-2026 (30% private, 70% NHS)",
+      description: "Target £10M annual revenue, 70:30 NHS:Private, 90:10 ADHD:Autism (NHS from April)",
       projections_2026: {
-        january: { b2c_adhd: 290, b2c_asd: 10, nhs_adhd: 25, nhs_asd: 5 },
-        february: { b2c_adhd: 380, b2c_asd: 25, nhs_adhd: 80, nhs_asd: 20 },
-        march: { b2c_adhd: 360, b2c_asd: 35, nhs_adhd: 140, nhs_asd: 35 },
-        april: { b2c_adhd: 350, b2c_asd: 50, nhs_adhd: 250, nhs_asd: 63 },
-        may: { b2c_adhd: 340, b2c_asd: 60, nhs_adhd: 400, nhs_asd: 100 },
-        june: { b2c_adhd: 330, b2c_asd: 70, nhs_adhd: 560, nhs_asd: 140 },
-        july: { b2c_adhd: 320, b2c_asd: 80, nhs_adhd: 700, nhs_asd: 175 },
-        august: { b2c_adhd: 340, b2c_asd: 85, nhs_adhd: 770, nhs_asd: 193 },
-        september: { b2c_adhd: 360, b2c_asd: 90, nhs_adhd: 840, nhs_asd: 210 },
-        october: { b2c_adhd: 360, b2c_asd: 90, nhs_adhd: 840, nhs_asd: 210 },
-        november: { b2c_adhd: 360, b2c_asd: 90, nhs_adhd: 840, nhs_asd: 210 },
-        december: { b2c_adhd: 360, b2c_asd: 90, nhs_adhd: 840, nhs_asd: 210 }
+        // Jan-Mar: B2C only (no NHS) - based on Jan actuals
+        january: { b2c_adhd: 182, b2c_asd: 3, nhs_adhd: 0, nhs_asd: 0 },   // Actual: 185 patients, £174K
+        february: { b2c_adhd: 200, b2c_asd: 22, nhs_adhd: 0, nhs_asd: 0 }, // Growing B2C
+        march: { b2c_adhd: 225, b2c_asd: 25, nhs_adhd: 0, nhs_asd: 0 },    // Pre-NHS ramp
+        // Apr onwards: NHS starts, targeting 70:30 NHS:Private, 90:10 ADHD:Autism
+        april: { b2c_adhd: 108, b2c_asd: 12, nhs_adhd: 252, nhs_asd: 28 },   // ~400 total, ~£540K
+        may: { b2c_adhd: 126, b2c_asd: 14, nhs_adhd: 288, nhs_asd: 32 },     // ~460 total, ~£620K
+        june: { b2c_adhd: 144, b2c_asd: 16, nhs_adhd: 324, nhs_asd: 36 },    // ~520 total, ~£700K
+        july: { b2c_adhd: 162, b2c_asd: 18, nhs_adhd: 360, nhs_asd: 40 },    // ~580 total, ~£780K
+        august: { b2c_adhd: 180, b2c_asd: 20, nhs_adhd: 396, nhs_asd: 44 },  // ~640 total, ~£860K
+        september: { b2c_adhd: 189, b2c_asd: 21, nhs_adhd: 423, nhs_asd: 47 }, // ~680 total, ~£920K
+        october: { b2c_adhd: 198, b2c_asd: 22, nhs_adhd: 450, nhs_asd: 50 },  // ~720 total, ~£970K
+        november: { b2c_adhd: 207, b2c_asd: 23, nhs_adhd: 468, nhs_asd: 52 }, // ~750 total, ~£1.0M
+        december: { b2c_adhd: 207, b2c_asd: 23, nhs_adhd: 468, nhs_asd: 52 }  // Maintain Dec levels
       }
     },
     optimistic: {
-      name: "Optimistic", 
-      description: "Aggressive scaling from 300 to 3000 patients/month (2x target)",
+      name: "Optimistic",
+      description: "Aggressive scaling to £15M annual (150% of target)",
       projections_2026: {
-        january: { b2c_adhd: 300, b2c_asd: 15, nhs_adhd: 50, nhs_asd: 10 },
-        february: { b2c_adhd: 380, b2c_asd: 40, nhs_adhd: 160, nhs_asd: 40 },
-        march: { b2c_adhd: 360, b2c_asd: 60, nhs_adhd: 280, nhs_asd: 70 },
-        april: { b2c_adhd: 350, b2c_asd: 80, nhs_adhd: 500, nhs_asd: 125 },
-        may: { b2c_adhd: 340, b2c_asd: 100, nhs_adhd: 800, nhs_asd: 200 },
-        june: { b2c_adhd: 400, b2c_asd: 120, nhs_adhd: 1120, nhs_asd: 280 },
-        july: { b2c_adhd: 500, b2c_asd: 140, nhs_adhd: 1400, nhs_asd: 350 },
-        august: { b2c_adhd: 600, b2c_asd: 160, nhs_adhd: 1540, nhs_asd: 385 },
-        september: { b2c_adhd: 720, b2c_asd: 180, nhs_adhd: 1680, nhs_asd: 420 },
-        october: { b2c_adhd: 720, b2c_asd: 180, nhs_adhd: 1680, nhs_asd: 420 },
-        november: { b2c_adhd: 720, b2c_asd: 180, nhs_adhd: 1680, nhs_asd: 420 },
-        december: { b2c_adhd: 720, b2c_asd: 180, nhs_adhd: 1680, nhs_asd: 420 }
+        // Jan-Mar: B2C only (no NHS)
+        january: { b2c_adhd: 182, b2c_asd: 3, nhs_adhd: 0, nhs_asd: 0 },
+        february: { b2c_adhd: 225, b2c_asd: 25, nhs_adhd: 0, nhs_asd: 0 },
+        march: { b2c_adhd: 270, b2c_asd: 30, nhs_adhd: 0, nhs_asd: 0 },
+        // Apr onwards: NHS starts aggressively
+        april: { b2c_adhd: 162, b2c_asd: 18, nhs_adhd: 378, nhs_asd: 42 },
+        may: { b2c_adhd: 189, b2c_asd: 21, nhs_adhd: 441, nhs_asd: 49 },
+        june: { b2c_adhd: 216, b2c_asd: 24, nhs_adhd: 504, nhs_asd: 56 },
+        july: { b2c_adhd: 243, b2c_asd: 27, nhs_adhd: 567, nhs_asd: 63 },
+        august: { b2c_adhd: 270, b2c_asd: 30, nhs_adhd: 630, nhs_asd: 70 },
+        september: { b2c_adhd: 297, b2c_asd: 33, nhs_adhd: 693, nhs_asd: 77 },
+        october: { b2c_adhd: 315, b2c_asd: 35, nhs_adhd: 735, nhs_asd: 82 },
+        november: { b2c_adhd: 333, b2c_asd: 37, nhs_adhd: 777, nhs_asd: 86 },
+        december: { b2c_adhd: 333, b2c_asd: 37, nhs_adhd: 777, nhs_asd: 86 }
       }
     }
   },
@@ -280,18 +288,20 @@ const financialData = {
 
   // Legacy: Keep for backward compatibility (matches realistic scenario)
   projections_2026: {
-    january: { b2c_adhd: 400, b2c_asd: 15, nhs_adhd: 40, nhs_asd: 10 },
-    february: { b2c_adhd: 380, b2c_asd: 25, nhs_adhd: 80, nhs_asd: 20 },
-    march: { b2c_adhd: 360, b2c_asd: 35, nhs_adhd: 140, nhs_asd: 35 },
-    april: { b2c_adhd: 350, b2c_asd: 50, nhs_adhd: 250, nhs_asd: 63 },
-    may: { b2c_adhd: 340, b2c_asd: 60, nhs_adhd: 400, nhs_asd: 100 },
-    june: { b2c_adhd: 330, b2c_asd: 70, nhs_adhd: 560, nhs_asd: 140 },
-    july: { b2c_adhd: 320, b2c_asd: 80, nhs_adhd: 700, nhs_asd: 175 },
-    august: { b2c_adhd: 340, b2c_asd: 85, nhs_adhd: 770, nhs_asd: 193 },
-    september: { b2c_adhd: 360, b2c_asd: 90, nhs_adhd: 840, nhs_asd: 210 },
-    october: { b2c_adhd: 360, b2c_asd: 90, nhs_adhd: 840, nhs_asd: 210 },
-    november: { b2c_adhd: 360, b2c_asd: 90, nhs_adhd: 840, nhs_asd: 210 },
-    december: { b2c_adhd: 360, b2c_asd: 90, nhs_adhd: 840, nhs_asd: 210 }
+    // Jan-Mar: B2C only (no NHS) - based on Jan actuals
+    january: { b2c_adhd: 182, b2c_asd: 3, nhs_adhd: 0, nhs_asd: 0 },
+    february: { b2c_adhd: 200, b2c_asd: 22, nhs_adhd: 0, nhs_asd: 0 },
+    march: { b2c_adhd: 225, b2c_asd: 25, nhs_adhd: 0, nhs_asd: 0 },
+    // Apr onwards: NHS starts, 70:30 NHS:Private, 90:10 ADHD:Autism
+    april: { b2c_adhd: 108, b2c_asd: 12, nhs_adhd: 252, nhs_asd: 28 },
+    may: { b2c_adhd: 126, b2c_asd: 14, nhs_adhd: 288, nhs_asd: 32 },
+    june: { b2c_adhd: 144, b2c_asd: 16, nhs_adhd: 324, nhs_asd: 36 },
+    july: { b2c_adhd: 162, b2c_asd: 18, nhs_adhd: 360, nhs_asd: 40 },
+    august: { b2c_adhd: 180, b2c_asd: 20, nhs_adhd: 396, nhs_asd: 44 },
+    september: { b2c_adhd: 189, b2c_asd: 21, nhs_adhd: 423, nhs_asd: 47 },
+    october: { b2c_adhd: 198, b2c_asd: 22, nhs_adhd: 450, nhs_asd: 50 },
+    november: { b2c_adhd: 207, b2c_asd: 23, nhs_adhd: 468, nhs_asd: 52 },
+    december: { b2c_adhd: 207, b2c_asd: 23, nhs_adhd: 468, nhs_asd: 52 }
   },
 
   // Multi-year projections (aggressive expansion strategy)
@@ -383,12 +393,12 @@ const financialData = {
     // ADHD Assessment Only (£590)
     adhd_assessment_only: {
       revenue: 590,
-      clinical_costs: 550,
+      clinical_costs: 320,
       tech_admin: 60,
       cac: 300,
-      total_costs: 910,
-      gross_profit: -320,  // Loss leader - converts to packages
-      margin: -0.54,
+      total_costs: 680,
+      gross_profit: -90,  // Loss leader - converts to packages
+      margin: -0.15,
       notes: 'Entry product - most convert to Complete Care'
     },
     // ADHD Complete Care (£1,200) - Main product
@@ -406,12 +416,12 @@ const financialData = {
     // ADHD Premium (£1,990)
     adhd_premium: {
       revenue: 1990,
-      clinical_costs: 550,
+      clinical_costs: 650,
       tech_admin: 60,
       cac: 300,
-      total_costs: 910,
-      gross_profit: 1080,
-      margin: 0.54,
+      total_costs: 1010,
+      gross_profit: 980,
+      margin: 0.49,
       notes: 'High-value package with extended support'
     },
     // Adult Autism Assessment (£1,900)
@@ -439,14 +449,14 @@ const financialData = {
     // Child ADHD Assessment (£890)
     child_adhd: {
       revenue: 890,
-      clinical_costs: 550,
+      clinical_costs: 320,
       tech_admin: 60,
       cac: 300,
-      total_costs: 910,
-      gross_profit: -20,
-      margin: -0.02,
+      total_costs: 680,
+      gross_profit: 210,
+      margin: 0.24,
       subscription_potential: 1050, // Child 6-month plan
-      notes: 'Break-even, upsell to treatment plans'
+      notes: 'Profitable with treatment plan upsell'
     },
     // Adult 6-Month Treatment Plan (£750)
     adult_6m_plan: {
@@ -496,10 +506,10 @@ const financialData = {
 
   // Key Performance Metrics (updated with unit economics)
   metrics: {
-    year_1_revenue_target: 21329000, // Updated to match actual 2026 projections calculation
-    year_1_patients_target: 12916, // Updated to match actual projections
-    blended_gross_margin: 0.484, // Weighted average based on updated unit economics: 48.4%
-    avg_revenue_per_patient: 1651, // Recalculated: 21,329,000 / 12,916
+    year_1_revenue_target: 10000000, // £10M target for 2026
+    year_1_patients_target: 6500, // Estimated patients for £10M target
+    blended_gross_margin: 0.50, // ~50% blended margin with NHS
+    avg_revenue_per_patient: 1540, // Blended average with NHS/Private mix
     monthly_fixed_costs_2026: 8250, // Insurance + CQC + Office + Admin + 10% overhead
     annual_fixed_costs_2026: 99000
   },
