@@ -66,28 +66,36 @@ Central data repository containing:
 | ADHD Assessment Only | £590 | B2C |
 | ADHD Complete Care | £1,200 | B2C |
 | ADHD Premium | £1,990 | B2C |
-| ASD Assessment | £1,750 | B2C/NHS |
+| Child ADHD | £890 | B2C |
+| ASD Assessment (Adult/Child) | £1,900 | B2C/NHS |
 | NHS ADHD Contract | £1,350 | NHS |
 | NHS ASD Contract | £2,000 | NHS |
 
 ### Revenue Channels
 1. **B2C Direct** - Private patients
-2. **NHS Right to Choose** - Contract referrals (launching Dec 2025)
+2. **NHS Right to Choose** - Contract referrals (launching April 2026)
 3. **Subscriptions** - 6-month treatment plans (50% take rate)
 
-### Unit Economics
-- B2C ADHD: 31% margin (£369 profit/patient)
-- B2C ASD: 51% margin (£892 profit/patient)
-- NHS ADHD: 55% margin (£739 profit/patient)
-- NHS ASD: 68% margin (£1,362 profit/patient)
+### Unit Economics (Updated Feb 2026)
+| Service | Revenue | Clinical | Tech/Admin | CAC | Margin |
+|---------|---------|----------|------------|-----|--------|
+| ADHD Assessment Only | £590 | £320 | £60 | £300 | -15% |
+| ADHD Complete Care | £1,200 | £550 | £60 | £300 | 24% |
+| ADHD Premium | £1,990 | £650 | £60 | £300 | 49% |
+| Child ADHD | £890 | £320 | £60 | £300 | 24% |
+| ASD Assessment | £1,900 | £550 | £60 | £300 | 52% |
+| NHS ADHD | £1,350 | £550 | £60 | £0 | 55% |
+| NHS ASD | £2,000 | £550 | £60 | £0 | 70% |
 
 ## Growth Scenarios (2026)
 
-| Scenario | Patients | Revenue | Description |
-|----------|----------|---------|-------------|
-| Pessimistic | ~750/mo | ~£10M | 50% of target |
-| Realistic | ~1,500/mo | ~£21M | 30% private, 70% NHS |
-| Optimistic | ~3,000/mo | ~£40M | 2x target |
+| Scenario | Annual Revenue | Description |
+|----------|----------------|-------------|
+| Pessimistic | ~£5M | 50% of target |
+| Realistic | ~£10M | 70:30 NHS:Private, 90:10 ADHD:Autism |
+| Optimistic | ~£15M | 150% of target |
+
+**Note:** NHS launches April 2026. Jan-Mar is B2C only.
 
 ## Key Metrics to Track
 - Total patients (monthly/annual)
@@ -150,19 +158,39 @@ Central data repository containing:
 - Primary: Stripe export (`unified_payments.csv`)
 - Analysis script: `scripts/analyze_stripe.py`
 
-## Team
-- **Armando** - [Role TBD]
-- **Daniel** - [Role TBD]
-- **Kayode** - [Role TBD]
-- **Dor** - [Role TBD]
+## Team (28 people)
+
+### Leadership & Vision
+- **Daniel Shichor** - CEO & Co-Founder
+- **Dor Cohen** - COO & Co-Founder
+
+### Management & Operations
+- **Dr. Armando Muro** - Medical Director
+- **Harry Bradley** - Head of Operations
+- **Ami Andrews** - Head of Clinical Operations
+- **Paul Houghton** - Head of Autism Pathway
+- **Carl Ellis** - ADHD Clinical Lead
+- **Adil Bhaloda** - Prescribing Pathway Lead
+
+### Clinical Team
+- **12 ADHD Assessors** (Psychiatrists)
+- **3 Autism Assessment Team** (Clinical Psychologists + SLT)
+- **3 Prescribers** (Nurse/Pharmacist Independent Prescribers)
+- **3 Support Staff** (QA, Patient Support)
+
+### Key Advisor
+- **Colbert Ncube** - NHS Partnership Lead (14 years NHS experience)
+
+## Funding
+- **Seed Round (Completed):** £250K
+- **Series A (Current):** Raising £3M
+- **Target:** £10M revenue in 2026
 
 ## TODO / Improvements
 - [ ] Extract inline CSS to `css/styles.css`
-- [ ] Update image paths to new asset structure
 - [ ] Add interactive charts (Chart.js consideration)
 - [ ] Mobile responsiveness improvements
 - [ ] Add print/PDF export functionality
-- [ ] Update team bios and roles
 
 ## Notes
 - All financials in GBP (£)
