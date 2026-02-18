@@ -118,29 +118,37 @@ Central data repository containing:
 
 ## Current Status (Last Updated: Feb 2026)
 
-### 2025 Actuals (June - December)
-| Month | Patients | Revenue | Stripe |
-|-------|----------|---------|--------|
-| June | 14 | £11,045 | £11,045 |
-| July | 23 | £21,520 | £21,520 |
-| August | 60 | £51,470 | £73,586 |
-| September | 155 | £144,876 | £144,330 |
-| October | 210 | £195,170 | £170,000 |
-| November | 286 | £258,750 | £245,057 |
-| December | 198 | £179,395 | £168,355 |
-| **2025 Total** | **946** | **£862,226** | |
+### 2025 Actuals - Stripe Verified (June - December)
+| Month | Patients | Revenue |
+|-------|----------|---------|
+| June | 14 | £11,045 |
+| July | 27 | £24,315 |
+| August | 84 | £72,322 |
+| September | 147 | £135,340 |
+| October | 198 | £178,315 |
+| November | 264 | £240,537 |
+| December | 172 | £159,785 |
+| **2025 Total** | **906** | **£821,659** |
 
-### January 2026 Actual
-- Patients: 198
-- Revenue: £179,395
-- Stripe: £168,355
+### 2026 Actuals - Stripe Verified
+| Month | Patients | Revenue |
+|-------|----------|---------|
+| January | 185 | £174,080 |
+| February* | 99 | £99,142 |
+
+*February is partial month (as of Feb 18)
 
 ### Key Milestones Achieved
-- Peak month: November 2025 (286 patients, £258K revenue)
-- Exceeded £75K monthly target - reached £179K in Jan 2026
+- Peak month: November 2025 (264 patients, £240K revenue)
+- Exceeded £75K monthly target - reached £174K in Jan 2026
+- Autism assessments launched January 2026 (8 patients in first month)
+- Total 2025 revenue: £822K (Stripe verified)
 - NHS Launch: December 2025
-- ASD Launch: Q4 2025
 - Seed Round: £250K
+
+### Data Source
+- Primary: Stripe export (`unified_payments.csv`)
+- Analysis script: `scripts/analyze_stripe.py`
 
 ## Team
 - **Armando** - [Role TBD]

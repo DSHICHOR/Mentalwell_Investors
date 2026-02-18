@@ -49,8 +49,9 @@ const financialData = {
     gross_margin_target: 0.53
   },
 
-  // 2025-2026 Actuals (from Monthly Accounts spreadsheet)
+  // 2025-2026 Actuals (from Stripe export - unified_payments)
   // Last updated: February 2026
+  // Source: scripts/analyze_stripe.py
   performance_2025: {
     actuals: {
       june: {
@@ -58,100 +59,93 @@ const financialData = {
         revenue: 11045,
         status: 'actual',
         breakdown: {
-          assessment_only: 5,
-          addon_6m: 3,
-          complete_care: 4,
-          reassessment: 1,
-          renewal_6m: 1
+          adhd_assessment_only: 5,
+          adhd_complete_care: 4,
+          adhd_reassessment: 1,
+          adult_6m_plan: 4
         }
       },
       july: {
-        patients: 23,
-        revenue: 21520,
+        patients: 27,
+        revenue: 24315,
         status: 'actual',
         breakdown: {
-          assessment_only: 8,
-          complete_care: 14,
-          child_assessment: 1
+          adhd_assessment_only: 10,
+          adhd_complete_care: 14,
+          adhd_reassessment: 1,
+          adult_6m_plan: 2
         }
       },
       august: {
-        patients: 60,
-        revenue: 51470,
-        stripe: 73586,
+        patients: 84,
+        revenue: 72322,
         status: 'actual',
         breakdown: {
-          assessment_only: 22,
-          complete_care: 20,
-          reassessment: 2,
-          package_6m: 7,
-          child_assessment: 5,
-          child_package: 4
+          adhd_assessment_only: 27,
+          adhd_complete_care: 26,
+          adhd_reassessment: 3,
+          adult_6m_plan: 6,
+          child_6m_plan: 4,
+          child_adhd_assessment: 17
         }
       },
       september: {
-        patients: 155,
-        revenue: 144876,
-        stripe: 144330,
+        patients: 147,
+        revenue: 135340,
         status: 'actual',
         breakdown: {
-          assessment_only: 34,
-          addon_6m: 13,
-          complete_care: 55,
-          premium: 3,
-          reassessment: 10,
-          child_assessment: 27,
-          child_6m: 11,
-          child_12m: 2
+          adhd_assessment_only: 29,
+          adhd_complete_care: 51,
+          adhd_premium: 2,
+          adhd_reassessment: 10,
+          adult_6m_plan: 14,
+          child_12m_plan: 1,
+          child_6m_plan: 13,
+          child_adhd_assessment: 27
         }
       },
       october: {
-        patients: 210,
-        revenue: 195170,
-        stripe: 170000,
+        patients: 198,
+        revenue: 178315,
         status: 'actual',
         breakdown: {
-          assessment_only: 51,
-          addon_6m: 26,
-          complete_care: 68,
-          premium: 3,
-          reassessment: 4,
-          child_assessment: 32,
-          child_6m: 25,
-          child_12m: 1
+          adhd_assessment_only: 62,
+          adhd_complete_care: 68,
+          adhd_premium: 3,
+          adhd_reassessment: 5,
+          adult_6m_plan: 16,
+          child_6m_plan: 12,
+          child_adhd_assessment: 31
         }
       },
       november: {
-        patients: 286,
-        revenue: 258750,
-        stripe: 245057,
+        patients: 264,
+        revenue: 240537,
         status: 'actual',
         breakdown: {
-          assessment_only: 95,
-          addon_6m: 24,
-          addon_12m: 2,
-          complete_care: 103,
-          premium: 10,
-          reassessment: 6,
-          child_assessment: 31,
-          child_6m: 14,
-          child_12m: 1
+          adhd_assessment_only: 91,
+          adhd_complete_care: 90,
+          adhd_premium: 10,
+          adhd_reassessment: 7,
+          adult_12m_plan: 1,
+          adult_6m_plan: 26,
+          child_6m_plan: 14,
+          child_adhd_assessment: 24
         }
       },
       december: {
-        patients: 198,
-        revenue: 179395,
-        stripe: 168355,
+        patients: 172,
+        revenue: 159785,
         status: 'actual',
         breakdown: {
-          assessment_only: 59,
-          addon_6m: 31,
-          addon_12m: 1,
-          complete_care: 64,
-          premium: 5,
-          reassessment: 5,
-          child_assessment: 19,
-          child_6m: 14
+          adhd_assessment_only: 45,
+          adhd_complete_care: 54,
+          adhd_premium: 6,
+          adhd_reassessment: 3,
+          adult_12m_plan: 1,
+          adult_6m_plan: 30,
+          child_6m_plan: 14,
+          child_adhd_assessment: 19
         }
       }
     },
@@ -159,38 +153,58 @@ const financialData = {
     projections: {}
   },
 
-  // January 2026 Actuals
+  // 2026 Actuals (from Stripe)
   performance_2026: {
     actuals: {
       january: {
-        patients: 198,
-        revenue: 179395,
-        stripe: 168355,
+        patients: 185,
+        revenue: 174080,
         status: 'actual',
         breakdown: {
-          assessment_only: 59,
-          addon_6m: 31,
-          addon_12m: 1,
-          complete_care: 64,
-          premium: 5,
-          reassessment: 5,
-          child_assessment: 19,
-          child_6m: 14
+          adhd_assessment_only: 50,
+          adhd_complete_care: 71,
+          adhd_premium: 4,
+          adhd_reassessment: 3,
+          adult_6m_plan: 25,
+          adult_autism: 2,
+          cyp_autism: 1,
+          child_6m_plan: 11,
+          child_adhd_assessment: 15,
+          consultation: 1
+        }
+      },
+      february: {
+        patients: 99,  // Partial month (as of Feb 18)
+        revenue: 99142,
+        status: 'actual',
+        note: 'Partial month data',
+        breakdown: {
+          adhd_assessment_only: 26,
+          adhd_complete_care: 35,
+          adhd_premium: 3,
+          adhd_reassessment: 2,
+          adult_12m_plan: 1,
+          adult_6m_plan: 13,
+          adult_autism: 6,
+          cyp_autism: 1,
+          child_6m_plan: 3,
+          child_adhd_assessment: 7,
+          consultation: 1
         }
       }
     }
   },
 
-  // 2025 Annual Summary (calculated from actuals)
+  // 2025 Annual Summary (calculated from Stripe actuals)
   annual_summary_2025: {
-    total_patients: 946,  // Jun-Dec 2025
-    total_revenue: 862226,
+    total_patients: 906,  // Jun-Dec 2025 from Stripe
+    total_revenue: 821659,
     months_active: 7,
-    avg_monthly_patients: 135,
-    avg_monthly_revenue: 123175,
+    avg_monthly_patients: 129,
+    avg_monthly_revenue: 117380,
     peak_month: 'November',
-    peak_revenue: 258750,
-    peak_patients: 286
+    peak_revenue: 240537,
+    peak_patients: 264
   },
 
   // Growth Scenarios for 2026
@@ -414,9 +428,10 @@ const financialData = {
       'Complete MHRA certification for AI diagnostic tools',
       'Launch NHS Right to Choose channel (Dec 2025)',
       'Scale clinical team to 8+ psychiatrists',
-      '✓ Achieved £179K monthly revenue (Jan 2026) - exceeded £75K target',
-      '✓ Reached 286 patients/month peak (Nov 2025)',
-      '✓ Total 2025 revenue: £862K across 946 patients',
+      '✓ Achieved £174K monthly revenue (Jan 2026) - exceeded £75K target',
+      '✓ Reached 264 patients/month peak (Nov 2025)',
+      '✓ Total 2025 revenue: £822K across 906 patients (Stripe verified)',
+      '✓ Launched Autism assessments (Jan 2026)',
       'Complete ASD pathway development and launch',
       'Build foundation for 2026 growth trajectory'
     ]
