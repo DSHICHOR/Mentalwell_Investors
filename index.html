@@ -1,0 +1,2741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mentalwell Financial Model & Business Plan</title>
+    <meta name="description" content="Mentalwell's comprehensive financial projections and business plan - AI-powered ADHD and ASD assessment clinic revolutionizing mental healthcare.">
+    <meta name="keywords" content="Mentalwell, ADHD, ASD, mental health, AI, telemedicine, financial model, business plan">
+    <link rel="icon" type="image/png" href="mw.png">
+    
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f8fafc;
+            color: #1e293b;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, #1e40af, #3b82f6);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(30, 64, 175, 0.3);
+        }
+        
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .header-logo {
+            position: absolute;
+            right: 0;
+            flex-shrink: 0;
+            display: none;
+        }
+        
+        .header-text {
+            text-align: center;
+            flex: 1;
+        }
+        
+        .header h1 {
+            margin: 0 0 10px 0;
+            font-size: 32px;
+            font-weight: 700;
+        }
+        
+        .header p {
+            margin: 0;
+            opacity: 0.9;
+            font-size: 18px;
+        }
+        
+        .date-info {
+            margin-top: 15px; 
+            font-size: 14px; 
+            opacity: 0.8;
+        }
+        
+        .section {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.07);
+            border: 1px solid #e2e8f0;
+        }
+        
+        .section h2 {
+            margin: 0 0 20px 0;
+            color: #1e40af;
+            font-size: 24px;
+            font-weight: 600;
+            border-bottom: 3px solid #e2e8f0;
+            padding-bottom: 10px;
+        }
+        
+        .section h3 {
+            color: #1e40af;
+            font-size: 20px;
+            font-weight: 600;
+            margin: 20px 0 15px 0;
+        }
+        
+        .section h4 {
+            color: #1e40af;
+            font-size: 18px;
+            font-weight: 600;
+            margin: 15px 0 10px 0;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            font-size: 14px;
+            overflow-x: auto;
+        }
+        
+        th, td {
+            padding: 12px 15px;
+            text-align: right;
+            border: 1px solid #e2e8f0;
+            min-width: 120px;
+        }
+        
+        th {
+            background: #f1f5f9;
+            font-weight: 600;
+            color: #475569;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        td:first-child, th:first-child {
+            text-align: left;
+            font-weight: 500;
+        }
+        
+        .actual {
+            background: #dcfce7 !important;
+        }
+        
+        .projection {
+            background: #fef3c7 !important;
+        }
+        
+        .total-row {
+            background: #1e40af !important;
+            color: white;
+            font-weight: 600;
+        }
+        
+        .total-row td {
+            background: #1e40af !important;
+        }
+        
+        .metric-card {
+            display: inline-block;
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 10px 10px 10px 0;
+            min-width: 180px;
+            text-align: center;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        
+        .metric-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+        
+        .metric-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1e40af;
+            margin-bottom: 5px;
+        }
+        
+        .metric-label {
+            font-size: 13px;
+            color: #64748b;
+            font-weight: 500;
+        }
+        
+        .highlight {
+            background: #fef2f2;
+            border-left: 4px solid #ef4444;
+            padding: 16px;
+            margin: 15px 0;
+            border-radius: 6px;
+            font-size: 15px;
+        }
+        
+        .highlight strong {
+            color: #dc2626;
+        }
+        
+        .tabs {
+            display: flex;
+            margin-bottom: 25px;
+            border-bottom: 3px solid #e2e8f0;
+            background: white;
+            border-radius: 12px 12px 0 0;
+            overflow-x: auto;
+        }
+        
+        .tab {
+            padding: 15px 25px;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            font-weight: 500;
+            color: #64748b;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            user-select: none;
+        }
+        
+        .tab:hover {
+            color: #1e40af;
+            background: #f8fafc;
+        }
+        
+        .tab.active {
+            color: #1e40af;
+            border-bottom-color: #1e40af;
+            background: #f8fafc;
+            font-weight: 600;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        @media (min-width: 768px) {
+            .grid-2 {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        
+        .grid-3 {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        @media (min-width: 768px) {
+            .grid-3 {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        
+        .card {
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 20px;
+        }
+        
+        .card-success {
+            background: #f0f9ff;
+            border-left: 4px solid #3b82f6;
+        }
+        
+        .card-warning {
+            background: #fef2f2;
+            border-left: 4px solid #ef4444;
+        }
+        
+        .gradient-box {
+            background: linear-gradient(135deg, #1e40af, #3b82f6);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .gradient-box h3, .gradient-box h4 {
+            color: white;
+            margin-top: 0;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            text-align: center;
+        }
+        
+        .stat-item {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 8px;
+        }
+        
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 30px;
+            background: #1e293b;
+            color: white;
+            border-radius: 12px;
+        }
+        
+        .team-photo {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #1e40af;
+            margin: 0 auto 15px auto;
+            display: block;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .team-card {
+            text-align: center;
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        
+        .team-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+        
+        .video-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin: 20px auto;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            height: 0;
+            overflow: hidden;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+            border-radius: 12px;
+        }
+        
+        .demo-section {
+            text-align: center;
+            background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+            padding: 30px;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+        
+        /* Deck slides styling */
+        .deck-slides-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-top: 25px;
+        }
+        
+        .slide-card {
+            background: white;
+            border-radius: 12px;
+            border: 2px solid #e2e8f0;
+            overflow: hidden;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.07);
+        }
+        
+        .slide-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(30, 64, 175, 0.15);
+        }
+        
+        .slide-image-container {
+            position: relative;
+            width: 100%;
+            height: 250px;
+            background: #f8fafc;
+            overflow: hidden;
+        }
+        
+        .slide-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .slide-placeholder {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #1e40af, #3b82f6);
+            color: white;
+            font-size: 24px;
+            font-weight: 600;
+        }
+        
+        .slide-caption {
+            padding: 15px 20px;
+            margin: 0;
+            font-weight: 600;
+            color: #1e40af;
+            font-size: 16px;
+            text-align: center;
+            background: white;
+        }
+
+        /* Responsive improvements */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .header {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 24px;
+            }
+            
+            .section {
+                padding: 15px;
+            }
+            
+            .metric-card {
+                min-width: 140px;
+                padding: 15px;
+                margin: 5px 5px 5px 0;
+            }
+            
+            .metric-value {
+                font-size: 20px;
+            }
+            
+            th, td {
+                padding: 8px 10px;
+                min-width: 100px;
+            }
+            
+            .deck-slides-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .slide-image-container {
+                height: 200px;
+            }
+            
+            .slide-placeholder {
+                font-size: 20px;
+            }
+        }
+        
+        /* Interactive Demo Styles */
+        .controls {
+            background: #f1f5f9;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        
+        .control-group {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .control-group label {
+            min-width: 200px;
+            font-weight: 600;
+            color: #1e40af;
+        }
+        
+        .control-group input[type="number"] {
+            padding: 8px 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: 4px;
+            width: 120px;
+        }
+        
+        .control-group span {
+            font-weight: 600;
+            color: #64748b;
+        }
+        
+        .scenario-selector {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+        }
+        
+        .scenario-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .scenario-btn {
+            padding: 12px 20px;
+            border: 2px solid #3b82f6;
+            background: #3b82f6;
+            color: white;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            flex: 1;
+            text-align: center;
+        }
+        
+        .scenario-btn:hover {
+            border-color: #2563eb;
+            background: #2563eb;
+        }
+        
+        .scenario-btn.active {
+            background: #16a34a;
+            color: white;
+            border-color: #16a34a;
+        }
+        
+        .scenario-description {
+            font-style: italic;
+            color: #64748b;
+            text-align: center;
+            padding: 10px;
+            background: white;
+            border-radius: 4px;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .current-scenario {
+            background: #f0f9ff;
+            border: 2px solid #3b82f6;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .current-scenario h3 {
+            margin: 0 0 5px 0;
+            color: #1e40af;
+        }
+        
+        .current-scenario p {
+            margin: 0;
+            color: #64748b;
+        }
+        
+        #kpi-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .metric-card {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        
+        .metric-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1e40af;
+            margin-bottom: 8px;
+        }
+        
+        .metric-label {
+            font-size: 14px;
+            color: #64748b;
+            font-weight: 500;
+        }
+        
+        /* Smaller parameter controls */
+        .parameter-controls {
+            background: #f8fafc;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .parameter-controls h4 {
+            margin: 0 0 15px 0;
+            font-size: 16px;
+            color: #1e40af;
+            font-weight: 600;
+        }
+        
+        .parameter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .parameter-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .parameter-item label {
+            font-size: 12px;
+            font-weight: 500;
+            color: #1e40af;
+            min-width: 120px;
+        }
+        
+        .parameter-item input[type="number"] {
+            padding: 4px 8px;
+            border: 1px solid #e2e8f0;
+            border-radius: 3px;
+            width: 70px;
+            font-size: 12px;
+        }
+        
+        .parameter-item span {
+            font-size: 12px;
+            color: #64748b;
+            font-weight: 500;
+        }
+        
+        .parameter-controls button {
+            padding: 6px 12px;
+            font-size: 12px;
+            background: #6b7280;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        
+        .parameter-controls button:hover {
+            background: #4b5563;
+        }
+        
+        /* Password Protection Styles */
+        .password-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(30, 64, 175, 0.95);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+        }
+        
+        .password-container {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }
+        
+        .password-container h2 {
+            color: #1e40af;
+            margin: 0 0 10px 0;
+            font-size: 24px;
+        }
+        
+        .password-container p {
+            color: #64748b;
+            margin: 0 0 30px 0;
+            font-size: 16px;
+        }
+        
+        .password-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 16px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+        }
+        
+        .password-input:focus {
+            outline: none;
+            border-color: #1e40af;
+        }
+        
+        .password-submit {
+            background: #1e40af;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+        }
+        
+        .password-submit:hover {
+            background: #1e3a8a;
+        }
+        
+        .password-error {
+            color: #dc2626;
+            font-size: 14px;
+            margin-top: 10px;
+            display: none;
+        }
+        
+        .main-content {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Password Protection Overlay -->
+    <div id="password-overlay" class="password-overlay">
+        <div class="password-container">
+            <h2>🔒 Protected Content</h2>
+            <p>Please enter the password to access the Mentalwell Financial Model</p>
+            <input type="password" id="password-input" class="password-input" placeholder="Enter password" autocomplete="off">
+            <button onclick="checkPassword()" class="password-submit">Access Model</button>
+            <div id="password-error" class="password-error">Incorrect password. Please try again.</div>
+        </div>
+    </div>
+
+    <div id="main-content" class="main-content">
+    <div class="container">
+        <div class="header">
+            <div class="header-content">
+                <div class="header-logo">
+                    <img src="Logo with stroke@4x.png" alt="Mentalwell Logo" style="height: 60px; width: auto;">
+                </div>
+                <div class="header-text">
+                    <h1>Mentalwell Financial Model & Business Plan</h1>
+                    <p>AI-Powered ADHD & ASD Assessment Clinic - Revolutionary Mental Healthcare Technology</p>
+                    <div class="date-info">
+                        Updated: <span id="current-date"></span> | Confidential & Proprietary
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tabs">
+            <div class="tab active" onclick="showTab('company-intro')">🏢 Company Intro</div>
+            <div class="tab" onclick="showTab('overview')">📊 Overview & Actuals</div>
+            <div class="tab" onclick="showTab('projections')">📈 Financial Projections</div>
+            <div class="tab" onclick="showTab('unit-economics')">💰 Unit Economics</div>
+            <div class="tab" onclick="showTab('assumptions')">📋 Key Assumptions</div>
+            <div class="tab" onclick="showTab('business-plan')">🚀 Business Plan</div>
+            <div class="tab" onclick="showTab('hr-planning')">👥 HR Planning</div>
+            <!-- <div class="tab" onclick="showTab('deck')">🎯 Deck</div> -->
+        </div>
+
+        <!-- Overview Tab -->
+        <!-- Company Intro Tab -->
+        <div id="company-intro" class="tab-content active">
+            <div class="section">
+                <h2>Company Intro</h2>
+                
+                <div class="gradient-box">
+                    <h3 style="margin: 0 0 10px 0; color: white;">Mentalwell Company Introduction</h3>
+                  
+                </div>
+
+                <div class="deck-container" style="display: flex; flex-direction: column; gap: 30px; margin-top: 30px;">
+                    
+                    <div class="deck-slide" style="text-align: center; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                        <img src="Intro.png" alt="Company Overview Slide" style="max-width: 100%; height: auto; border-radius: 8px;" onerror="this.style.display='none'">
+                        <p class="slide-caption" style="margin-top: 15px; font-weight: 600; color: #1e40af;">Intro</p>
+                    </div>
+
+                    <div class="deck-slide" style="text-align: center; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                        <img src="story in a slide.png" alt="Market Opportunity Slide" style="max-width: 100%; height: auto; border-radius: 8px;" onerror="this.style.display='none'">
+                        <p class="slide-caption" style="margin-top: 15px; font-weight: 600; color: #1e40af;">Story in a Slide</p>
+                    </div>
+
+                    <div class="deck-slide" style="text-align: center; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                        <img src="problem.png" alt="Technology & AI Slide" style="max-width: 100%; height: auto; border-radius: 8px;" onerror="this.style.display='none'">
+                        <p class="slide-caption" style="margin-top: 15px; font-weight: 600; color: #1e40af;">The Problem</p>
+                    </div>
+
+                    <div class="deck-slide" style="text-align: center; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                        <img src="Solution.png" alt="Technology & AI Slide" style="max-width: 100%; height: auto; border-radius: 8px;" onerror="this.style.display='none'">
+                        <p class="slide-caption" style="margin-top: 15px; font-weight: 600; color: #1e40af;">The Solution</p>
+                    </div>
+
+                    <div class="deck-slide" style="text-align: center; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                        <img src="assessment process.png" alt="Business Model Slide" style="max-width: 100%; height: auto; border-radius: 8px;" onerror="this.style.display='none'">
+                        <p class="slide-caption" style="margin-top: 15px; font-weight: 600; color: #1e40af;">Assessment Process</p>
+                    </div>
+
+                    <div class="deck-slide" style="text-align: center; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                        <img src="How it Works.png" alt="Investment Opportunity Slide" style="max-width: 100%; height: auto; border-radius: 8px;" onerror="this.style.display='none'">
+                        <p class="slide-caption" style="margin-top: 15px; font-weight: 600; color: #1e40af;">How it Works</p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div id="overview" class="tab-content">
+            <div class="section">
+                <h2>Service Portfolio & Pricing</h2>
+                
+                <div id="service-pricing-table">
+                    <!-- Dynamic content will be inserted here -->
+                </div>
+
+                <div class="highlight">
+                    <strong>Revenue Model Optimization:</strong> The subscription model applies exclusively to ADHD patients at £750 per 6-month treatment plan, with 50% uptake rates driving predictable recurring revenue. ASD assessments focus on higher-value one-time diagnostic services, maximizing margin per patient while serving the underdiagnosed autism market.
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>2025 Performance - Actuals & Projections to EOY</h2>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Month</th>
+                            <th>Status</th>
+                            <th>Total Patients</th>
+                            <th>Total Revenue</th>
+                            <th>MoM Growth</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="background: #dcfce7;">
+                            <td><strong>May 2025</strong></td>
+                            <td style="color: #16a34a; font-weight: 600;">ACTUAL</td>
+                            <td>4</td>
+                            <td>£3,565</td>
+                            <td>-</td>
+                        </tr>
+                        <tr style="background: #dcfce7;">
+                            <td><strong>June 2025</strong></td>
+                            <td style="color: #16a34a; font-weight: 600;">ACTUAL</td>
+                            <td>10</td>
+                            <td>£11,040</td>
+                            <td>209.7%</td>
+                        </tr>
+                        <tr style="background: #dcfce7;">
+                            <td><strong>July 2025</strong></td>
+                            <td style="color: #16a34a; font-weight: 600;">ACTUAL</td>
+                            <td>28</td>
+                            <td>£28,965</td>
+                            <td>162.4%</td>
+                        </tr>
+                        <tr style="background: #dcfce7;">
+                            <td><strong>Aug 2025</strong></td>
+                            <td style="color: #16a34a; font-weight: 600;">ACTUAL</td>
+                            <td>50</td>
+                            <td>£80,000</td>
+                            <td>176.2%</td>
+                        </tr>
+                        <tr style="background: #fef3c7;">
+                            <td><strong>Sep 2025</strong></td>
+                            <td style="color: #f59e0b; font-weight: 600;">PROJECTED</td>
+                            <td>130</td>
+                            <td>£150,000</td>
+                            <td>102.3%</td>
+                        </tr>
+                        <tr style="background: #fef3c7;">
+                            <td><strong>Oct 2025</strong></td>
+                            <td style="color: #f59e0b; font-weight: 600;">PROJECTED</td>
+                            <td>175</td>
+                            <td>£218,906</td>
+                            <td>35.2%</td>
+                        </tr>
+                        <tr style="background: #fef3c7;">
+                            <td><strong>Nov 2025</strong></td>
+                            <td style="color: #f59e0b; font-weight: 600;">PROJECTED</td>
+                            <td>230</td>
+                            <td>£288,019</td>
+                            <td>31.6%</td>
+                        </tr>
+                        <tr style="background: #fef3c7;">
+                            <td><strong>Dec 2025</strong></td>
+                            <td style="color: #f59e0b; font-weight: 600;">PROJECTED</td>
+                            <td>300</td>
+                            <td>£376,250</td>
+                            <td>30.6%</td>
+                        </tr>
+                        <tr class="total-row">
+                            <td><strong>2025 TOTAL</strong></td>
+                            <td style="color: white; font-weight: 600;">COMBINED</td>
+                            <td><strong>927</strong></td>
+                            <td><strong>£1,168,601</strong></td>
+                            <td><strong>-</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="highlight">
+                    <strong>Steady Growth Strategy:</strong> Our 2025 projections show consistent expansion from 130 patients in September to 300 by December. Growth rates stabilize at ~30-35% MoM as we focus on operational excellence and NHS contract preparation, with NHS launch expected in December 2025.
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>Key Performance Metrics</h2>
+                
+                <div class="metric-card">
+                    <div class="metric-value">£21.3M</div>
+                    <div class="metric-label">2026 Revenue Projection</div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-value">42%</div>
+                    <div class="metric-label">Blended Gross Margin</div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-value">12,000+</div>
+                    <div class="metric-label">Total Patients Year 1</div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-value">£1,527</div>
+                    <div class="metric-label">Avg Revenue per Patient</div>
+                </div>
+                
+                <div style="text-align: center; margin-top: 30px; display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+                    <img src="review.png" alt="Performance Review" style="max-width: 48%; height: auto; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                    <img src="review2.png" alt="Performance Review 2" style="max-width: 48%; height: auto; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                </div>
+          
+            </div>
+        </div>
+
+        <!-- Interactive Financial Projections Tab -->
+        <div id="projections" class="tab-content">
+            <div class="section">
+                <h2>🚀 Interactive Financial Model</h2>
+                
+                <div class="controls">
+                    <h3>🎯 Growth Scenarios</h3>
+                    <div class="scenario-selector">
+                        <div class="scenario-buttons">
+                            <button class="scenario-btn" data-scenario="pessimistic" onclick="switchScenario('pessimistic')">
+                                📉 Pessimistic
+                            </button>
+                            <button class="scenario-btn active" data-scenario="realistic" onclick="switchScenario('realistic')">
+                                📊 Realistic
+                            </button>
+                            <button class="scenario-btn" data-scenario="optimistic" onclick="switchScenario('optimistic')">
+                                🚀 Optimistic
+                            </button>
+                        </div>
+                        <div id="scenario-description" class="scenario-description">
+                            Base case projections with steady NHS growth
+                        </div>
+                    </div>
+                </div>
+
+              
+            </div>
+
+            <div class="section" id="projections-2026">
+                <h2>2026 Projections</h2>
+                <div id="projections-2026-table"></div>
+            </div>
+
+            <div class="section" id="kpi-section">
+                <h2>Key Performance Metrics</h2>
+                <div id="kpi-cards"></div>
+            </div>
+
+            <div class="section" id="scenario-comparison">
+                <div id="scenario-comparison-table"></div>
+            </div>
+
+            <div class="section" id="three-statement-model">
+                <h2>📊 3-Statement Financial Model</h2>
+                <div id="income-statement-table"></div>
+                <div id="balance-sheet-table"></div>
+                <div id="cash-flow-table"></div>
+            </div>
+
+            <div class="section">
+                <h2>Multi-Year Growth Projections</h2>
+                <p>Aggressive expansion strategy focused on UK market dominance and international market entry.</p>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Year</th>
+                            <th>Total Patients</th>
+                            <th>Total Revenue</th>
+                            <th>Key Markets</th>
+                            <th>Strategic Focus</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Year 2 (2027)</strong></td>
+                            <td>25,000</td>
+                            <td>£38,000,000</td>
+                            <td>UK</td>
+                            <td>Complete UK market penetration</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Year 3 (2028)</strong></td>
+                            <td>45,000</td>
+                            <td>£68,000,000</td>
+                            <td>UK, US, EU, Canada</td>
+                            <td>North American  & EU expansion</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Year 4 (2029)</strong></td>
+                            <td>80,000</td>
+                            <td>£120,000,000</td>
+                            <td>Global>
+                            <td>Commonwealth market dominance</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="highlight">
+                    <strong>Growth Strategy:</strong> 
+                    <ul style="margin: 10px 0; padding-left: 20px;">
+                        <li><strong>2027:</strong> Achieve significant UK ADHD market share through NHS partnerships and B2C scaling</li>
+                        <li><strong>2028:</strong> Launch in additional markets with proven clinical pathways</li>
+                        <li><strong>2029:</strong> Establish global leadership position in AI-driven mental health diagnostics</li>
+                        <li><strong>Key enablers:</strong> Technology platform, regulatory approvals, clinical team scaling, and strategic partnerships</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="parameter-controls">
+                    <h4>⚙️ Adjust Key Parameters</h4>
+                    <div class="parameter-grid">
+                        <div class="parameter-item">
+                            <label>B2C ADHD Price:</label>
+                            <input type="number" id="b2c-adhd-price" value="1200" min="500" max="3000">
+                            <span>£</span>
+                        </div>
+                        <div class="parameter-item">
+                            <label>B2C ASD Price:</label>
+                            <input type="number" id="b2c-asd-price" value="1750" min="1000" max="3000">
+                            <span>£</span>
+                        </div>
+                        <div class="parameter-item">
+                            <label>NHS ADHD Rate:</label>
+                            <input type="number" id="nhs-adhd-price" value="1350" min="1000" max="2000">
+                            <span>£</span>
+                        </div>
+                        <div class="parameter-item">
+                            <label>Clinical Cost (ADHD):</label>
+                            <input type="number" id="clinical-cost-adhd" value="450" min="300" max="700">
+                            <span>£</span>
+                        </div>
+                        <div class="parameter-item">
+                            <label>Customer Acquisition Cost:</label>
+                            <input type="number" id="cac" value="200" min="100" max="500">
+                            <span>£</span>
+                        </div>
+                    </div>
+                    <button onclick="updateModel()">🔄 Update Parameters</button>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="highlight">
+                    <strong>🎯 Interactive Model:</strong> Switch between growth scenarios to see dramatic differences in projections. The optimistic scenario shows NHS contracts scaling to 500+ patients/month within 6 months, while pessimistic shows conservative growth. Adjust parameters to see real-time impact across all scenarios.
+                </div>
+            </div>
+        </div>
+
+        <!-- Unit Economics Tab -->
+        <div id="unit-economics" class="tab-content">
+            <div class="section">
+                <h2>Unit Economics (B2C, Complete Care Package)</h2>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Service Type</th>
+                            <th>ADHD Package</th>
+                            <th>Autism</th>
+                            <th>Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Assessment Revenue</strong></td>
+                            <td><strong>£1,200</strong></td>
+                            <td><strong>£1,750</strong></td>
+                            <td>One-time diagnostic fee</td>
+                        </tr>
+                        <tr>
+                            <td>Clinical Costs</td>
+                            <td>£450</td>
+                            <td>£450</td>
+                            <td>Higher complexity for ASD</td>
+                        </tr>
+                        <tr>
+                            <td>Technology & Admin</td>
+                            <td>£60</td>
+                            <td>£85</td>
+                            <td>Platform costs, admin support</td>
+                        </tr>
+                        <tr>
+                            <td>Customer Acquisition Cost</td>
+                            <td>£200</td>
+                            <td>£200</td>
+                            <td>Marketing, advertising</td>
+                        </tr>
+                        <tr>
+                            <td>Operating Expenses</td>
+                            <td>£45</td>
+                            <td>£45</td>
+                            <td>Insurance, CQC, office, admin (2026+)</td>
+                        </tr>
+                        <tr>
+                            <td>Unexpected Overhead (10%)</td>
+                            <td>£76</td>
+                            <td>£78</td>
+                            <td>Buffer for unforeseen costs</td>
+                        </tr>
+                        <tr class="total-row">
+                            <td><strong>Total Assessment Costs</strong></td>
+                            <td><strong>£831</strong></td>
+                            <td><strong>£858</strong></td>
+                            <td></td>
+                        </tr>
+                        <tr style="background: #10b981; color: white;">
+                            <td><strong>Assessment Gross Profit</strong></td>
+                            <td><strong>£369</strong></td>
+                            <td><strong>£892</strong></td>
+                            <td>31% / 51% margin</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="highlight">
+                    <strong>Subscription Revenue (B2C Only):</strong> 50% of B2C patients take 6-month treatment plans at £750, with 50% renewal rate driving predictable recurring revenue streams.
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>NHS Unit Economics (Contract Rates)</h2>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Service Type</th>
+                            <th>NHS ADHD</th>
+                            <th>NHS Autism</th>
+                            <th>Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Contract Revenue</strong></td>
+                            <td><strong>£1,350</strong></td>
+                            <td><strong>£2,000</strong></td>
+                            <td>Right to Choose rates</td>
+                        </tr>
+                        <tr>
+                            <td>Clinical Costs</td>
+                            <td>£450</td>
+                            <td>£450</td>
+                            <td>Same clinical complexity</td>
+                        </tr>
+                        <tr>
+                            <td>Technology & Admin</td>
+                            <td>£60</td>
+                            <td>£85</td>
+                            <td>Same platform costs</td>
+                        </tr>
+                        <tr>
+                            <td>Customer Acquisition Cost</td>
+                            <td>£0</td>
+                            <td>£0</td>
+                            <td>Contract-based referrals</td>
+                        </tr>
+                        <tr>
+                            <td>Operating Expenses</td>
+                            <td>£45</td>
+                            <td>£45</td>
+                            <td>Insurance, CQC, office, admin (2026+)</td>
+                        </tr>
+                        <tr>
+                            <td>Unexpected Overhead (10%)</td>
+                            <td>£56</td>
+                            <td>£58</td>
+                            <td>Buffer for unforeseen costs</td>
+                        </tr>
+                        <tr class="total-row">
+                            <td><strong>Total Costs</strong></td>
+                            <td><strong>£611</strong></td>
+                            <td><strong>£638</strong></td>
+                            <td></td>
+                        </tr>
+                        <tr style="background: #10b981; color: white;">
+                            <td><strong>Gross Profit</strong></td>
+                            <td><strong>£739</strong></td>
+                            <td><strong>£1,362</strong></td>
+                            <td>55% / 68% margin</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="highlight">
+                    <strong>Competitive Advantage:</strong> NHS contracts provide zero-CAC revenue with government payment security, while B2C channels offer premium pricing with subscription upsell opportunities. The dual-channel strategy reduces market risk and maximizes revenue potential across the underserved ADHD and ASD patient populations.
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>Customer Lifetime Value Analysis</h2>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Revenue Component</th>
+                            <th>B2C ADHD</th>
+                            <th>B2C ASD</th>
+                            <th>NHS (Both)</th>
+                            <th>Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Initial Assessment</td>
+                            <td>£1,200</td>
+                            <td>£1,750</td>
+                            <td>£1,350 / £2,000</td>
+                            <td>One-time diagnostic fee</td>
+                        </tr>
+                        <tr>
+                            <td>Subscription Take Rate</td>
+                            <td>50%</td>
+                            <td>0%</td>
+                            <td>0%</td>
+                            <td>ADHD only, NHS contract restrictions</td>
+                        </tr>
+                        <tr>
+                            <td>Subscription Value (6 months)</td>
+                            <td>£750</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>Treatment support package</td>
+                        </tr>
+                        <tr>
+                            <td>Renewal Rate</td>
+                            <td>50%</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>Conservative market assumption</td>
+                        </tr>
+                        <tr>
+                            <td>Expected Subscription Revenue</td>
+                            <td>£375</td>
+                            <td>£0</td>
+                            <td>£0</td>
+                            <td>50% take × 50% renewal × £750</td>
+                        </tr>
+                        <tr class="total-row">
+                            <td><strong>Total LTV</strong></td>
+                            <td><strong>£1,575</strong></td>
+                            <td><strong>£1,750</strong></td>
+                            <td><strong>£1,350 / £2,000</strong></td>
+                            <td>Assessment + Expected Subscription</td>
+                        </tr>
+                        <tr>
+                            <td><strong>LTV/CAC Ratio</strong></td>
+                            <td><strong>4.4:1</strong></td>
+                            <td><strong>5.1:1</strong></td>
+                            <td><strong>∞</strong></td>
+                            <td>Healthy unit economics with growth investment</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Assumptions Tab -->
+        <div id="assumptions" class="tab-content">
+            <div class="section">
+                <h2>Key Financial Assumptions</h2>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Assumption Category</th>
+                            <th>Current</th>
+                            <th>Year 1 Target</th>
+                            <th>Rationale</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Patient Growth Rate</strong></td>
+                            <td>15-20% monthly</td>
+                            <td>Aggressive to 150/month (B2C), 150/month (NHS)</td>
+                            <td>Ambitious scaling based on strong early traction</td>
+                        </tr>
+                        <tr>
+                            <td><strong>B2C Pricing</strong></td>
+                            <td>£1,200</td>
+                            <td>£1,200</td>
+                            <td>Competitive positioning maintained</td>
+                        </tr>
+                        <tr>
+                            <td><strong>NHS Contract Rate</strong></td>
+                            <td>-</td>
+                            <td>£1,350</td>
+                            <td>Based on Right to Choose standards</td>
+                        </tr>
+                        <tr>
+                            <td><strong>NHS Patient Mix</strong></td>
+                            <td>0%</td>
+                            <td>43% by Jan 2026 (50/50 steady state)</td>
+                            <td>Rapid NHS scaling post contract launch</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Clinical Costs</strong></td>
+                            <td>£450 per patient</td>
+                            <td>£420 per patient</td>
+                            <td>AI efficiency gains, volume discounts</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Customer Acquisition Cost</strong></td>
+                            <td>£200 (B2C)</td>
+                            <td>£150 (B2C)</td>
+                            <td>Marketing optimization, referrals</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ASD Launch Timing</strong></td>
+                            <td>Not available</td>
+                            <td>Q4 2025 launch, 5-10% B2C mix</td>
+                            <td>Higher value service expansion</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Subscription Model</strong></td>
+                            <td>£750/6 months</td>
+                            <td>50% take rate, 50% renewal</td>
+                            <td>Conservative renewal assumptions</td>
+                        </tr>
+                        <tr>
+                            <td><strong>NHS ASD Pricing</strong></td>
+                            <td>-</td>
+                            <td>£2,000 per assessment</td>
+                            <td>Premium rates for complex assessments</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="section">
+                <h2>Market & Operational Assumptions</h2>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Factor</th>
+                            <th>Assumption</th>
+                            <th>Impact</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Market Demand</strong></td>
+                            <td>2.2M undiagnosed ADHD patients in UK</td>
+                            <td>Sufficient market size for growth targets</td>
+                        </tr>
+                        <tr>
+                            <td><strong>NHS Contract Timing</strong></td>
+                            <td>Go-live Q1 2026</td>
+                            <td>Critical for significant revenue acceleration</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Clinical Capacity</strong></td>
+                            <td>Each psychiatrist handles 50-60 patients/month</td>
+                            <td>Team expansion needed for scaling</td>
+                        </tr>
+                        <tr>
+                            <td><strong>AI Efficiency Gains</strong></td>
+                            <td>50% clinical time reduction maintained</td>
+                            <td>Key to scalability and margins</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Competitive Response</strong></td>
+                            <td>18-month lead before major competition</td>
+                            <td>Time to build market position</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Regulatory Environment</strong></td>
+                            <td>Stable AI/telemedicine regulations</td>
+                            <td>Low regulatory risk assumed</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="section">
+                <h2>Sensitivity Analysis</h2>
+                
+                <div class="highlight">
+                    <strong>Market Opportunity:</strong> The financial model demonstrates Mentalwell's ability to scale rapidly while maintaining healthy unit economics. With £21.3M projected Year 1 revenue representing significant market penetration of the 2.2M undiagnosed UK population, this provides a strong foundation for continued growth through service line extension and geographic expansion.
+                </div>
+            </div>
+        </div>
+
+        <!-- Business Plan Tab -->
+        <div id="business-plan" class="tab-content">
+            <div class="section">
+                <h2>Executive Summary</h2>
+                
+                <div class="gradient-box">
+                    <h3 style="margin: 0 0 10px 0; color: white;">Mentalwell: Revolutionizing Psychiatry Through AI-Enhanced Care</h3>
+                    <p style="margin: 0; font-size: 16px;">Transforming ADHD and autism diagnosis with proprietary AI, delivering clinical results in days rather than years while addressing a £20B+ global market opportunity.</p>
+                </div>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Key Metric</th>
+                            <th>Current Performance</th>
+                            <th>Year 1 Target</th>
+                            <th>Market Impact</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Revenue Growth</strong></td>
+                            <td>Exponential growht in 4 months</td>
+                            <td>£21.3M annual revenue</td>
+                            <td>Early signs of brand awareness</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Patient Volume</strong></td>
+                            <td>4 → 130 monthly</td>
+                            <td>12,000+ total patients</td>
+                            <td>Scalable to 400/month capacity</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Service Delivery</strong></td>
+                            <td>7 days vs 4+ years NHS</td>
+                            <td>ADHD + ASD assessments</td>
+                            <td>50%+ clinical efficiency gains</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Unit Economics</strong></td>
+                            <td>31% gross margins</td>
+                            <td>42% blended margins</td>
+                            <td>4.4:1 to ∞ LTV/CAC ratios</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>The Opportunity</h3>
+                <ul>
+                    <li><strong>2.6M ADHD patients in UK alone</strong>, with 85% undiagnosed</li>
+                    <li>NHS wait times exceed 4+ years; Mentalwell delivers in under 7 days</li>
+                    <li><strong>£135K economic burden per untreated patient</strong> (Centre for Mental Health)</li>
+                    <li>Over $100B invested in digital health since 2020, validating sector momentum</li>
+                </ul>
+
+                <h3>Our Solution</h3>
+                <ul>
+                    <li><strong>AI-powered clinical decision support</strong> reducing assessment time by 50%+</li>
+                    <li><strong>Fully remote, CQC-licensed clinic</strong> with NHS-compatible infrastructure</li>
+                    <li><strong>Proprietary database architecture</strong> training multiple AI models from 150+ coded features</li>
+                    <li><strong>Subscription treatment model</strong> driving high customer lifetime value</li>
+                </ul>
+
+                <h3>Financial Highlights</h3>
+                <ul>
+                    <li><strong>Profitable from day one</strong> with £490 gross profit per B2C patient</li>
+                    <li><strong>£21.3M Y1 revenue projection</strong> with clear path to £38M by Y2</li>
+                    <li><strong>NHS Right to Choose</strong> pipeline offering £0 CAC, higher-margin revenue</li>
+                    <li><strong>Unit economics</strong>: £1,200-£2,000 pricing with scalable cost structure</li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <h2>Market Analysis</h2>
+                
+                <h3>Problem Statement</h3>
+                <div class="grid-2">
+                    <div class="card card-warning">
+                        <h4 style="color: #dc2626; margin: 0 0 10px 0;">The ADHD Crisis</h4>
+                        <ul style="margin: 0; padding-left: 20px; color: #374151;">
+                            <li>~5% of children & ~4% of adults suffer from ADHD</li>
+                            <li><strong>Over 80% have not been diagnosed</strong></li>
+                            <li>Demand for assessments grown exponentially since 2020</li>
+                            <li>ADHD assessments are complicated and time-consuming</li>
+                            <li><strong>Hard to get treatment</strong> - Years of waiting (NHS), expensive (private)</li>
+                            <li>Untreated ADHD = £135K economic burden per patient</li>
+                        </ul>
+                    </div>
+                    <div class="card card-success">
+                        <h4 style="color: #1d4ed8; margin: 0 0 10px 0;">Market Opportunity</h4>
+                        <ul style="margin: 0; padding-left: 20px; color: #374151;">
+                            <li><strong>UK TAM: 2.6M</strong> (700K+ children, 1.9M adults)</li>
+                            <li><strong>UK SAM: 2.2M</strong> (85% undiagnosed)</li>
+                            <li><strong>UK SOM: 110K</strong> (5% achievable penetration)</li>
+                            <li><strong>US TAM: 14M</strong> (6M+ children, 8M+ adults)</li>
+                            <li><strong>US SAM: 11.9M</strong> (85% undiagnosed)</li>
+                            <li><strong>Combined £20B+ opportunity</strong></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3>Market Dynamics & Trends</h3>
+                <p><strong>Accelerating Factors:</strong></p>
+                <ul>
+                    <li>Post-COVID mental health awareness surge</li>
+                    <li>Telemedicine adoption and regulatory acceptance</li>
+                    <li>AI technology maturation in healthcare</li>
+                    <li>Healthcare staff shortages driving efficiency needs</li>
+                    <li>Consumer preference for convenient, digital-first experiences</li>
+                </ul>
+
+                <p><strong>Regulatory Environment:</strong></p>
+                <ul>
+                    <li>UK: CQC licensing provides credibility and NHS compatibility</li>
+                    <li>Established "Right to Choose" framework for private provider NHS contracts</li>
+                    <li>Growing acceptance of AI-assisted diagnostic tools in clinical practice</li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <h2>Product & Technology</h2>
+                
+                <h3>Current Product Portfolio</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Service Line</th>
+                            <th>Target Market</th>
+                            <th>Pricing Strategy</th>
+                            <th>Launch Status</th>
+                            <th>Revenue Contribution</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>ADHD B2C</strong></td>
+                            <td>Adults seeking private care</td>
+                            <td>£1,200 + £750 subscription</td>
+                            <td>Live & scaling</td>
+                            <td>53% of Year 1 patients</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ADHD NHS</strong></td>
+                            <td>Right to Choose referrals</td>
+                            <td>£1,350 contract rate</td>
+                            <td>Q4 2025 launch</td>
+                            <td>30% of Year 1 patients</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ASD B2C</strong></td>
+                            <td>Autism assessment market</td>
+                            <td>£1,750 premium pricing</td>
+                            <td>Q4 2025 launch</td>
+                            <td>5% of Year 1 patients</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ASD NHS</strong></td>
+                            <td>NHS autism referrals</td>
+                            <td>£2,000 contract rate</td>
+                            <td>Q4 2025 launch</td>
+                            <td>12% of Year 1 patients</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Technology Stack</h3>
+                <div class="card">
+                    <h4 style="color: #1e40af; margin: 0 0 10px 0;">🤖 Proprietary AI Architecture</h4>
+                    <ul style="margin: 0; padding-left: 20px; color: #374151;">
+                        <li><strong>Pre-assessment Model:</strong> Natural language processing of patient questionnaires</li>
+                        <li><strong>Assessment Model:</strong> Clinical decision support before and after consultations</li>
+                        <li><strong>Combined Model:</strong> Integrated diagnosis generation with clinical accuracy</li>
+                        <li><strong>Machine-readable database:</strong> Structured data architecture enabling continuous model improvement</li>
+                    </ul>
+                </div>
+
+                <div class="demo-section">
+                    <h4 style="color: #1e40af; margin: 0 0 20px 0;">🎥 Product Demo - AI Assessment Companion Tool</h4>
+                    <div class="video-container">
+                        <iframe 
+                            src="https://www.youtube.com/embed/AuoSxaaCTrk" 
+                            title="Mentalwell AI Assessment Demo" 
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+                    <p style="margin: 10px 0 0 0; font-size: 14px; color: #64748b;">
+                        Live demonstration of our AI-powered assessment companion tool in action during a psychiatric consultation.
+                    </p>
+                </div>
+
+                <h3>Clinical Efficiency Gains</h3>
+                <ul>
+                    <li><strong>50%+ reduction</strong> in clinical time vs. traditional ADHD assessments</li>
+                    <li>Automated report generation and administrative task reduction</li>
+                    <li>Standardized assessment protocols improving consistency and outcomes</li>
+                    <li>Real-time clinical insights supporting psychiatrist decision-making</li>
+                </ul>
+
+                <h3>Product Development Roadmap</h3>
+                <div class="grid-3">
+                    <div class="card">
+                        <h4 style="color: #1e40af; margin: 0 0 10px 0;">Q3-Q4 2025</h4>
+                        <ul style="margin: 0; padding-left: 20px; font-size: 13px;">
+                            <li>Autism Spectrum Disorder (ASD) assessment pathway launch</li>
+                            <li>Enhanced AI diagnostic accuracy through expanded dataset</li>
+                            <li>NHS Right to Choose integration and compliance certification</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h4 style="color: #1e40af; margin: 0 0 10px 0;">2026</h4>
+                        <ul style="margin: 0; padding-left: 20px; font-size: 13px;">
+                            <li>Additional automations to maximise LTV and reduce clinical time</li>
+                            <li>Medication titration automation and monitoring</li>
+                            <li>International market adaptation</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h4 style="color: #1e40af; margin: 0 0 10px 0;">2027-2030</h4>
+                        <ul style="margin: 0; padding-left: 20px; font-size: 13px;">
+                            <li>Fully autonomous diagnostic capabilities with human oversight</li>
+                            <li>Global market expansion across English-speaking countries</li>
+                            <li>Integration with major healthcare systems and EMR platforms</li>
+                            <li>Advanced predictive analytics for patient outcomes</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>Business Model & Revenue Streams</h2>
+                
+                <h3>Primary Revenue Streams</h3>
+                <div class="grid-2">
+                    <div>
+                        <h4 style="color: #1e40af; margin-bottom: 10px;">1. Direct-to-Consumer (B2C)</h4>
+                        <ul style="font-size: 14px;">
+                            <li>ADHD assessments: £1,200 per patient</li>
+                            <li>ASD assessments: £1,750 per patient</li>
+                            <li>Subscription treatment packages: £750 per 6 months</li>
+                            <li>Supporting services: letters, medication reviews, consultations</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 style="color: #1e40af; margin-bottom: 10px;">2. NHS Contracts (B2B)</h4>
+                        <ul style="font-size: 14px;">
+                            <li>Right to Choose ADHD assessments: £1,350 per patient</li>
+                            <li>ASD assessments: £2,000 per patient</li>
+                            <li>Higher margins due to £0 customer acquisition cost</li>
+                            <li>Predictable revenue with government backing</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h4 style="color: #1e40af; margin-bottom: 10px;">3. B2B2C Partnerships</h4>
+                <ul>
+                    <li>Insurance company benefits (Zurich pilot launching)</li>
+                    <li>Corporate employee assistance programs</li>
+                    <li>University student health services</li>
+                    <li>Occupational health provider partnerships</li>
+                </ul>
+
+                <h4 style="color: #1e40af; margin-bottom: 10px;">4. SaaS Platform (Future)</h4>
+                <ul>
+                    <li>AI diagnostic tools licensing to healthcare providers</li>
+                    <li>Clinical decision support software subscriptions</li>
+                    <li>Data analytics and reporting services</li>
+                    <li>White-label assessment platform licensing</li>
+                </ul>
+
+                <div class="gradient-box">
+                    <h4 style="margin: 0 0 10px 0; color: white;">💰 Year 1 Financial Projections</h4>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-value">£21.3M</div>
+                            <div class="stat-label">Total Revenue</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">53%</div>
+                            <div class="stat-label">Gross Margin</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">1,780</div>
+                            <div class="stat-label">Total Patients</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">5%</div>
+                            <div class="stat-label">Recurring Revenue</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>Operations & Clinical Governance</h2>
+                
+                <h3>Clinical Operations</h3>
+                <p><strong>Quality Assurance Framework:</strong></p>
+                <ul>
+                    <li>All assessments conducted by GMC-registered psychiatrists</li>
+                    <li>CQC licensing ensuring regulatory compliance</li>
+                    <li>Clinical governance protocols and outcome monitoring</li>
+                    <li>Regular clinical audit and improvement processes</li>
+                </ul>
+
+                <p><strong>Scalability Model:</strong></p>
+                <ul>
+                    <li>Standardized assessment protocols reducing training time</li>
+                    <li>AI assistance enabling psychiatrists to handle more cases efficiently</li>
+                    <li>Remote delivery eliminating geographical constraints</li>
+                    <li>Modular technology stack supporting rapid expansion</li>
+                </ul>
+
+                <h3>Clinical Team Structure</h3>
+                <ul>
+                    <li><strong>Medical Director:</strong> Dr. Armando Muro,</li>
+                    <li><strong>Clinical Operations Manager:</strong> Joining October '25 - Oversight of quality and compliance</li>
+                    <li><strong>NHS Partnership Lead:</strong> Colbert Ncube (14 years NHS experience)</li>
+                </ul>
+
+                <h3>Technology Operations</h3>
+                <p><strong>Infrastructure:</strong></p>
+                <ul>
+                    <li>Cloud-based, GDPR-compliant data architecture</li>
+                    <li>Proprietary database architecture</li>
+                    <li>Unique pipeline optimised for ADHD assessment and treatment</li>
+      
+
+                <h3>Operational Metrics</h3>
+                <div class="grid-2">
+                    <div>
+                        <h4 style="color: #1e40af;">Current Capacity</h4>
+                        <ul style="font-size: 14px;">
+                            <li>8 psychiatrists handling 150-200 assessments/month</li>
+                            <li>Average assessment time: 90-120 minutes</li>
+                            <li>Administrative time reduced by 50% through AI automation</li>
+                            <li>100% treatment plan renewal rate</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 style="color: #1e40af;">Scaling Plan</h4>
+                        <ul style="font-size: 14px;">
+                            <li>Q4 2025: 12-15 psychiatrists, NHS channel activation</li>
+                            <li>2026: 75 psychiatrists across UK regions, additional markets penetration</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>Marketing & Customer Acquisition</h2>
+                
+                <h3>Current Marketing Strategy</h3>
+                <p><strong>Digital Marketing (60% of budget):</strong></p>
+                <ul>
+                    <li>Search engine marketing (Google Ads, SEO)</li>
+                    <li>Social media advertising (Facebook, Instagram, TikTok)</li>
+                    <li>Content marketing and educational resources</li>
+                    <li>Affiliate partnerships with mental health influencers</li>
+                </ul>
+
+                <p><strong>Partnership Marketing (25% of budget):</strong></p>
+                <ul>
+                    <li>B2B2C insurance partnerships (Zurich pilot)</li>
+                    <li>Corporate employee assistance program outreach</li>
+                    <li>Healthcare provider referral programs</li>
+                    <li>University and student health service partnerships</li>
+                </ul>
+
+                <p><strong>Organic Growth (15% of budget):</strong></p>
+                <ul>
+                    <li>Patient referrals and word-of-mouth (strong NPS)</li>
+                    <li>Healthcare professional recommendations</li>
+                    <li>Public relations and thought leadership</li>
+                    <li>Community outreach and education programs</li>
+                </ul>
+
+                <h3>Customer Acquisition Metrics</h3>
+                <div class="grid-2">
+                    <div>
+                        <h4 style="color: #1e40af;">Current Performance</h4>
+                        <ul style="font-size: 14px;">
+                            <li>Customer Acquisition Cost (CAC): £200 (B2C)</li>
+                            <li>Conversion rate: 15% (website visits to bookings)</li>
+                            <li>Average time from inquiry to assessment: 3 days</li>
+                            <li>Patient satisfaction leading to referrals: 65% recommend</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 style="color: #1e40af;">Growth Targets</h4>
+                        <ul style="font-size: 14px;">
+                            <li>Reduce CAC to £150 through optimization and partnerships</li>
+                            <li>Increase conversion rate to 25% through UX improvements</li>
+                            <li>Expand organic referrals through customer success programs</li>
+                            <li>NHS channel providing £0 CAC revenue stream</li>
+                        </ul>
+                    </div>
+                </div>
+
+               
+
+                <div class="highlight">
+                    <strong>CQC Registration - The Ultimate Moat:</strong> The Care Quality Commission registration process is notoriously complex, requiring comprehensive clinical governance, safety protocols, and operational systems. Most healthcare startups fail at this stage, with approval taking 12-18 months minimum. Our completed CQC registration represents a £2M+ equivalent barrier that competitors must overcome, providing significant first-mover advantage in the AI-enhanced mental health assessment market.
+                </div>
+
+                <h3>Competitive Positioning</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Factor</th>
+                            <th>Mentalwell</th>
+                            <th>NHS</th>
+                            <th>Private Clinics</th>
+                            <th>Telemedicine</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Wait Time</strong></td>
+                            <td style="background: #10b981; color: white;"><strong>&lt;1 week</strong></td>
+                            <td>4+ years</td>
+                            <td>3-6 months</td>
+                            <td>Varies (weeks)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Cost</strong></td>
+                            <td style="background: #10b981; color: white;"><strong>£1,200-£1,750</strong></td>
+                            <td>Free (long wait)</td>
+                            <td>£600-£3,000</td>
+                            <td>£200-£1,500</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Clinical Efficiency</strong></td>
+                            <td style="background: #10b981; color: white;"><strong>50% time savings</strong></td>
+                            <td>Standard</td>
+                            <td>Standard</td>
+                            <td>Minimal improvement</td>
+                        </tr>
+                        <tr>
+                            <td><strong>AI Integration</strong></td>
+                            <td style="background: #10b981; color: white;"><strong>Proprietary clinical AI</strong></td>
+                            <td>None</td>
+                            <td>None</td>
+                            <td>Limited tools</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Scalability</strong></td>
+                            <td style="background: #10b981; color: white;"><strong>Highly scalable</strong></td>
+                            <td>Capacity constrained</td>
+                            <td>Limited by staff</td>
+                            <td>Platform scalable</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <p><strong>Key Differentiators:</strong></p>
+                <ul>
+                    <li><strong>Speed:</strong> 7 days vs. 4+ years (NHS) / 3-6 months (private)</li>
+                    <li><strong>Technology:</strong> 50% clinical time reduction through AI</li>
+                    <li><strong>Quality:</strong> CQC-licensed with GMC-registered psychiatrists</li>
+                    <li><strong>Value:</strong> £1,200 vs. £600-£3,000 (traditional private)</li>
+                    <li><strong>Outcomes:</strong> 100% treatment package renewal rate</li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <h2>Management Team & Governance</h2>
+                
+                <h3>Leadership Team</h3>
+                <div class="grid-2">
+                    <div>
+                        <div class="team-card">
+                            <!-- Replace daniel.jpg with your actual image filename -->
+                            <img src="daniel.png" alt="Daniel Shichor CEO" class="team-photo" onerror="this.style.display='none'">
+                            <h4 style="color: #1e40af; margin: 0 0 5px 0;">Daniel Shichor</h4>
+                            <p style="color: #64748b; font-weight: 600; margin: 0 0 10px 0;">CEO & Co-Founder</p>
+                            <ul style="margin: 0; padding-left: 20px; font-size: 14px; text-align: left;">
+                                <li>2x technical entrepreneur with track record of scaling companies</li>
+                                <li>PhD candidate, London School of Economics</li>
+                                <li>MA in Cognitive-Linguistics, BA in Philosophy</li>
+                                <li>Experience building products from zero to millions of users and multi-million pound revenue</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="team-card">
+                            <!-- Replace dor.jpg with your actual image filename -->
+                            <img src="dor.png" alt="Dor Cohen COO" class="team-photo" onerror="this.style.display='none'">
+                            <h4 style="color: #1e40af; margin: 0 0 5px 0;">Dor Cohen</h4>
+                            <p style="color: #64748b; font-weight: 600; margin: 0 0 10px 0;">COO & Co-Founder</p>
+                            <ul style="margin: 0; padding-left: 20px; font-size: 14px; text-align: left;">
+                                <li>Commercially-driven operations leader</li>
+                                <li>Expert in digital sales funnels and user experience</li>
+                                <li>VR/AR experience with major brands (Lacoste, Bloomingdale's)</li>
+                                <li>MA Information Experience Design (RCA), BA Architecture</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <h3>Clinical Team</h3>
+                <div class="grid-2">
+                    <div class="team-card">
+                        <!-- Replace armando.jpg with your actual image filename -->
+                        <img src="armando.png" alt="Dr. Armando Muro" class="team-photo" onerror="this.style.display='none'">
+                        <h4 style="color: #1e40af; margin: 0 0 5px 0;">Dr. Armando Muro</h4>
+                        <p style="color: #64748b; font-weight: 600; margin: 0;">Medical Director</p>
+                    </div>
+                    <div class="team-card">
+                        <!-- Replace kayode.jpg with your actual image filename -->
+                        <img src="kayode.png" alt="Dr. Kayode Timothy" class="team-photo" onerror="this.style.display='none'">
+                        <h4 style="color: #1e40af; margin: 0 0 5px 0;">Dr. Kayode Timothy</h4>
+                        <p style="color: #64748b; font-weight: 600; margin: 0;">Psychiatrist</p>
+                    </div>
+                </div>
+
+                <div class="grid-2">
+                    <div class="team-card">
+                        <h4 style="color: #1e40af; margin: 0 0 5px 0;">Dr. Matthew Kelleher</h4>
+                        <p style="color: #64748b; font-weight: 600; margin: 0;">Psychiatrist</p>
+                    </div>
+                    <div class="team-card">
+                        <!-- Replace miriam.jpg with your actual image filename -->
+                        <img src="miriam.jpg" alt="Dr. Miriam Zikry" class="team-photo" onerror="this.style.display='none'">
+                        <h4 style="color: #1e40af; margin: 0 0 5px 0;">Dr. Miriam Zikry</h4>
+                        <p style="color: #64748b; font-weight: 600; margin: 0;">Psychiatrist</p>
+                    </div>
+                </div>
+
+                <div class="grid-2">
+                    <div class="team-card">
+                        <h4 style="color: #1e40af; margin: 0 0 5px 0;">Dr. Olukemi Akanle</h4>
+                        <p style="color: #64748b; font-weight: 600; margin: 0;">Psychiatrist</p>
+                    </div>
+                    <div class="team-card">
+                        <h4 style="color: #1e40af; margin: 0 0 5px 0;">Dr. Nadeem Ahmed</h4>
+                        <p style="color: #64748b; font-weight: 600; margin: 0;">Psychiatrist</p>
+                    </div>
+                </div>
+
+                <div class="grid-2">
+                    <div class="team-card">
+                        <h4 style="color: #1e40af; margin: 0 0 5px 0;">Dr. Christopher John Smith</h4>
+                        <p style="color: #64748b; font-weight: 600; margin: 0;">Psychiatrist</p>
+                    </div>
+                    <div class="team-card">
+                        <h4 style="color: #1e40af; margin: 0 0 5px 0;">Dr. Michael Akanje</h4>
+                        <p style="color: #64748b; font-weight: 600; margin: 0;">Psychiatrist</p>
+                    </div>
+                </div>
+
+                <div class="grid-2">
+                    <div class="team-card">
+                        <h4 style="color: #1e40af; margin: 0 0 5px 0;">Dr. Neha Bansal</h4>
+                        <p style="color: #64748b; font-weight: 600; margin: 0;">Psychiatrist</p>
+                    </div>
+                    <div class="team-card">
+                        <h4 style="color: #1e40af; margin: 0 0 5px 0;">Adil Bhaloda</h4>
+                        <p style="color: #64748b; font-weight: 600; margin: 0;">ADHD Prescribing Pharmacist</p>
+                    </div>
+                </div>
+
+                <h3>Key Advisors</h3>
+                <ul>
+                    <li><strong>Colbert Ncube:</strong> NHS Partnership Lead (14 years NHS experience)</li>
+                </ul>
+
+                <h3>Organizational Structure</h3>
+                <div class="grid-2">
+                    <div>
+                        <h4 style="color: #1e40af;">Current Team Size: 17 people</h4>
+                        <ul style="font-size: 14px;">
+                            <li>2 Founders</li>
+                            <li>1 Medical Director</li>
+                            <li>9 Clinical staff (8 Psychiatrists + 1 Pharmacist)</li>
+                            <li>2 Technology/Product</li>
+                            <li>2 Operations</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 style="color: #1e40af;">Scaling Plan</h4>
+                        <ul style="font-size: 14px;">
+                            <li>2026: 50 people (expand all functions)</li>
+                            <li>2027: 80 people (international expansion)</li>
+                            <li>2028: 100+ people (multi-market operations)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3>Board & Governance</h3>
+                <p><strong>Board Composition:</strong></p>
+                <ul>
+                    <li>Daniel Shichor (CEO)</li>
+                    <li>Dor Cohen (COO)</li>
+                    <li>Investor representative (lead investor)</li>
+   
+                </ul>
+
+ 
+            </div>
+
+            <div class="section">
+                <h2>Strategic Partnerships</h2>
+                
+                <h3>Current Partnerships</h3>
+                <p><strong>Zurich Insurance Subsidiary:</strong></p>
+                <ul>
+                    <li>B2B2C pilot launching Q4 2025</li>
+                    <li>Employee benefits integration</li>
+                    <li>Potential for broader insurance network expansion</li>
+                </ul>
+
+                <p><strong>Mental Health Influencer Network:</strong></p>
+                <ul>
+                    <li>Affiliate marketing partnerships with community leaders - early traction generating revenue</li>
+
+                </ul>
+                 <p><strong>Enterprise employee benefit schemes:</strong></p>
+                <ul>
+                    <li>In discussions with several potential enterprise customers for EDI/HR employee benefits</li>
+
+                </ul>
+                <h3>Strategic Partnership Pipeline</h3>
+                <div class="grid-2">
+                    <div>
+                        <h4 style="color: #1e40af;">NHS Trusts</h4>
+                        <ul style="font-size: 14px;">
+                            <li>Right to Choose contracts in development</li>
+                            <li>Regional expansion opportunities</li>
+                            <li>Integration with existing NHS digital platforms</li>
+                        </ul>
+                        
+                        <h4 style="color: #1e40af;">Healthcare Providers</h4>
+                        <ul style="font-size: 14px;">
+                            <li>Private hospital groups</li>
+                            <li>GP surgery networks</li>
+                            <li>Occupational health providers</li>
+                        </ul>
+                    </div>
+                    <div>
+  
+                        </ul>
+                        
+                        <h4 style="color: #1e40af;">International Expansion</h4>
+                        <ul style="font-size: 14px;">
+                            <li>New markets penetration</li>
+                
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>Investment Opportunity</h2>
+                
+                <div style="background: linear-gradient(135deg, #dc2626, #ef4444); color: white; padding: 25px; border-radius: 12px; margin-bottom: 20px;">
+                    <h3 style="margin: 0 0 15px 0; color: white;">Seed Funding: £250,000</h3>
+                    <div class="grid-2">
+                        <div>
+                            <h4 style="margin: 0 0 10px 0; color: white;">Use of Funds</h4>
+                            <ul style="margin: 0; padding-left: 20px; font-size: 14px;">
+                                <li><strong>Research & Development (72.5% - £181.25K)</strong></li>
+                                <li>Technology infrastructure scaling: £150K</li>
+                                <li>ASD pathway development: £31.25K</li>
+                                <li><strong>Partnership Development (10% - £25K)</strong></li>
+                                <li>Strategic partnerships and NHS channel development: £25K</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 style="margin: 0 0 10px 0; color: white;">Key Milestones</h4>
+                            <ul style="margin: 0; padding-left: 20px; font-size: 14px;">
+                                <li>Launch NHS Right to Choose channel (Dec 2025)</li>
+                                <li>Scale clinical team to 8+ psychiatrists</li>
+                                <li>Achieve 350-450K monthly run-rate by EOY 2025</li>
+                                <li>Complete ASD pathway development and launch</li>
+                                <li>Build foundation for 2026 growth trajectory</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <h4 style="margin: 15px 0 10px 0; color: white;">Additional Fund Allocation:</h4>
+                    <ul style="margin: 0; padding-left: 20px; font-size: 14px;">
+                        <li><strong>Operations & Infrastructure (12.5% - £31.25K)</strong> - Clinical team expansion, operational systems, quality assurance</li>
+                        <li><strong>Regulatory & Compliance (5% - £12.5K)</strong> - NHS contract preparation, legal compliance</li>
+                    </ul>
+                </div>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Investment Metric</th>
+                            <th>Value</th>
+                            <th>Benchmark</th>
+                            <th>Risk Level</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Revenue Multiple</strong></td>
+                            <td>7.4% of Y1 revenue</td>
+                            <td>Excellent</td>
+                            <td style="color: #10b981;"><strong>Low</strong></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Market Penetration</strong></td>
+                            <td>0.2% of TAM</td>
+                            <td>Significant runway</td>
+                            <td style="color: #10b981;"><strong>Low</strong></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Unit Economics</strong></td>
+                            <td>4.8:1+ LTV/CAC</td>
+                            <td>Healthy</td>
+                            <td style="color: #10b981;"><strong>Low</strong></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Revenue Diversification</strong></td>
+                            <td>4 revenue streams</td>
+                            <td>Balanced portfolio</td>
+                            <td style="color: #f59e0b;"><strong>Medium</strong></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Regulatory</strong></td>
+                            <td>CQC licensed, NHS approved</td>
+                            <td>De-risked</td>
+                            <td style="color: #10b981;"><strong>Low</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Future Funding Roadmap</h3>
+                <div class="grid-2">
+                    <div>
+                        <h4 style="color: #1e40af;">Series A (2026): £4-6M</h4>
+                        <ul style="font-size: 14px;">
+                            <li>New markets entry and expansion</li>
+                            <li>SaaS platform development and launch</li>
+                            <li>Clinical team scaling across regions</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 style="color: #1e40af;">Series B (2027-2028): £12-15M</h4>
+                        <ul style="font-size: 14px;">
+                            <li>Global market expansion</li>
+                            <li>Advanced AI capabilities development</li>
+                            <li>Strategic acquisitions and partnerships</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Risk Analysis & Mitigation Section - Commented Out
+            <div class="section">
+                <h2>Risk Analysis & Mitigation</h2>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Risk Category</th>
+                            <th>Specific Risk</th>
+                            <th>Probability</th>
+                            <th>Impact</th>
+                            <th>Mitigation Strategy</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Regulatory Risk</strong></td>
+                            <td>Changes in medical licensing or AI regulation</td>
+                            <td>Low</td>
+                            <td>Medium</td>
+                            <td>Active engagement with regulators, compliance-first approach, diversified jurisdiction strategy</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Clinical Risk</strong></td>
+                            <td>Clinical errors or quality issues affecting reputation</td>
+                            <td>Low</td>
+                            <td>High</td>
+                            <td>Robust clinical governance, continuous monitoring, professional indemnity insurance</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Competitive Risk</strong></td>
+                            <td>Large healthcare players entering market</td>
+                            <td>High</td>
+                            <td>Medium</td>
+                            <td>Strong IP development, first-mover advantage, superior technology and outcomes</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Technology Risk</strong></td>
+                            <td>AI model failures or data security breaches</td>
+                            <td>Medium</td>
+                            <td>High</td>
+                            <td>Redundant systems, human oversight, comprehensive security protocols</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Market Risk</strong></td>
+                            <td>Reduced demand or economic downturn affecting private pay</td>
+                            <td>Medium</td>
+                            <td>Medium</td>
+                            <td>NHS revenue diversification, insurance partnerships, flexible pricing models</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Operational Risk</strong></td>
+                            <td>Psychiatrist shortage affecting scaling</td>
+                            <td>Medium</td>
+                            <td>Medium</td>
+                            <td>Competitive compensation, AI efficiency tools, international recruitment</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Intellectual Property Strategy</h3>
+                <p><strong>Current IP Assets:</strong></p>
+                <ul>
+                    <li>Proprietary database architecture and AI models</li>
+                    <li>Clinical assessment protocols and workflows</li>
+                    <li>Brand and trademark registrations</li>
+                </ul>
+
+                <p><strong>IP Development Plan:</strong></p>
+                <ul>
+                    <li>Patent applications for core AI diagnostic technologies</li>
+                    <li>Trade secret protection for algorithmic improvements</li>
+                    <li>Licensing agreements for technology partnerships</li>
+                </ul>
+            </div>
+            -->
+
+            <div class="section">
+                <h2>ESG & Social Impact</h2>
+                
+                <h3>Environmental Impact</h3>
+                <ul>
+                    <li><strong>Reduced Carbon Footprint:</strong> Remote consultations eliminating patient travel</li>
+                    <li><strong>Digital-First Operations:</strong> Minimizing paper usage and physical infrastructure</li>
+                    <li><strong>Sustainable Scaling:</strong> Cloud-based technology reducing hardware requirements</li>
+                </ul>
+
+                <h3>Social Impact</h3>
+                <ul>
+                    <li><strong>Healthcare Access:</strong> Serving underdiagnosed populations</li>
+                    <li><strong>Economic Benefits:</strong> Reducing £135K per-patient societal costs</li>
+                    <li><strong>Quality of Life:</strong> Enabling earlier intervention and better outcomes</li>
+                    <li><strong>Professional Development:</strong> Supporting psychiatrist efficiency and job satisfaction</li>
+                </ul>
+
+                <h3>Governance</h3>
+                <ul>
+                    <li><strong>Clinical Governance:</strong> Robust quality assurance and patient safety protocols</li>
+                    <li><strong>Data Governance:</strong> GDPR compliance and ethical AI development</li>
+                    <li><strong>Financial Governance:</strong> Transparent reporting and responsible growth</li>
+                    <li><strong>Stakeholder Governance:</strong> Patient-first decision making and community engagement</li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <h2>Investment Conclusion</h2>
+                
+                <h3>Why Invest in Mentalwell Now</h3>
+                <div class="grid-2">
+                    <div>
+                        <h4 style="color: #1e40af;">Proven Traction</h4>
+                        <ul style="font-size: 14px;">
+                            <li>Exponential revenue growth in 3 months demonstrates strong product-market fit</li>
+                            <li>100% treatment package renewal rate shows exceptional patient outcomes</li>
+                            <li>NHS partnership pipeline providing low-risk, high-margin revenue stream</li>
+                        </ul>
+                        
+                        <h4 style="color: #1e40af;">Technology Advantage</h4>
+                        <ul style="font-size: 14px;">
+                            <li>50%+ clinical efficiency gains through proprietary AI</li>
+                            <li>First-mover advantage in AI-enhanced psychiatric diagnostics</li>
+                            <li>Scalable technology platform with global expansion potential</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 style="color: #1e40af;">Market Opportunity</h4>
+                        <ul style="font-size: 14px;">
+                            <li>£20B+ addressable market with 85% undiagnosed population</li>
+                            <li>Structural healthcare capacity constraints creating sustained demand</li>
+                            <li>Regulatory tailwinds supporting digital health adoption</li>
+                        </ul>
+                        
+                        <h4 style="color: #1e40af;">Strong Unit Economics</h4>
+                        <ul style="font-size: 14px;">
+                            <li>Profitable from day one with healthy margins</li>
+                            <li>Multiple revenue streams reducing risk</li>
+                            <li>Clear path to high net margins at scale</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3>Vision for the Future</h3>
+                <p>Mentalwell is positioned to become the global leader in AI-enhanced mental health diagnostics, transforming how psychiatric care is delivered while maintaining the highest clinical standards. With strong fundamentals, proven traction, and a clear scaling strategy, we offer investors the opportunity to participate in revolutionizing healthcare delivery for millions of underserved patients worldwide.</p>
+                
+                <div class="gradient-box">
+                    <h3 style="margin: 0 0 15px 0; color: white; text-align: center;">The Future of Psychiatry is Mentalwell</h3>
+                    
+                    <div class="stats-grid" style="margin-bottom: 20px;">
+                        <div class="stat-item">
+                            <div class="stat-value">£21.3M</div>
+                            <div class="stat-label">Year 1 Revenue Target</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">1,780</div>
+                            <div class="stat-label">Patients Served Annually</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">£20B+</div>
+                            <div class="stat-label">Addressable Market</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">53%</div>
+                            <div class="stat-label">Gross Margins</div>
+                        </div>
+                    </div>
+
+                    <div style="text-align: center; font-size: 16px; line-height: 1.6;">
+                        <p style="margin: 0 0 15px 0;"><strong>Mentalwell combines proven traction, superior technology, and massive market opportunity to deliver transformational healthcare outcomes while generating exceptional investor returns.</strong></p>
+                        <p style="margin: 0; font-weight: 600; font-size: 18px;">Join us in revolutionizing mental healthcare for millions of underserved patients worldwide.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Deck Tab - Commented out for future implementation
+        <div id="deck" class="tab-content">
+            <div class="section">
+                <h2>Presentation Deck</h2>
+                
+                <div class="gradient-box">
+                    <h3 style="margin: 0 0 10px 0; color: white;">📊 Mentalwell Slide Deck</h3>
+                    <p style="margin: 0; font-size: 16px;">Access our comprehensive presentation slides showcasing Mentalwell's value proposition, technology, and growth strategy.</p>
+                </div>
+
+                <div class="deck-slides-grid">
+                    <div class="slide-card">
+                        <div class="slide-image-container">
+                            <img src="slide1.png" alt="Slide 1" class="slide-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                            <div class="slide-placeholder" style="display: none;">
+                                <span>Slide 1</span>
+                            </div>
+                        </div>
+                        <p class="slide-caption">Company Overview</p>
+                    </div>
+                    
+                    <div class="slide-card">
+                        <div class="slide-image-container">
+                            <img src="slide2.png" alt="Slide 2" class="slide-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                            <div class="slide-placeholder" style="display: none;">
+                                <span>Slide 2</span>
+                            </div>
+                        </div>
+                        <p class="slide-caption">Market Opportunity</p>
+                    </div>
+                    
+                    <div class="slide-card">
+                        <div class="slide-image-container">
+                            <img src="slide3.png" alt="Slide 3" class="slide-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                            <div class="slide-placeholder" style="display: none;">
+                                <span>Slide 3</span>
+                            </div>
+                        </div>
+                        <p class="slide-caption">Technology Platform</p>
+                    </div>
+                    
+                    <div class="slide-card">
+                        <div class="slide-image-container">
+                            <img src="slide4.png" alt="Slide 4" class="slide-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                            <div class="slide-placeholder" style="display: none;">
+                                <span>Slide 4</span>
+                            </div>
+                        </div>
+                        <p class="slide-caption">Financial Projections</p>
+                    </div>
+                    
+                    <div class="slide-card">
+                        <div class="slide-image-container">
+                            <img src="slide5.png" alt="Slide 5" class="slide-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                            <div class="slide-placeholder" style="display: none;">
+                                <span>Slide 5</span>
+                            </div>
+                        </div>
+                        <p class="slide-caption">Business Model</p>
+                    </div>
+                    
+                    <div class="slide-card">
+                        <div class="slide-image-container">
+                            <img src="slide6.png" alt="Slide 6" class="slide-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                            <div class="slide-placeholder" style="display: none;">
+                                <span>Slide 6</span>
+                            </div>
+                        </div>
+                        <p class="slide-caption">Investment Opportunity</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- HR Planning Tab -->
+        <div id="hr-planning" class="tab-content">
+            <div class="section">
+                <h2>📋 HR Planning - Clinical Team Scaling</h2>
+                <div id="hr-planning-table"></div>
+            </div>
+
+            <div class="section">
+                <h2>Active Patients in Titration - Year 1 (2026)</h2>
+                <div id="titration-tracking-table"></div>
+            </div>
+            <div class="section">
+                <h2>Active Patients in Titration - Year 2 (2027)</h2>
+                <div id="titration-2027-table"></div>
+            </div>
+            <div class="section">
+                <h2>Active Patients in Titration - Year 3 (2028)</h2>
+                <div id="titration-2028-table"></div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p><strong>Mentalwell Ltd.</strong> - Confidential Financial Model & Business Plan</p>
+            <p>Contact: daniel@mentalwell.co.uk | +44-7309-62290 | www.mentalwell.co.uk</p>
+            <p style="margin-top: 10px; font-size: 12px;">© 2025 Mentalwell Ltd. All rights reserved. This document contains confidential and proprietary information.</p>
+        </div>
+    </div>
+    --> <!-- End commented out Deck Tab -->
+
+    <!-- Financial Model Scripts -->
+    <script src="financial-data.js"></script>
+    <script src="calculations.js"></script>
+    <script src="renderer.js"></script>
+    
+    <script>
+        // Set current date
+        document.getElementById('current-date').textContent = new Date().toLocaleDateString('en-GB', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+
+        function showTab(tabName) {
+            // Hide all tab contents
+            const contents = document.getElementsByClassName('tab-content');
+            for (let content of contents) {
+                content.classList.remove('active');
+            }
+            
+            // Remove active class from all tabs
+            const tabs = document.getElementsByClassName('tab');
+            for (let tab of tabs) {
+                tab.classList.remove('active');
+            }
+            
+            // Show selected tab content and mark tab as active
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+            
+            // Render HR planning tables when HR planning tab is selected
+            if (tabName === 'hr-planning' && typeof calculator !== 'undefined' && typeof renderer !== 'undefined') {
+                const currentScenario = calculator.getCurrentScenario().key;
+                
+                // HR planning table (scenario-aware)
+                const hrPlanningElement = document.getElementById('hr-planning-table');
+                if (hrPlanningElement) {
+                    hrPlanningElement.innerHTML = renderer.renderHRPlanningTable(currentScenario);
+                }
+                
+                // Titration tracking table (scenario-aware)
+                const titrationTrackingElement = document.getElementById('titration-tracking-table');
+                if (titrationTrackingElement) {
+                    titrationTrackingElement.innerHTML = renderer.renderTitrationTrackingTable(currentScenario);
+                }
+                
+                // Year 2 titration tracking table
+                const titration2027Element = document.getElementById('titration-2027-table');
+                if (titration2027Element) {
+                    titration2027Element.innerHTML = renderer.renderTitration2027TrackingTable();
+                }
+                
+                // Year 3 titration tracking table
+                const titration2028Element = document.getElementById('titration-2028-table');
+                if (titration2028Element) {
+                    titration2028Element.innerHTML = renderer.renderTitration2028TrackingTable();
+                }
+            }
+        }
+
+        // Interactive Demo Variables
+        let calculator, renderer;
+        
+        // Initialize the model
+        function initializeModel() {
+            calculator = new FinancialCalculations(financialData);
+            renderer = new FinancialRenderer(financialData, calculator);
+            
+            // Set initial scenario to realistic
+            switchScenario('realistic');
+        }
+
+        // Update the financial model with new parameters
+        function updateModel() {
+            // Get values from inputs
+            financialData.pricing.b2c_adhd_complete = parseInt(document.getElementById('b2c-adhd-price').value);
+            financialData.pricing.b2c_asd = parseInt(document.getElementById('b2c-asd-price').value);
+            financialData.pricing.nhs_adhd = parseInt(document.getElementById('nhs-adhd-price').value);
+            financialData.costs.clinical_adhd = parseInt(document.getElementById('clinical-cost-adhd').value);
+            financialData.costs.customer_acquisition_b2c = parseInt(document.getElementById('cac').value);
+
+            // Recalculate unit economics
+            updateUnitEconomics();
+
+            // Recreate calculator and renderer with updated data
+            calculator = new FinancialCalculations(financialData);
+            renderer = new FinancialRenderer(financialData, calculator);
+            
+            // Update display
+            updateDisplay();
+        }
+
+        // Update unit economics based on new inputs
+        function updateUnitEconomics() {
+            const adhdRevenue = financialData.pricing.b2c_adhd_complete;
+            const asdRevenue = financialData.pricing.b2c_asd;
+            const clinicalCostAdhd = financialData.costs.clinical_adhd;
+            const cac = financialData.costs.customer_acquisition_b2c;
+            const operatingExpenses = 45; // Fixed operating expenses per patient allocation
+            const overheadRate = 0.10; // 10% unexpected overhead
+
+            // Update B2C ADHD unit economics
+            const adhdBaseCosts = clinicalCostAdhd + 60 + cac + operatingExpenses;
+            const adhdOverhead = adhdBaseCosts * overheadRate;
+            const adhdTotalCosts = adhdBaseCosts + adhdOverhead;
+            
+            financialData.unit_economics.b2c_adhd.revenue = adhdRevenue;
+            financialData.unit_economics.b2c_adhd.clinical_costs = clinicalCostAdhd;
+            financialData.unit_economics.b2c_adhd.cac = cac;
+            financialData.unit_economics.b2c_adhd.allocated_operating_expenses = operatingExpenses;
+            financialData.unit_economics.b2c_adhd.unexpected_overhead = Math.round(adhdOverhead);
+            financialData.unit_economics.b2c_adhd.total_costs = Math.round(adhdTotalCosts);
+            financialData.unit_economics.b2c_adhd.gross_profit = adhdRevenue - Math.round(adhdTotalCosts);
+            financialData.unit_economics.b2c_adhd.margin = financialData.unit_economics.b2c_adhd.gross_profit / adhdRevenue;
+
+            // Update B2C ASD unit economics
+            const asdBaseCosts = 650 + 85 + cac + operatingExpenses;
+            const asdOverhead = asdBaseCosts * overheadRate;
+            const asdTotalCosts = asdBaseCosts + asdOverhead;
+            
+            financialData.unit_economics.b2c_asd.revenue = asdRevenue;
+            financialData.unit_economics.b2c_asd.cac = cac;
+            financialData.unit_economics.b2c_asd.allocated_operating_expenses = operatingExpenses;
+            financialData.unit_economics.b2c_asd.unexpected_overhead = Math.round(asdOverhead);
+            financialData.unit_economics.b2c_asd.total_costs = Math.round(asdTotalCosts);
+            financialData.unit_economics.b2c_asd.gross_profit = asdRevenue - Math.round(asdTotalCosts);
+            financialData.unit_economics.b2c_asd.margin = financialData.unit_economics.b2c_asd.gross_profit / asdRevenue;
+        }
+
+        // Switch growth scenarios
+        function switchScenario(scenarioName) {
+            // Only run if calculator is initialized
+            if (!calculator) return;
+            
+            // Update active scenario in data
+            calculator.switchScenario(scenarioName);
+            
+            // Update button states
+            document.querySelectorAll('.scenario-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.getAttribute('data-scenario') === scenarioName) {
+                    btn.classList.add('active');
+                }
+            });
+            
+            // Update scenario display
+            const scenario = calculator.getCurrentScenario();
+            const nameElement = document.getElementById('current-scenario-name');
+            const descElement = document.getElementById('current-scenario-desc');
+            const scenarioDescElement = document.getElementById('scenario-description');
+            
+            if (nameElement) nameElement.textContent = scenario.name + ' Scenario';
+            if (descElement) descElement.textContent = scenario.description;
+            if (scenarioDescElement) scenarioDescElement.textContent = scenario.description;
+            
+            // Update all financial displays
+            updateDisplay();
+        }
+
+        // Update all displays
+        function updateDisplay() {
+            if (!calculator || !renderer) return;
+            
+            const currentScenario = calculator.getCurrentScenario().key;
+            
+            // 2026 projections table (scenario-aware)
+            const projections2026Element = document.getElementById('projections-2026-table');
+            if (projections2026Element) {
+                projections2026Element.innerHTML = renderer.render2026ProjectionsTable(currentScenario);
+            }
+            
+            // KPI cards (scenario-aware)
+            const kpiElement = document.getElementById('kpi-cards');
+            if (kpiElement) {
+                kpiElement.innerHTML = renderer.renderKPICards(currentScenario);
+            }
+            
+            // Scenario comparison table
+            const scenarioComparisonElement = document.getElementById('scenario-comparison-table');
+            if (scenarioComparisonElement) {
+                scenarioComparisonElement.innerHTML = renderer.renderScenarioComparison();
+            }
+            
+            // 3-Statement Financial Model (scenario-aware)
+            const incomeStatementElement = document.getElementById('income-statement-table');
+            const balanceSheetElement = document.getElementById('balance-sheet-table');
+            const cashFlowElement = document.getElementById('cash-flow-table');
+            
+            if (incomeStatementElement && balanceSheetElement && cashFlowElement) {
+                const threeStatementModel = renderer.renderThreeStatementModel(currentScenario);
+                incomeStatementElement.innerHTML = threeStatementModel.incomeStatement;
+                balanceSheetElement.innerHTML = threeStatementModel.balanceSheet;
+                cashFlowElement.innerHTML = threeStatementModel.cashFlow;
+            }
+            
+        }
+
+        // Initialize financial model when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize the interactive model
+            initializeModel();
+            
+            // Also initialize any existing static content
+            if (typeof FinancialCalculations !== 'undefined' && typeof FinancialRenderer !== 'undefined') {
+                const staticCalculator = new FinancialCalculations(financialData);
+                const staticRenderer = new FinancialRenderer(financialData, staticCalculator);
+                staticRenderer.initializeDynamicContent();
+            }
+        });
+
+        // Password Protection Functions
+        function checkPassword() {
+            const password = document.getElementById('password-input').value;
+            const correctPassword = 'EkaVC'; // Change this to your desired password
+            
+            if (password === correctPassword) {
+                // Hide password overlay and show main content
+                document.getElementById('password-overlay').style.display = 'none';
+                document.getElementById('main-content').style.display = 'block';
+                
+                // Store password in session storage to remember during session
+                sessionStorage.setItem('mentalwellAccess', 'granted');
+            } else {
+                // Show error message
+                document.getElementById('password-error').style.display = 'block';
+                document.getElementById('password-input').value = '';
+                document.getElementById('password-input').focus();
+            }
+        }
+
+        // Check if user already entered password this session
+        function checkSession() {
+            if (sessionStorage.getItem('mentalwellAccess') === 'granted') {
+                document.getElementById('password-overlay').style.display = 'none';
+                document.getElementById('main-content').style.display = 'block';
+            } else {
+                // Focus on password input
+                setTimeout(() => {
+                    document.getElementById('password-input').focus();
+                }, 100);
+            }
+        }
+
+        // Allow Enter key to submit password
+        document.addEventListener('DOMContentLoaded', function() {
+            checkSession();
+            
+            document.getElementById('password-input').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    checkPassword();
+                }
+            });
+        });
+    </script>
+    </div> <!-- Close main-content -->
+</body>
+</html>

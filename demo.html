@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mentalwell Financial Model - Interactive Demo</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 20px;
+            background: #f8fafc;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.07);
+        }
+        h1 {
+            color: #1e40af;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .controls {
+            background: #f1f5f9;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        .control-group {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        label {
+            min-width: 200px;
+            font-weight: 600;
+            color: #1e40af;
+        }
+        input[type="number"] {
+            padding: 8px 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: 4px;
+            width: 120px;
+        }
+        button {
+            background: #1e40af;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        button:hover {
+            background: #1e3a8a;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: right;
+            border: 1px solid #e2e8f0;
+        }
+        th {
+            background: #f1f5f9;
+            font-weight: 600;
+            color: #475569;
+        }
+        td:first-child, th:first-child {
+            text-align: left;
+        }
+        .actual {
+            background: #dcfce7 !important;
+        }
+        .projection {
+            background: #fef3c7 !important;
+        }
+        .total-row {
+            background: #1e40af !important;
+            color: white;
+            font-weight: 600;
+        }
+        .total-row td {
+            background: #1e40af !important;
+        }
+        .highlight {
+            background: #fef2f2;
+            border-left: 4px solid #ef4444;
+            padding: 16px;
+            margin: 15px 0;
+            border-radius: 6px;
+        }
+        .scenario-selector {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+        }
+        .scenario-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .scenario-btn {
+            padding: 12px 20px;
+            border: 2px solid #3b82f6;
+            background: #3b82f6;
+            color: white;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            flex: 1;
+            text-align: center;
+        }
+        .scenario-btn:hover {
+            border-color: #2563eb;
+            background: #2563eb;
+        }
+        .scenario-btn.active {
+            background: #16a34a;
+            color: white;
+            border-color: #16a34a;
+        }
+        .scenario-description {
+            font-style: italic;
+            color: #64748b;
+            text-align: center;
+            padding: 10px;
+            background: white;
+            border-radius: 4px;
+            border: 1px solid #e2e8f0;
+        }
+        .current-scenario {
+            background: #f0f9ff;
+            border: 2px solid #3b82f6;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .current-scenario h3 {
+            margin: 0 0 5px 0;
+            color: #1e40af;
+        }
+        .current-scenario p {
+            margin: 0;
+            color: #64748b;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Mentalwell Interactive Financial Model</h1>
+        
+        <div class="controls">
+            <h3>🎯 Growth Scenarios</h3>
+            <div class="scenario-selector">
+                <div class="scenario-buttons">
+                    <button class="scenario-btn active" data-scenario="pessimistic" onclick="switchScenario('pessimistic')">
+                        📉 Pessimistic
+                    </button>
+                    <button class="scenario-btn" data-scenario="realistic" onclick="switchScenario('realistic')">
+                        📊 Realistic
+                    </button>
+                    <button class="scenario-btn" data-scenario="optimistic" onclick="switchScenario('optimistic')">
+                        🚀 Optimistic
+                    </button>
+                </div>
+                <div id="scenario-description" class="scenario-description">
+                    Conservative growth with delayed NHS expansion
+                </div>
+            </div>
+
+            <h3>📊 Adjust Key Parameters</h3>
+            <div class="control-group">
+                <label>B2C ADHD Price:</label>
+                <input type="number" id="b2c-adhd-price" value="1200" min="500" max="3000">
+                <span>£</span>
+            </div>
+            <div class="control-group">
+                <label>B2C ASD Price:</label>
+                <input type="number" id="b2c-asd-price" value="1750" min="1000" max="3000">
+                <span>£</span>
+            </div>
+            <div class="control-group">
+                <label>NHS ADHD Rate:</label>
+                <input type="number" id="nhs-adhd-price" value="1350" min="1000" max="2000">
+                <span>£</span>
+            </div>
+            <div class="control-group">
+                <label>Clinical Cost (ADHD):</label>
+                <input type="number" id="clinical-cost-adhd" value="450" min="300" max="700">
+                <span>£</span>
+            </div>
+            <div class="control-group">
+                <label>Customer Acquisition Cost:</label>
+                <input type="number" id="cac" value="200" min="100" max="500">
+                <span>£</span>
+            </div>
+            <button onclick="updateModel()">🔄 Update Parameters</button>
+        </div>
+
+        <div id="current-scenario-display" class="current-scenario">
+            <h3 id="current-scenario-name">Realistic Scenario</h3>
+            <p id="current-scenario-desc">Base case projections with steady NHS growth</p>
+        </div>
+
+        <div id="service-pricing">
+            <h2>Service Portfolio & Pricing</h2>
+            <div id="service-pricing-table"></div>
+        </div>
+
+        <div id="performance-2025">
+            <h2>2025 Performance - Actuals & Projections</h2>
+            <div id="performance-2025-table"></div>
+        </div>
+
+        <div id="projections-2026">
+            <h2>2026 Projections</h2>
+            <div id="projections-2026-table"></div>
+        </div>
+
+        <div id="kpi-section">
+            <h2>Key Performance Metrics</h2>
+            <div id="kpi-cards"></div>
+        </div>
+
+        <div id="scenario-comparison">
+            <div id="scenario-comparison-table"></div>
+        </div>
+
+        <div id="hr-planning">
+            <h2>📋 HR Planning - Clinical Team Scaling</h2>
+            <div id="hr-planning-table"></div>
+        </div>
+
+        <div class="highlight">
+            <strong>🎯 Interactive Model:</strong> Switch between growth scenarios to see dramatic differences in projections. The optimistic scenario shows NHS contracts scaling to 500+ patients/month within 6 months, while pessimistic shows conservative growth. Adjust parameters to see real-time impact across all scenarios.
+        </div>
+    </div>
+
+    <!-- Financial Model Scripts -->
+    <script src="financial-data.js"></script>
+    <script src="calculations.js"></script>
+    <script src="renderer.js"></script>
+    
+    <script>
+        let calculator, renderer;
+        
+        // Initialize the model
+        function initializeModel() {
+            calculator = new FinancialCalculations(financialData);
+            renderer = new FinancialRenderer(financialData, calculator);
+            
+            // Set initial scenario to realistic
+            switchScenario('realistic');
+        }
+
+        // Update the financial model with new parameters
+        function updateModel() {
+            // Get values from inputs
+            financialData.pricing.b2c_adhd_complete = parseInt(document.getElementById('b2c-adhd-price').value);
+            financialData.pricing.b2c_asd = parseInt(document.getElementById('b2c-asd-price').value);
+            financialData.pricing.nhs_adhd = parseInt(document.getElementById('nhs-adhd-price').value);
+            financialData.costs.clinical_adhd = parseInt(document.getElementById('clinical-cost-adhd').value);
+            financialData.costs.customer_acquisition_b2c = parseInt(document.getElementById('cac').value);
+
+            // Recalculate unit economics
+            updateUnitEconomics();
+
+            // Recreate calculator and renderer with updated data
+            calculator = new FinancialCalculations(financialData);
+            renderer = new FinancialRenderer(financialData, calculator);
+            
+            // Update display
+            updateDisplay();
+        }
+
+        // Update unit economics based on new inputs
+        function updateUnitEconomics() {
+            const adhdRevenue = financialData.pricing.b2c_adhd_complete;
+            const asdRevenue = financialData.pricing.b2c_asd;
+            const clinicalCostAdhd = financialData.costs.clinical_adhd;
+            const cac = financialData.costs.customer_acquisition_b2c;
+
+            // Update B2C ADHD unit economics
+            financialData.unit_economics.b2c_adhd.revenue = adhdRevenue;
+            financialData.unit_economics.b2c_adhd.clinical_costs = clinicalCostAdhd;
+            financialData.unit_economics.b2c_adhd.cac = cac;
+            financialData.unit_economics.b2c_adhd.total_costs = clinicalCostAdhd + 60 + cac;
+            financialData.unit_economics.b2c_adhd.gross_profit = adhdRevenue - financialData.unit_economics.b2c_adhd.total_costs;
+            financialData.unit_economics.b2c_adhd.margin = financialData.unit_economics.b2c_adhd.gross_profit / adhdRevenue;
+
+            // Update B2C ASD unit economics
+            financialData.unit_economics.b2c_asd.revenue = asdRevenue;
+            financialData.unit_economics.b2c_asd.cac = cac;
+            financialData.unit_economics.b2c_asd.total_costs = 650 + 85 + cac;
+            financialData.unit_economics.b2c_asd.gross_profit = asdRevenue - financialData.unit_economics.b2c_asd.total_costs;
+            financialData.unit_economics.b2c_asd.margin = financialData.unit_economics.b2c_asd.gross_profit / asdRevenue;
+        }
+
+        // Switch growth scenarios
+        function switchScenario(scenarioName) {
+            // Update active scenario in data
+            calculator.switchScenario(scenarioName);
+            
+            // Update button states
+            document.querySelectorAll('.scenario-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.getAttribute('data-scenario') === scenarioName) {
+                    btn.classList.add('active');
+                }
+            });
+            
+            // Update scenario display
+            const scenario = calculator.getCurrentScenario();
+            document.getElementById('current-scenario-name').textContent = scenario.name + ' Scenario';
+            document.getElementById('current-scenario-desc').textContent = scenario.description;
+            document.getElementById('scenario-description').textContent = scenario.description;
+            
+            // Update all financial displays
+            updateDisplay();
+        }
+
+        // Update all displays
+        function updateDisplay() {
+            const currentScenario = calculator.getCurrentScenario().key;
+            
+            // Service pricing table
+            document.getElementById('service-pricing-table').innerHTML = renderer.renderServicePricingTable();
+            
+            // 2025 performance table
+            document.getElementById('performance-2025-table').innerHTML = renderer.render2025PerformanceTable();
+            
+            // 2026 projections table (scenario-aware)
+            document.getElementById('projections-2026-table').innerHTML = renderer.render2026ProjectionsTable(currentScenario);
+            
+            // KPI cards (scenario-aware)
+            document.getElementById('kpi-cards').innerHTML = renderer.renderKPICards(currentScenario);
+            
+            // Scenario comparison table
+            document.getElementById('scenario-comparison-table').innerHTML = renderer.renderScenarioComparison();
+            
+            // HR planning table (scenario-aware)
+            document.getElementById('hr-planning-table').innerHTML = renderer.renderHRPlanningTable(currentScenario);
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', initializeModel);
+    </script>
+</body>
+</html>
