@@ -2,27 +2,37 @@
 // Edit this file to update all financial projections across the website
 
 const financialData = {
-  // Service Pricing
+  // Service Pricing (Updated Feb 2026)
   pricing: {
+    // ADHD Services
     b2c_adhd_assessment: 590,
     b2c_adhd_complete: 1200,
     b2c_adhd_premium: 1990,
-    b2c_asd: 1750,
-    nhs_adhd: 1350,
-    nhs_asd: 2000,
-    subscription_6month: 750,
+    b2c_adhd_reassessment: 295,
+    // Autism Services (Adult & Child same price)
+    b2c_asd: 1900,           // Used by calculations engine
+    b2c_asd_adult: 1900,
+    b2c_asd_child: 1900,
+    // Child ADHD
+    b2c_child_adhd: 890,
+    // Treatment Plans
     treatment_adult_6month: 750,
-    treatment_child_6month: 1050
+    treatment_adult_12month: 1500,
+    treatment_child_6month: 1050,
+    treatment_child_12month: 2100,
+    subscription_6month: 750, // Alias for subscription calculation
+    // NHS Rates (future)
+    nhs_adhd: 1350,
+    nhs_asd: 2000
   },
 
-  // Cost Structure (per patient)
+  // Cost Structure (per patient) - Updated Feb 2026
   costs: {
-    clinical_adhd: 650,
-    clinical_asd: 450,
-    technology_admin_adhd: 120,
-    technology_admin_asd: 150,
-    customer_acquisition_b2c: 300,
-    customer_acquisition_nhs: 50
+    clinical_adhd: 550,      // Clinical costs for ADHD
+    clinical_asd: 550,       // Clinical costs for Autism (same)
+    clinical_child: 550,     // Clinical costs for children
+    technology_admin: 60,    // Tech/admin per patient
+    customer_acquisition: 300 // CAC for all products
   },
 
   // Fixed Operating Expenses (monthly)
@@ -348,60 +358,139 @@ const financialData = {
     }
   },
 
-  // Unit Economics (updated with new operating expenses)
+  // Unit Economics (Updated Feb 2026 - Clinical £550, CAC £300 all products)
   unit_economics: {
+    // B2C ADHD - Used by calculations engine (Complete Care as default)
     b2c_adhd: {
       revenue: 1200,
-      clinical_costs: 450,
+      clinical_costs: 550,
       tech_admin: 60,
-      cac: 200,
-      allocated_operating_expenses: 45, // Estimated monthly allocation per patient for 2026
-      base_costs: 755, // 450 + 60 + 200 + 45
-      unexpected_overhead: 76, // 10% of base costs (755 * 0.10)
-      total_costs: 831, // base + overhead
-      gross_profit: 369, // 1200 - 831
-      margin: 0.31, // Updated margin accounting for new expenses
-      subscription_revenue_expected: 375, // 50% take × 50% renewal × £750
-      total_ltv: 1575,
-      ltv_cac_ratio: 4.4 // Adjusted for higher costs
+      cac: 300,
+      total_costs: 910,
+      gross_profit: 290,
+      margin: 0.24
     },
+    // B2C ASD - Used by calculations engine
     b2c_asd: {
-      revenue: 1750,
-      clinical_costs: 450,
-      tech_admin: 85,
-      cac: 200,
-      allocated_operating_expenses: 45,
-      base_costs: 780, // 450 + 85 + 200 + 45
-      unexpected_overhead: 78, // 10% of base costs
-      total_costs: 858,
-      gross_profit: 892, // 1750 - 858
-      margin: 0.51, // Updated margin
-      total_ltv: 1750,
-      ltv_cac_ratio: 6.1 // Improved due to lower costs
+      revenue: 1900,
+      clinical_costs: 550,
+      tech_admin: 60,
+      cac: 300,
+      total_costs: 910,
+      gross_profit: 990,
+      margin: 0.52
     },
+    // ADHD Assessment Only (£590)
+    adhd_assessment_only: {
+      revenue: 590,
+      clinical_costs: 550,
+      tech_admin: 60,
+      cac: 300,
+      total_costs: 910,
+      gross_profit: -320,  // Loss leader - converts to packages
+      margin: -0.54,
+      notes: 'Entry product - most convert to Complete Care'
+    },
+    // ADHD Complete Care (£1,200) - Main product
+    adhd_complete_care: {
+      revenue: 1200,
+      clinical_costs: 550,
+      tech_admin: 60,
+      cac: 300,
+      total_costs: 910,
+      gross_profit: 290,
+      margin: 0.24,
+      subscription_potential: 750, // 6-month plan upsell
+      notes: 'Core B2C product'
+    },
+    // ADHD Premium (£1,990)
+    adhd_premium: {
+      revenue: 1990,
+      clinical_costs: 550,
+      tech_admin: 60,
+      cac: 300,
+      total_costs: 910,
+      gross_profit: 1080,
+      margin: 0.54,
+      notes: 'High-value package with extended support'
+    },
+    // Adult Autism Assessment (£1,900)
+    autism_adult: {
+      revenue: 1900,
+      clinical_costs: 550,
+      tech_admin: 60,
+      cac: 300,
+      total_costs: 910,
+      gross_profit: 990,
+      margin: 0.52,
+      notes: 'New service launched Jan 2026'
+    },
+    // Child Autism Assessment (£1,900)
+    autism_child: {
+      revenue: 1900,
+      clinical_costs: 550,
+      tech_admin: 60,
+      cac: 300,
+      total_costs: 910,
+      gross_profit: 990,
+      margin: 0.52,
+      notes: 'CYP Autism assessment'
+    },
+    // Child ADHD Assessment (£890)
+    child_adhd: {
+      revenue: 890,
+      clinical_costs: 550,
+      tech_admin: 60,
+      cac: 300,
+      total_costs: 910,
+      gross_profit: -20,
+      margin: -0.02,
+      subscription_potential: 1050, // Child 6-month plan
+      notes: 'Break-even, upsell to treatment plans'
+    },
+    // Adult 6-Month Treatment Plan (£750)
+    adult_6m_plan: {
+      revenue: 750,
+      clinical_costs: 200,  // Lower - follow-up only
+      tech_admin: 30,
+      cac: 0,  // Already acquired
+      total_costs: 230,
+      gross_profit: 520,
+      margin: 0.69,
+      notes: 'High-margin recurring revenue'
+    },
+    // Child 6-Month Treatment Plan (£1,050)
+    child_6m_plan: {
+      revenue: 1050,
+      clinical_costs: 250,
+      tech_admin: 30,
+      cac: 0,
+      total_costs: 280,
+      gross_profit: 770,
+      margin: 0.73,
+      notes: 'High-margin recurring revenue'
+    },
+    // NHS ADHD (future)
     nhs_adhd: {
       revenue: 1350,
-      clinical_costs: 450,
+      clinical_costs: 550,
       tech_admin: 60,
-      cac: 0,
-      allocated_operating_expenses: 45,
-      base_costs: 555, // 450 + 60 + 0 + 45
-      unexpected_overhead: 56, // 10% of base costs
-      total_costs: 611,
-      gross_profit: 739, // 1350 - 611
-      margin: 0.55 // Updated margin
+      cac: 50,  // Lower CAC for NHS referrals
+      total_costs: 660,
+      gross_profit: 690,
+      margin: 0.51,
+      notes: 'NHS Right to Choose pathway'
     },
+    // NHS ASD (future)
     nhs_asd: {
       revenue: 2000,
-      clinical_costs: 450,
-      tech_admin: 85,
-      cac: 0,
-      allocated_operating_expenses: 45,
-      base_costs: 580, // 450 + 85 + 0 + 45
-      unexpected_overhead: 58, // 10% of base costs
-      total_costs: 638,
-      gross_profit: 1362, // 2000 - 638
-      margin: 0.68 // Updated margin
+      clinical_costs: 550,
+      tech_admin: 60,
+      cac: 50,
+      total_costs: 660,
+      gross_profit: 1340,
+      margin: 0.67,
+      notes: 'NHS ASD pathway'
     }
   },
 
