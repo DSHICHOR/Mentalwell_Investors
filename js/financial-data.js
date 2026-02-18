@@ -49,20 +49,148 @@ const financialData = {
     gross_margin_target: 0.53
   },
 
-  // 2025 Actuals (May-July) and Projections (Aug-Dec)
+  // 2025-2026 Actuals (from Monthly Accounts spreadsheet)
+  // Last updated: February 2026
   performance_2025: {
     actuals: {
-      may: { patients: 4, revenue: 3565, status: 'actual' },
-      june: { patients: 10, revenue: 11040, status: 'actual' },
-      july: { patients: 28, revenue: 28965, status: 'actual' },
-      august: { patients: 50, revenue: 80000, status: 'actual' }
+      june: {
+        patients: 14,
+        revenue: 11045,
+        status: 'actual',
+        breakdown: {
+          assessment_only: 5,
+          addon_6m: 3,
+          complete_care: 4,
+          reassessment: 1,
+          renewal_6m: 1
+        }
+      },
+      july: {
+        patients: 23,
+        revenue: 21520,
+        status: 'actual',
+        breakdown: {
+          assessment_only: 8,
+          complete_care: 14,
+          child_assessment: 1
+        }
+      },
+      august: {
+        patients: 60,
+        revenue: 51470,
+        stripe: 73586,
+        status: 'actual',
+        breakdown: {
+          assessment_only: 22,
+          complete_care: 20,
+          reassessment: 2,
+          package_6m: 7,
+          child_assessment: 5,
+          child_package: 4
+        }
+      },
+      september: {
+        patients: 155,
+        revenue: 144876,
+        stripe: 144330,
+        status: 'actual',
+        breakdown: {
+          assessment_only: 34,
+          addon_6m: 13,
+          complete_care: 55,
+          premium: 3,
+          reassessment: 10,
+          child_assessment: 27,
+          child_6m: 11,
+          child_12m: 2
+        }
+      },
+      october: {
+        patients: 210,
+        revenue: 195170,
+        stripe: 170000,
+        status: 'actual',
+        breakdown: {
+          assessment_only: 51,
+          addon_6m: 26,
+          complete_care: 68,
+          premium: 3,
+          reassessment: 4,
+          child_assessment: 32,
+          child_6m: 25,
+          child_12m: 1
+        }
+      },
+      november: {
+        patients: 286,
+        revenue: 258750,
+        stripe: 245057,
+        status: 'actual',
+        breakdown: {
+          assessment_only: 95,
+          addon_6m: 24,
+          addon_12m: 2,
+          complete_care: 103,
+          premium: 10,
+          reassessment: 6,
+          child_assessment: 31,
+          child_6m: 14,
+          child_12m: 1
+        }
+      },
+      december: {
+        patients: 198,
+        revenue: 179395,
+        stripe: 168355,
+        status: 'actual',
+        breakdown: {
+          assessment_only: 59,
+          addon_6m: 31,
+          addon_12m: 1,
+          complete_care: 64,
+          premium: 5,
+          reassessment: 5,
+          child_assessment: 19,
+          child_6m: 14
+        }
+      }
     },
-    projections: {
-      september: { b2c_adhd: 125, b2c_asd: 3, nhs_adhd: 2, nhs_asd: 0 },
-      october: { b2c_adhd: 165, b2c_asd: 4, nhs_adhd: 5, nhs_asd: 1 },
-      november: { b2c_adhd: 215, b2c_asd: 6, nhs_adhd: 8, nhs_asd: 1 },
-      december: { b2c_adhd: 280, b2c_asd: 8, nhs_adhd: 10, nhs_asd: 2 }
+    // No projections needed - all 2025 data is now actual
+    projections: {}
+  },
+
+  // January 2026 Actuals
+  performance_2026: {
+    actuals: {
+      january: {
+        patients: 198,
+        revenue: 179395,
+        stripe: 168355,
+        status: 'actual',
+        breakdown: {
+          assessment_only: 59,
+          addon_6m: 31,
+          addon_12m: 1,
+          complete_care: 64,
+          premium: 5,
+          reassessment: 5,
+          child_assessment: 19,
+          child_6m: 14
+        }
+      }
     }
+  },
+
+  // 2025 Annual Summary (calculated from actuals)
+  annual_summary_2025: {
+    total_patients: 946,  // Jun-Dec 2025
+    total_revenue: 862226,
+    months_active: 7,
+    avg_monthly_patients: 135,
+    avg_monthly_revenue: 123175,
+    peak_month: 'November',
+    peak_revenue: 258750,
+    peak_patients: 286
   },
 
   // Growth Scenarios for 2026
@@ -286,7 +414,9 @@ const financialData = {
       'Complete MHRA certification for AI diagnostic tools',
       'Launch NHS Right to Choose channel (Dec 2025)',
       'Scale clinical team to 8+ psychiatrists',
-      'Achieve £75K monthly run-rate by EOY 2025',
+      '✓ Achieved £179K monthly revenue (Jan 2026) - exceeded £75K target',
+      '✓ Reached 286 patients/month peak (Nov 2025)',
+      '✓ Total 2025 revenue: £862K across 946 patients',
       'Complete ASD pathway development and launch',
       'Build foundation for 2026 growth trajectory'
     ]

@@ -116,8 +116,28 @@ Central data repository containing:
 - Currency formatted with `formatCurrency()`
 - Percentages with `formatPercentage()`
 
-## Current Status
-- 2025 Actuals: May-Aug (£3.5K → £80K)
+## Current Status (Last Updated: Feb 2026)
+
+### 2025 Actuals (June - December)
+| Month | Patients | Revenue | Stripe |
+|-------|----------|---------|--------|
+| June | 14 | £11,045 | £11,045 |
+| July | 23 | £21,520 | £21,520 |
+| August | 60 | £51,470 | £73,586 |
+| September | 155 | £144,876 | £144,330 |
+| October | 210 | £195,170 | £170,000 |
+| November | 286 | £258,750 | £245,057 |
+| December | 198 | £179,395 | £168,355 |
+| **2025 Total** | **946** | **£862,226** | |
+
+### January 2026 Actual
+- Patients: 198
+- Revenue: £179,395
+- Stripe: £168,355
+
+### Key Milestones Achieved
+- Peak month: November 2025 (286 patients, £258K revenue)
+- Exceeded £75K monthly target - reached £179K in Jan 2026
 - NHS Launch: December 2025
 - ASD Launch: Q4 2025
 - Seed Round: £250K
