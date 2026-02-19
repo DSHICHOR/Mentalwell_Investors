@@ -310,7 +310,7 @@ const financialData = {
       total_patients: 25000,
       total_revenue: 38000000,
       markets: ['UK', 'Ireland'],
-      strategy: 'Complete UK market penetration',
+      strategy: 'Fill UK capacity, launch Ireland',
       gross_profit: 17600000, // 46.3% blended margin maintained
       operating_expenses: 12000000, // Scaled operations across multiple markets
       ebitda: 5600000,
@@ -335,7 +335,7 @@ const financialData = {
       total_patients: 45000,
       total_revenue: 68000000,
       markets: ['UK', 'Ireland', 'Canada'],
-      strategy: 'North American expansion',
+      strategy: 'Enter North America',
       gross_profit: 31500000, // Improved margins through scale
       operating_expenses: 20000000, // International operations
       ebitda: 11500000,
@@ -360,7 +360,7 @@ const financialData = {
       total_patients: 80000,
       total_revenue: 120000000,
       markets: ['UK', 'Ireland', 'Canada', 'Australia'],
-      strategy: 'Commonwealth market dominance',
+      strategy: 'Four-country operations',
       gross_profit: 55500000, // Scale efficiencies
       operating_expenses: 32000000, // Global platform operations
       ebitda: 23500000,
