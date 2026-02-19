@@ -262,7 +262,7 @@ class FinancialRenderer {
         <td><strong>${this.calc.formatCurrency(asdData.total_costs)}</strong></td>
         <td></td>
       </tr>
-      <tr style="background: #10b981; color: white;">
+      <tr style="background: #66ec37; color: white;">
         <td><strong>Assessment Gross Profit</strong></td>
         <td><strong>${this.calc.formatCurrency(adhdData.gross_profit)}</strong></td>
         <td><strong>${this.calc.formatCurrency(asdData.gross_profit)}</strong></td>
@@ -389,7 +389,7 @@ class FinancialRenderer {
     comparisonData.forEach(row => {
       tableRows += `
         <tr>
-          <td><strong>${row.name}</strong><br><small style="color: #64748b;">${row.description}</small></td>
+          <td><strong>${row.name}</strong><br><small style="color: #5c5c5c;">${row.description}</small></td>
           <td>${row.totalPatients.toLocaleString()}</td>
           <td>${this.calc.formatCurrency(row.totalRevenue)}</td>
           <td>${this.calc.formatCurrency(row.grossProfit)}</td>
