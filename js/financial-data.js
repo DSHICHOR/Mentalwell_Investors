@@ -54,8 +54,8 @@ const financialData = {
 
   // Market Assumptions
   market: {
-    subscription_take_rate: 0.5,
-    subscription_renewal_rate: 0.5,
+    subscription_take_rate: 0.562,
+    subscription_renewal_rate: 0.667,
     gross_margin_target: 0.53
   },
 
