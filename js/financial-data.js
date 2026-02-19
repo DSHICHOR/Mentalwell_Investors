@@ -304,67 +304,67 @@ const financialData = {
     december: { b2c_adhd: 207, b2c_asd: 23, nhs_adhd: 468, nhs_asd: 52 }
   },
 
-  // Multi-year projections (aggressive expansion strategy)
+  // Multi-year projections (phased expansion, pending NHS integration + market entry)
   annual_projections: {
     year_2027: {
-      total_patients: 25000,
-      total_revenue: 38000000,
-      markets: ['UK', 'Ireland'],
-      strategy: 'Complete UK market penetration',
-      gross_profit: 17600000, // 46.3% blended margin maintained
-      operating_expenses: 12000000, // Scaled operations across multiple markets
-      ebitda: 5600000,
-      net_profit: 4200000,
+      total_patients: 15000,
+      total_revenue: 22000000,
+      markets: ['UK'],
+      strategy: 'Deepen NHS partnerships, scale B2C nationally',
+      gross_profit: 10200000, // 46.3% blended margin maintained
+      operating_expenses: 7000000,
+      ebitda: 3200000,
+      net_profit: 2400000,
       // Detailed monthly breakdown for titration tracking
       monthly_breakdown: {
-        january: { b2c_adhd: 400, b2c_asd: 200, nhs_adhd: 900, nhs_asd: 450 },
-        february: { b2c_adhd: 450, b2c_asd: 210, nhs_adhd: 1000, nhs_asd: 475 },
-        march: { b2c_adhd: 500, b2c_asd: 220, nhs_adhd: 1000, nhs_asd: 500 },
-        april: { b2c_adhd: 500, b2c_asd: 230, nhs_adhd: 1000, nhs_asd: 525 },
-        may: { b2c_adhd: 500, b2c_asd: 240, nhs_adhd: 1000, nhs_asd: 550 },
-        june: { b2c_adhd: 500, b2c_asd: 250, nhs_adhd: 1000, nhs_asd: 575 },
-        july: { b2c_adhd: 500, b2c_asd: 260, nhs_adhd: 1000, nhs_asd: 600 },
-        august: { b2c_adhd: 500, b2c_asd: 270, nhs_adhd: 1000, nhs_asd: 625 },
-        september: { b2c_adhd: 500, b2c_asd: 280, nhs_adhd: 1000, nhs_asd: 650 },
-        october: { b2c_adhd: 500, b2c_asd: 290, nhs_adhd: 1000, nhs_asd: 675 },
-        november: { b2c_adhd: 500, b2c_asd: 300, nhs_adhd: 1000, nhs_asd: 700 },
-        december: { b2c_adhd: 500, b2c_asd: 310, nhs_adhd: 1000, nhs_asd: 725 }
+        january: { b2c_adhd: 250, b2c_asd: 120, nhs_adhd: 550, nhs_asd: 280 },
+        february: { b2c_adhd: 270, b2c_asd: 130, nhs_adhd: 600, nhs_asd: 300 },
+        march: { b2c_adhd: 290, b2c_asd: 140, nhs_adhd: 620, nhs_asd: 310 },
+        april: { b2c_adhd: 300, b2c_asd: 145, nhs_adhd: 640, nhs_asd: 320 },
+        may: { b2c_adhd: 310, b2c_asd: 150, nhs_adhd: 660, nhs_asd: 340 },
+        june: { b2c_adhd: 320, b2c_asd: 155, nhs_adhd: 680, nhs_asd: 350 },
+        july: { b2c_adhd: 330, b2c_asd: 160, nhs_adhd: 700, nhs_asd: 360 },
+        august: { b2c_adhd: 330, b2c_asd: 165, nhs_adhd: 700, nhs_asd: 370 },
+        september: { b2c_adhd: 340, b2c_asd: 170, nhs_adhd: 720, nhs_asd: 380 },
+        october: { b2c_adhd: 340, b2c_asd: 175, nhs_adhd: 720, nhs_asd: 390 },
+        november: { b2c_adhd: 350, b2c_asd: 180, nhs_adhd: 740, nhs_asd: 400 },
+        december: { b2c_adhd: 350, b2c_asd: 185, nhs_adhd: 740, nhs_asd: 410 }
       }
     },
     year_2028: {
-      total_patients: 45000,
-      total_revenue: 68000000,
-      markets: ['UK', 'Ireland', 'Canada'],
-      strategy: 'North American expansion',
-      gross_profit: 31500000, // Improved margins through scale
-      operating_expenses: 20000000, // International operations
-      ebitda: 11500000,
-      net_profit: 8500000,
+      total_patients: 30000,
+      total_revenue: 50000000,
+      markets: ['UK', 'Ireland'],
+      strategy: 'Ireland launch, UK market leadership',
+      gross_profit: 23000000, // Improved margins through scale
+      operating_expenses: 14000000,
+      ebitda: 9000000,
+      net_profit: 6800000,
       // Detailed monthly breakdown for titration tracking
       monthly_breakdown: {
-        january: { b2c_adhd: 600, b2c_asd: 350, nhs_adhd: 1200, nhs_asd: 800 },
-        february: { b2c_adhd: 650, b2c_asd: 375, nhs_adhd: 1300, nhs_asd: 850 },
-        march: { b2c_adhd: 700, b2c_asd: 400, nhs_adhd: 1400, nhs_asd: 900 },
-        april: { b2c_adhd: 750, b2c_asd: 425, nhs_adhd: 1500, nhs_asd: 950 },
-        may: { b2c_adhd: 800, b2c_asd: 450, nhs_adhd: 1600, nhs_asd: 1000 },
-        june: { b2c_adhd: 800, b2c_asd: 475, nhs_adhd: 1600, nhs_asd: 1050 },
-        july: { b2c_adhd: 800, b2c_asd: 500, nhs_adhd: 1600, nhs_asd: 1100 },
-        august: { b2c_adhd: 800, b2c_asd: 525, nhs_adhd: 1600, nhs_asd: 1150 },
-        september: { b2c_adhd: 800, b2c_asd: 550, nhs_adhd: 1600, nhs_asd: 1200 },
-        october: { b2c_adhd: 800, b2c_asd: 575, nhs_adhd: 1600, nhs_asd: 1250 },
-        november: { b2c_adhd: 800, b2c_asd: 600, nhs_adhd: 1600, nhs_asd: 1300 },
-        december: { b2c_adhd: 800, b2c_asd: 625, nhs_adhd: 1600, nhs_asd: 1350 }
+        january: { b2c_adhd: 450, b2c_asd: 250, nhs_adhd: 900, nhs_asd: 600 },
+        february: { b2c_adhd: 475, b2c_asd: 260, nhs_adhd: 950, nhs_asd: 625 },
+        march: { b2c_adhd: 500, b2c_asd: 275, nhs_adhd: 1000, nhs_asd: 650 },
+        april: { b2c_adhd: 525, b2c_asd: 290, nhs_adhd: 1050, nhs_asd: 675 },
+        may: { b2c_adhd: 550, b2c_asd: 300, nhs_adhd: 1100, nhs_asd: 700 },
+        june: { b2c_adhd: 550, b2c_asd: 310, nhs_adhd: 1100, nhs_asd: 725 },
+        july: { b2c_adhd: 575, b2c_asd: 325, nhs_adhd: 1150, nhs_asd: 750 },
+        august: { b2c_adhd: 575, b2c_asd: 340, nhs_adhd: 1150, nhs_asd: 775 },
+        september: { b2c_adhd: 600, b2c_asd: 350, nhs_adhd: 1200, nhs_asd: 800 },
+        october: { b2c_adhd: 600, b2c_asd: 360, nhs_adhd: 1200, nhs_asd: 825 },
+        november: { b2c_adhd: 625, b2c_asd: 375, nhs_adhd: 1250, nhs_asd: 850 },
+        december: { b2c_adhd: 625, b2c_asd: 390, nhs_adhd: 1250, nhs_asd: 875 }
       }
     },
     year_2029: {
-      total_patients: 80000,
-      total_revenue: 120000000,
-      markets: ['UK', 'Ireland', 'Canada', 'Australia'],
-      strategy: 'Commonwealth market dominance',
-      gross_profit: 55500000, // Scale efficiencies
-      operating_expenses: 32000000, // Global platform operations
-      ebitda: 23500000,
-      net_profit: 18000000
+      total_patients: 55000,
+      total_revenue: 100000000,
+      markets: ['UK', 'Ireland', 'US', 'Canada'],
+      strategy: 'North American expansion',
+      gross_profit: 46000000, // Scale efficiencies
+      operating_expenses: 28000000,
+      ebitda: 18000000,
+      net_profit: 13500000
     }
   },
 
