@@ -529,7 +529,7 @@ const financialData = {
       'Scale clinical team to 8+ psychiatrists',
       '✓ Achieved £174K monthly revenue (Jan 2026) - exceeded £75K target',
       '✓ Reached 264 patients/month peak (Nov 2025)',
-      '✓ Total 2025 revenue: £822K across 906 patients (Stripe verified)',
+      '✓ Total 2025 revenue: £822K across 906 patients',
       '✓ Launched Autism assessments (Jan 2026)',
       'Complete ASD pathway development and launch',
       'Build foundation for 2026 growth trajectory'
