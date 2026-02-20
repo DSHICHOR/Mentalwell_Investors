@@ -525,7 +525,7 @@ const financialData = {
     },
     milestones: [
       'Complete MHRA certification for AI diagnostic tools',
-      'Launch NHS Right to Choose channel (Dec 2025)',
+      'Launch NHS Right to Choose channel (Apr 2026)',
       'Scale clinical team to 8+ psychiatrists',
       '✓ Achieved £174K monthly revenue (Jan 2026) - exceeded £75K target',
       '✓ Reached 264 patients/month peak (Nov 2025)',
@@ -539,11 +539,11 @@ const financialData = {
   // Market & Assumptions
   assumptions: {
     market_demand_uk: 2200000, // undiagnosed ADHD patients
-    market_penetration_year_1: 0.0059, // 0.59% (12,916 patients / 2.2M undiagnosed)
+    market_penetration_year_1: 0.003, // 0.3% (~6,500 patients / 2.2M undiagnosed)
     clinical_capacity_per_psychiatrist: 55, // patients per month
     ai_efficiency_gain: 0.5, // 50% time reduction
     competitive_response_time: 18, // months
-    nhs_launch_date: 'December 2025',
+    nhs_launch_date: 'April 2026',
     asd_launch_date: 'Q4 2025'
   }
 };
