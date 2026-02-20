@@ -1142,3 +1142,93 @@ td:first-child, th:first-child {
 .bg-error { background: var(--color-error-bg); }
 .bg-primary-light { background: var(--color-primary-light-bg); }
 .font-semibold { font-weight: var(--font-weight-semibold); }
+
+/* Investment Highlights */
+.highlights-strip {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 0;
+    text-align: center;
+}
+
+.highlights-strip .hl-item {
+    padding: 18px 12px;
+    border-right: 1px solid rgba(255,255,255,0.12);
+}
+
+.highlights-strip .hl-item:last-child {
+    border-right: none;
+}
+
+.highlights-strip .hl-value {
+    font-size: 28px;
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: -0.5px;
+    line-height: 1.1;
+}
+
+.highlights-strip .hl-label {
+    font-size: 11px;
+    opacity: 0.8;
+    margin-top: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Proof point cards */
+.proof-card {
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-card);
+    padding: 20px 22px;
+    border-top: 3px solid var(--color-primary-accent);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.proof-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-medium);
+}
+
+.proof-card .proof-tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: var(--font-weight-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--color-primary-accent);
+    margin-bottom: 8px;
+}
+
+.proof-card h4 {
+    margin: 0 0 8px 0;
+    font-size: 15px;
+    color: var(--color-primary-dark);
+}
+
+.proof-card p {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--color-text-secondary);
+}
+
+.proof-card .proof-stat {
+    font-size: 22px;
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-success);
+    margin-bottom: 4px;
+}
+
+@media (max-width: 768px) {
+    .highlights-strip {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    .highlights-strip .hl-item {
+        padding: 12px 8px;
+        border-bottom: 1px solid rgba(255,255,255,0.12);
+    }
+    .highlights-strip .hl-value {
+        font-size: 20px;
+    }
+}
