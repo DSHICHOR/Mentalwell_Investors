@@ -1232,3 +1232,66 @@ td:first-child, th:first-child {
         font-size: 20px;
     }
 }
+
+/* Capital Efficiency Strip */
+.capital-efficiency-strip {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-left: 4px solid var(--color-primary);
+    border-radius: 8px;
+    padding: 16px 24px;
+    margin-top: 16px;
+}
+
+.capital-efficiency-strip .ce-header {
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-primary);
+    margin-bottom: 12px;
+}
+
+.capital-efficiency-strip .ce-items {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px;
+}
+
+.capital-efficiency-strip .ce-item {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    flex: 1;
+    min-width: 200px;
+}
+
+.capital-efficiency-strip .ce-value {
+    font-weight: 700;
+    font-size: 15px;
+    color: #0f172a;
+    white-space: nowrap;
+}
+
+.capital-efficiency-strip .ce-label {
+    font-size: 13px;
+    color: #64748b;
+}
+
+.capital-efficiency-strip .ce-divider {
+    width: 1px;
+    height: 28px;
+    background: #cbd5e1;
+    flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+    .capital-efficiency-strip .ce-items {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .capital-efficiency-strip .ce-divider {
+        display: none;
+    }
+}
