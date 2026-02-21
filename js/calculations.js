@@ -163,11 +163,31 @@ class FinancialCalculations {
     Object.entries(projectionData).forEach(([month, volumes]) => {
       const monthName = month.charAt(0).toUpperCase() + month.slice(1);
       const totalPatients = Object.values(volumes).reduce((sum, val) => sum + val, 0);
-      
-      const revenue = this.calculateMonthlyRevenue(volumes);
+
+      // Subscription revenue from renewal pipeline at 50% uptake
+      const pipelineEligible = this.data.renewal_pipeline_2026?.[month] || 0;
+      const subscriptionRevenue = Math.round(pipelineEligible * 0.5) * this.data.pricing.subscription_6month;
+
+      // Check for actuals (full months only, skip partial)
+      const actuals = this.data.performance_2026?.actuals?.[month];
+      const useActuals = actuals && actuals.status === 'actual' && !actuals.note;
+
+      let b2cRevenue, nhsRevenue, patients;
+      if (useActuals) {
+        b2cRevenue = actuals.revenue;
+        nhsRevenue = 0;
+        patients = actuals.patients;
+      } else {
+        const revenue = this.calculateMonthlyRevenue(volumes);
+        b2cRevenue = revenue.b2c_revenue;
+        nhsRevenue = revenue.nhs_revenue;
+        patients = totalPatients;
+      }
+
+      const totalRevenue = b2cRevenue + nhsRevenue + subscriptionRevenue;
       const costs = this.calculateMonthlyCosts(volumes, `${monthName} 2026`);
-      const grossProfit = revenue.total_revenue - costs.total_costs;
-      const grossMargin = revenue.total_revenue > 0 ? (grossProfit / revenue.total_revenue) : 0;
+      const grossProfit = totalRevenue - costs.total_costs;
+      const grossMargin = totalRevenue > 0 ? (grossProfit / totalRevenue) : 0;
 
       projections.push({
         month: `${monthName} 2026`,
@@ -175,13 +195,14 @@ class FinancialCalculations {
         b2c_asd: volumes.b2c_asd,
         nhs_adhd: volumes.nhs_adhd,
         nhs_asd: volumes.nhs_asd,
-        total_patients: totalPatients,
-        b2c_revenue: revenue.b2c_revenue,
-        nhs_revenue: revenue.nhs_revenue,
-        subscription_revenue: revenue.subscription_revenue,
-        total_revenue: revenue.total_revenue,
+        total_patients: patients,
+        b2c_revenue: b2cRevenue,
+        nhs_revenue: nhsRevenue,
+        subscription_revenue: subscriptionRevenue,
+        total_revenue: totalRevenue,
         gross_profit: grossProfit,
-        gross_margin: Math.round(grossMargin * 100) + '%'
+        gross_margin: Math.round(grossMargin * 100) + '%',
+        isActual: useActuals || false
       });
     });
 
@@ -202,25 +223,15 @@ class FinancialCalculations {
       subscription_revenue: 0
     });
 
-    // Calculate annual subscription revenue properly
-    // Total B2C ADHD patients for the year get annual subscription revenue
-    const annualSubscriptionRevenue = totals.b2c_adhd * 
-      this.data.market.subscription_take_rate * 
-      (this.data.pricing.subscription_6month * 2); // Full year = 2 x 6-month subscriptions
-    
     // Calculate total annual costs using unit economics
     const totalAnnualCosts = (totals.b2c_adhd * this.data.unit_economics.b2c_adhd.total_costs) +
                             (totals.b2c_asd * this.data.unit_economics.b2c_asd.total_costs) +
                             (totals.nhs_adhd * this.data.unit_economics.nhs_adhd.total_costs) +
                             (totals.nhs_asd * this.data.unit_economics.nhs_asd.total_costs);
 
-    // Unit economics already include overhead, so use as-is
-    const totalCostsWithOverhead = totalAnnualCosts;
-    
-    // Update totals with correct values
-    totals.subscription_revenue = annualSubscriptionRevenue;
+    // Subscription revenue is sum of monthly pipeline values (already accumulated above)
     totals.total_revenue = totals.b2c_revenue + totals.nhs_revenue + totals.subscription_revenue;
-    totals.gross_profit = totals.total_revenue - totalCostsWithOverhead;
+    totals.gross_profit = totals.total_revenue - totalAnnualCosts;
     totals.gross_margin = Math.round((totals.gross_profit / totals.total_revenue) * 100) + '%';
 
     projections.push({
