@@ -98,6 +98,8 @@ body {
     margin: 0;
     padding: 20px;
     background: var(--color-bg-page);
+    background-image: radial-gradient(circle, rgba(3, 7, 101, 0.03) 1px, transparent 1px);
+    background-size: 24px 24px;
     color: var(--color-text-primary);
     line-height: 1.5;
 }
@@ -210,7 +212,7 @@ body {
     font-weight: var(--font-weight-semibold);
     letter-spacing: -0.3px;
     border-bottom: 2px solid var(--color-border);
-    padding-bottom: 10px;
+    padding-bottom: 12px;
     position: relative;
     text-align: center;
 }
@@ -324,19 +326,24 @@ th, td {
 }
 
 th {
-    background: var(--color-bg-subtle);
+    background: var(--color-primary-dark);
+    color: rgba(255, 255, 255, 0.9);
+    border-color: rgba(255, 255, 255, 0.1);
     font-weight: var(--font-weight-semibold);
-    color: var(--color-text-secondary);
-    font-size: 12px;
+    font-size: 11px;
     text-transform: uppercase;
-    letter-spacing: 0.4px;
+    letter-spacing: 0.5px;
     position: sticky;
     top: 0;
     z-index: 10;
 }
 
+tr:nth-child(even):not(.total-row):not(.actual):not(.projection) td {
+    background: rgba(3, 7, 101, 0.015);
+}
+
 tr:not(.total-row):hover td {
-    background: rgba(3, 7, 101, 0.02);
+    background: rgba(3, 7, 101, 0.04);
 }
 
 td:first-child, th:first-child {
@@ -425,6 +432,79 @@ td:first-child, th:first-child {
 .highlight strong {
     color: var(--color-error);
     font-weight: var(--font-weight-semibold);
+}
+
+.highlight-success {
+    background: var(--color-success-bg);
+    border-left-color: var(--color-success);
+}
+
+.highlight-success strong {
+    color: var(--color-primary-dark);
+}
+
+.highlight-warning {
+    background: var(--color-warning-bg);
+    border-left-color: var(--color-warning);
+}
+
+.highlight-warning strong {
+    color: var(--color-warning);
+}
+
+.highlight-info {
+    background: var(--color-info-bg);
+    border-left-color: var(--color-primary-accent);
+}
+
+.highlight-info strong {
+    color: var(--color-primary-dark);
+}
+
+.highlight.no-margin {
+    margin: 0;
+}
+
+/* Trustpilot brand styling */
+.trustpilot-box {
+    background: linear-gradient(135deg, #00b67a, #00d4aa);
+}
+
+.trustpilot-stars {
+    color: #00b67a;
+    font-size: 18px;
+    margin-bottom: 8px;
+}
+
+.testimonial-quote {
+    font-style: italic;
+    margin: 0 0 8px 0;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.testimonial-author {
+    font-weight: var(--font-weight-semibold);
+    margin: 0;
+    font-size: 13px;
+    color: var(--color-text-secondary);
+}
+
+/* Proof card variants */
+.proof-card-success {
+    border-top-color: var(--color-success);
+}
+
+.proof-card-success .proof-tag {
+    color: var(--color-success);
+}
+
+.proof-card-warning {
+    border-top-color: var(--color-warning);
+}
+
+.proof-card-warning .proof-tag {
+    color: var(--color-warning);
 }
 
 .tabs {
@@ -580,7 +660,19 @@ td:first-child, th:first-child {
     border-radius: var(--radius-card);
     font-size: 13px;
     letter-spacing: 0.2px;
-    opacity: 0.95;
+    position: relative;
+    overflow: hidden;
+}
+
+.footer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 300px;
+    height: 100%;
+    background: linear-gradient(135deg, transparent 0%, rgba(27, 50, 253, 0.08) 100%);
+    pointer-events: none;
 }
 
 .footer a {
@@ -1214,10 +1306,11 @@ td:first-child, th:first-child {
 }
 
 .proof-card .proof-stat {
-    font-size: 22px;
+    font-size: 26px;
     font-weight: var(--font-weight-semibold);
-    color: var(--color-success);
+    color: var(--color-primary-dark);
     margin-bottom: 4px;
+    letter-spacing: -0.5px;
 }
 
 @media (max-width: 768px) {
@@ -1235,20 +1328,20 @@ td:first-child, th:first-child {
 
 /* Capital Efficiency Strip */
 .capital-efficiency-strip {
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
-    border-left: 4px solid var(--color-primary);
-    border-radius: 8px;
+    background: var(--color-bg-subtle);
+    border: 1px solid var(--color-border);
+    border-left: 4px solid var(--color-primary-accent);
+    border-radius: var(--radius-small);
     padding: 16px 24px;
     margin-top: 16px;
 }
 
 .capital-efficiency-strip .ce-header {
-    font-size: 13px;
-    font-weight: 600;
+    font-size: 12px;
+    font-weight: var(--font-weight-semibold);
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--color-primary);
+    letter-spacing: 0.6px;
+    color: var(--color-primary-accent);
     margin-bottom: 12px;
 }
 
@@ -1268,21 +1361,21 @@ td:first-child, th:first-child {
 }
 
 .capital-efficiency-strip .ce-value {
-    font-weight: 700;
+    font-weight: var(--font-weight-semibold);
     font-size: 15px;
-    color: #0f172a;
+    color: var(--color-primary-dark);
     white-space: nowrap;
 }
 
 .capital-efficiency-strip .ce-label {
     font-size: 13px;
-    color: #64748b;
+    color: var(--color-text-secondary);
 }
 
 .capital-efficiency-strip .ce-divider {
     width: 1px;
     height: 28px;
-    background: #cbd5e1;
+    background: var(--color-border);
     flex-shrink: 0;
 }
 
