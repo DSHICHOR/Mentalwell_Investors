@@ -118,10 +118,11 @@ class FinancialRenderer {
     projections.forEach(row => {
       const rowClass = row.isTotal ? 'total-row' : '';
       const cellClass = row.isTotal ? '' : 'class="projection"';
-      
+      const actualLabel = row.month === 'January 2026' ? ' <span style="font-size: 11px; color: var(--color-success); font-weight: 600;">(actual)</span>' : '';
+
       tableRows += `
         <tr class="${rowClass}">
-          <td><strong>${row.month}</strong></td>
+          <td><strong>${row.month}</strong>${actualLabel}</td>
           <td ${cellClass}>${row.b2c_adhd}</td>
           <td ${cellClass}>${row.b2c_asd}</td>
           <td ${cellClass}>${row.nhs_adhd}</td>

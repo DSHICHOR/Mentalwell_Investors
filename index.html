@@ -188,7 +188,7 @@
                     <!-- Dynamic content will be inserted here -->
                 </div>
 
-                <div class="highlight">
+                <div class="highlight" style="background: var(--color-primary-light-bg); border-left-color: var(--color-primary);">
                     <strong>Revenue model:</strong> ADHD patients can add a £750 six-month treatment plan (56.2% uptake rate), which generates recurring revenue at 69% margins. ASD assessments are one-time diagnostics at £1,900 with 52% margins. The subscription layer is ADHD-only because ongoing titration and medication management create a natural reason to stay.
                 </div>
             </div>
@@ -279,15 +279,10 @@
                         </tr>
                     </tbody>
                 </table>
-                <p style="font-size: 13px; color: var(--color-text-secondary); margin-top: 10px; background: var(--color-warning-bg); padding: 8px 12px; border-radius: 6px; border-left: 3px solid var(--color-warning);">*February 2026: Partial month (as of Feb 18): 99 patients and £99K recorded with 10 business days remaining.</p>
+                <p style="font-size: 13px; color: var(--color-text-secondary); margin-top: 10px; background: var(--color-warning-bg); padding: 8px 12px; border-radius: 6px; border-left: 3px solid var(--color-warning);">*February 2026: Partial month (as of Feb 18): 99 patients and £99K recorded.</p>
 
-                <div class="grid-2" style="margin-top: 12px;">
-                    <div class="highlight no-margin">
-                        <strong style="color: var(--color-error);">Dec 2025 dip (-33%):</strong> Google PPC policy changes (since resolved) combined with holiday seasonality. We also deliberately slowed growth to get clinical governance ready for NHS launch.
-                    </div>
-                    <div class="highlight highlight-success no-margin">
-                        <strong style="color: var(--color-success);">Jan 2026 recovery (+8.9%):</strong> Bounced back to £174K, more than double the original £75K monthly target. The PPC issue was resolved and the underlying demand remained strong throughout.
-                    </div>
+                <div class="highlight no-margin" style="background: var(--color-primary-light-bg); border-left-color: var(--color-primary);">
+                    <strong>Dec 2025 dip:</strong> Google PPC policy changes (since resolved) combined with holiday seasonality. We also deliberately slowed growth to get clinical governance ready for NHS launch.
                 </div>
             </div>
 
@@ -419,10 +414,9 @@
 
                 <div class="gradient-box trustpilot-box">
                     <div style="display: flex; align-items: center; justify-content: center; gap: 20px;">
-                        <div style="font-size: 48px; font-weight: 700;">4.6</div>
                         <div>
                             <div style="font-size: 24px;">★★★★★</div>
-                            <div style="font-size: 14px; opacity: 0.9;">Trustpilot Rating</div>
+                            <div style="font-size: 14px; opacity: 0.9;">Rated Excellent on Trustpilot</div>
                         </div>
                     </div>
                 </div>
@@ -460,17 +454,17 @@
                     </div>
                 </div>
 
-                <div class="highlight highlight-success">
-                    <strong>90% five-star reviews.</strong> The most common themes: speed of assessment, responsive support team, and clinicians who actually listen.
-                </div>
             </div>
         </div>
 
-        <!-- Interactive Financial Projections Tab -->
+        <!-- Financial Projections Tab -->
         <div id="projections" class="tab-content">
+            <div class="section" id="projections-2026">
+                <h2>2026 Projections</h2>
+                <div id="projections-2026-table"></div>
+            </div>
+
             <div class="section">
-                <h2>Interactive Financial Model</h2>
-                
                 <div class="controls">
                     <h3>Growth Scenarios</h3>
                     <div class="scenario-selector">
@@ -491,12 +485,37 @@
                     </div>
                 </div>
 
-              
-            </div>
-
-            <div class="section" id="projections-2026">
-                <h2>2026 Projections</h2>
-                <div id="projections-2026-table"></div>
+                <div class="parameter-controls" style="margin-top: 20px;">
+                    <h4>Adjust key parameters</h4>
+                    <div class="parameter-grid">
+                        <div class="parameter-item">
+                            <label>B2C ADHD Price:</label>
+                            <input type="number" id="b2c-adhd-price" value="1200" min="500" max="3000">
+                            <span>£</span>
+                        </div>
+                        <div class="parameter-item">
+                            <label>B2C ASD Price:</label>
+                            <input type="number" id="b2c-asd-price" value="1900" min="1000" max="3000">
+                            <span>£</span>
+                        </div>
+                        <div class="parameter-item">
+                            <label>NHS ADHD Rate:</label>
+                            <input type="number" id="nhs-adhd-price" value="1350" min="1000" max="2000">
+                            <span>£</span>
+                        </div>
+                        <div class="parameter-item">
+                            <label>Clinical Cost (ADHD):</label>
+                            <input type="number" id="clinical-cost-adhd" value="550" min="300" max="700">
+                            <span>£</span>
+                        </div>
+                        <div class="parameter-item">
+                            <label>Customer Acquisition Cost:</label>
+                            <input type="number" id="cac" value="300" min="100" max="500">
+                            <span>£</span>
+                        </div>
+                    </div>
+                    <button onclick="updateModel()">Update Parameters</button>
+                </div>
             </div>
 
             <div class="section" id="kpi-section">
@@ -563,45 +582,6 @@
                 </div>
             </div>
 
-            <div class="section">
-                <div class="parameter-controls">
-                    <h4>Adjust key parameters</h4>
-                    <div class="parameter-grid">
-                        <div class="parameter-item">
-                            <label>B2C ADHD Price:</label>
-                            <input type="number" id="b2c-adhd-price" value="1200" min="500" max="3000">
-                            <span>£</span>
-                        </div>
-                        <div class="parameter-item">
-                            <label>B2C ASD Price:</label>
-                            <input type="number" id="b2c-asd-price" value="1900" min="1000" max="3000">
-                            <span>£</span>
-                        </div>
-                        <div class="parameter-item">
-                            <label>NHS ADHD Rate:</label>
-                            <input type="number" id="nhs-adhd-price" value="1350" min="1000" max="2000">
-                            <span>£</span>
-                        </div>
-                        <div class="parameter-item">
-                            <label>Clinical Cost (ADHD):</label>
-                            <input type="number" id="clinical-cost-adhd" value="550" min="300" max="700">
-                            <span>£</span>
-                        </div>
-                        <div class="parameter-item">
-                            <label>Customer Acquisition Cost:</label>
-                            <input type="number" id="cac" value="300" min="100" max="500">
-                            <span>£</span>
-                        </div>
-                    </div>
-                    <button onclick="updateModel()">Update Parameters</button>
-                </div>
-            </div>
-
-            <div class="section">
-                <div class="highlight">
-                    <strong>Interactive model:</strong> Switch between growth scenarios above. The optimistic scenario assumes NHS contracts reach 500+ patients/month within 6 months; the pessimistic scenario assumes roughly half the target volumes. You can also adjust pricing and cost parameters to see how they affect each scenario.
-                </div>
-            </div>
         </div>
 
         <!-- Unit Economics Tab -->
@@ -707,7 +687,7 @@
                 </table>
 
                 <div class="highlight highlight-success">
-                    <strong style="color: var(--color-success);">Treatment plans are the highest-margin product</strong> at 69-73%, with zero acquisition cost since the patient is already in the system. Converting Assessment Only patients to Complete Care + Treatment Plan is what makes the loss-leader entry price work.
+                    <strong style="color: var(--color-success);">Treatment plans are the highest-margin product</strong> at 69-73%, with zero acquisition cost since the patient is already in the system. Converting Assessment Only patients to Treatment Plan subscribers is what makes the loss-leader entry price work.
                 </div>
 
                 <p style="font-size: 13px; color: var(--color-text-secondary); margin-top: 10px;">CAC of £300 represents a blended average across all B2C marketing channels (Google Ads, social media, referrals, partnerships). NHS CAC of £50 reflects administrative costs only. Referrals come through NHS Right to Choose contracts.</p>
@@ -753,76 +733,6 @@
                     </tbody>
                 </table>
 
-                <div class="highlight">
-                    <strong>Why NHS matters:</strong> Right to Choose contracts cost £50 to acquire a patient (vs £300 for B2C) and the government pays reliably. NHS is how the business gets to 50%+ blended margins at scale.
-                </div>
-            </div>
-
-            <div class="section">
-                <h2>Customer Lifetime Value Analysis</h2>
-                
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Revenue Component</th>
-                            <th>B2C ADHD</th>
-                            <th>B2C ASD</th>
-                            <th>NHS (Both)</th>
-                            <th>Notes</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Initial Assessment</td>
-                            <td>£1,200</td>
-                            <td>£1,900</td>
-                            <td>£1,350 / £2,000</td>
-                            <td>One-time diagnostic fee</td>
-                        </tr>
-                        <tr>
-                            <td>Subscription Take Rate</td>
-                            <td>56.2%</td>
-                            <td>0%</td>
-                            <td>0%</td>
-                            <td>ADHD only, NHS excluded</td>
-                        </tr>
-                        <tr>
-                            <td>Subscription Value (6 months)</td>
-                            <td>£750</td>
-                            <td>-</td>
-                            <td>-</td>
-                            <td>Treatment support package</td>
-                        </tr>
-                        <tr>
-                            <td>Renewal Rate</td>
-                            <td>66.7%</td>
-                            <td>-</td>
-                            <td>-</td>
-                            <td>18 of 27 eligible renewed</td>
-                        </tr>
-                        <tr>
-                            <td>Expected Subscription Revenue</td>
-                            <td>£703</td>
-                            <td>£0</td>
-                            <td>£0</td>
-                            <td>56.2% × £750 + 56.2% × 66.7% × £750 (2 periods)</td>
-                        </tr>
-                        <tr class="total-row">
-                            <td><strong>Total LTV</strong></td>
-                            <td><strong>£1,903</strong></td>
-                            <td><strong>£1,900</strong></td>
-                            <td><strong>£1,350 / £2,000</strong></td>
-                            <td>Assessment + Expected Subscription</td>
-                        </tr>
-                        <tr>
-                            <td><strong>LTV/CAC Ratio</strong></td>
-                            <td><strong>6.3:1</strong></td>
-                            <td><strong>6.3:1</strong></td>
-                            <td><strong>27:1 / 40:1</strong></td>
-                            <td>Based on £300 B2C CAC, £50 NHS CAC</td>
-                        </tr>
-                    </tbody>
-                </table>
             </div>
         </div>
 
