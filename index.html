@@ -188,7 +188,7 @@
                     <!-- Dynamic content will be inserted here -->
                 </div>
 
-                <div class="highlight">
+                <div class="highlight" style="background: var(--color-primary-light-bg); border-left-color: var(--color-primary);">
                     <strong>Revenue model:</strong> ADHD patients can add a £750 six-month treatment plan (56.2% uptake rate), which generates recurring revenue at 69% margins. ASD assessments are one-time diagnostics at £1,900 with 52% margins. The subscription layer is ADHD-only because ongoing titration and medication management create a natural reason to stay.
                 </div>
             </div>
@@ -279,15 +279,10 @@
                         </tr>
                     </tbody>
                 </table>
-                <p style="font-size: 13px; color: var(--color-text-secondary); margin-top: 10px; background: var(--color-warning-bg); padding: 8px 12px; border-radius: 6px; border-left: 3px solid var(--color-warning);">*February 2026: Partial month (as of Feb 18): 99 patients and £99K recorded with 10 business days remaining.</p>
+                <p style="font-size: 13px; color: var(--color-text-secondary); margin-top: 10px; background: var(--color-warning-bg); padding: 8px 12px; border-radius: 6px; border-left: 3px solid var(--color-warning);">*February 2026: Partial month (as of Feb 18): 99 patients and £99K recorded.</p>
 
-                <div class="grid-2" style="margin-top: 12px;">
-                    <div class="highlight no-margin">
-                        <strong style="color: var(--color-error);">Dec 2025 dip (-33%):</strong> Google PPC policy changes (since resolved) combined with holiday seasonality. We also deliberately slowed growth to get clinical governance ready for NHS launch.
-                    </div>
-                    <div class="highlight highlight-success no-margin">
-                        <strong style="color: var(--color-success);">Jan 2026 recovery (+8.9%):</strong> Bounced back to £174K, more than double the original £75K monthly target. The PPC issue was resolved and the underlying demand remained strong throughout.
-                    </div>
+                <div class="highlight no-margin" style="background: var(--color-primary-light-bg); border-left-color: var(--color-primary);">
+                    <strong>Dec 2025 dip:</strong> Google PPC policy changes (since resolved) combined with holiday seasonality. We also deliberately slowed growth to get clinical governance ready for NHS launch.
                 </div>
             </div>
 
@@ -419,10 +414,9 @@
 
                 <div class="gradient-box trustpilot-box">
                     <div style="display: flex; align-items: center; justify-content: center; gap: 20px;">
-                        <div style="font-size: 48px; font-weight: 700;">4.6</div>
                         <div>
                             <div style="font-size: 24px;">★★★★★</div>
-                            <div style="font-size: 14px; opacity: 0.9;">Trustpilot Rating</div>
+                            <div style="font-size: 14px; opacity: 0.9;">Rated Excellent on Trustpilot</div>
                         </div>
                     </div>
                 </div>
@@ -460,17 +454,17 @@
                     </div>
                 </div>
 
-                <div class="highlight highlight-success">
-                    <strong>90% five-star reviews.</strong> The most common themes: speed of assessment, responsive support team, and clinicians who actually listen.
-                </div>
             </div>
         </div>
 
-        <!-- Interactive Financial Projections Tab -->
+        <!-- Financial Projections Tab -->
         <div id="projections" class="tab-content">
+            <div class="section" id="projections-2026">
+                <h2>2026 Projections</h2>
+                <div id="projections-2026-table"></div>
+            </div>
+
             <div class="section">
-                <h2>Interactive Financial Model</h2>
-                
                 <div class="controls">
                     <h3>Growth Scenarios</h3>
                     <div class="scenario-selector">
@@ -491,12 +485,37 @@
                     </div>
                 </div>
 
-              
-            </div>
-
-            <div class="section" id="projections-2026">
-                <h2>2026 Projections</h2>
-                <div id="projections-2026-table"></div>
+                <div class="parameter-controls" style="margin-top: 20px;">
+                    <h4>Adjust key parameters</h4>
+                    <div class="parameter-grid">
+                        <div class="parameter-item">
+                            <label>B2C ADHD Price:</label>
+                            <input type="number" id="b2c-adhd-price" value="1200" min="500" max="3000">
+                            <span>£</span>
+                        </div>
+                        <div class="parameter-item">
+                            <label>B2C ASD Price:</label>
+                            <input type="number" id="b2c-asd-price" value="1900" min="1000" max="3000">
+                            <span>£</span>
+                        </div>
+                        <div class="parameter-item">
+                            <label>NHS ADHD Rate:</label>
+                            <input type="number" id="nhs-adhd-price" value="1350" min="1000" max="2000">
+                            <span>£</span>
+                        </div>
+                        <div class="parameter-item">
+                            <label>Clinical Cost (ADHD):</label>
+                            <input type="number" id="clinical-cost-adhd" value="550" min="300" max="700">
+                            <span>£</span>
+                        </div>
+                        <div class="parameter-item">
+                            <label>Customer Acquisition Cost:</label>
+                            <input type="number" id="cac" value="300" min="100" max="500">
+                            <span>£</span>
+                        </div>
+                    </div>
+                    <button onclick="updateModel()">Update Parameters</button>
+                </div>
             </div>
 
             <div class="section" id="kpi-section">
@@ -563,45 +582,6 @@
                 </div>
             </div>
 
-            <div class="section">
-                <div class="parameter-controls">
-                    <h4>Adjust key parameters</h4>
-                    <div class="parameter-grid">
-                        <div class="parameter-item">
-                            <label>B2C ADHD Price:</label>
-                            <input type="number" id="b2c-adhd-price" value="1200" min="500" max="3000">
-                            <span>£</span>
-                        </div>
-                        <div class="parameter-item">
-                            <label>B2C ASD Price:</label>
-                            <input type="number" id="b2c-asd-price" value="1900" min="1000" max="3000">
-                            <span>£</span>
-                        </div>
-                        <div class="parameter-item">
-                            <label>NHS ADHD Rate:</label>
-                            <input type="number" id="nhs-adhd-price" value="1350" min="1000" max="2000">
-                            <span>£</span>
-                        </div>
-                        <div class="parameter-item">
-                            <label>Clinical Cost (ADHD):</label>
-                            <input type="number" id="clinical-cost-adhd" value="550" min="300" max="700">
-                            <span>£</span>
-                        </div>
-                        <div class="parameter-item">
-                            <label>Customer Acquisition Cost:</label>
-                            <input type="number" id="cac" value="300" min="100" max="500">
-                            <span>£</span>
-                        </div>
-                    </div>
-                    <button onclick="updateModel()">Update Parameters</button>
-                </div>
-            </div>
-
-            <div class="section">
-                <div class="highlight">
-                    <strong>Interactive model:</strong> Switch between growth scenarios above. The optimistic scenario assumes NHS contracts reach 500+ patients/month within 6 months; the pessimistic scenario assumes roughly half the target volumes. You can also adjust pricing and cost parameters to see how they affect each scenario.
-                </div>
-            </div>
         </div>
 
         <!-- Unit Economics Tab -->
@@ -707,7 +687,7 @@
                 </table>
 
                 <div class="highlight highlight-success">
-                    <strong style="color: var(--color-success);">Treatment plans are the highest-margin product</strong> at 69-73%, with zero acquisition cost since the patient is already in the system. Converting Assessment Only patients to Complete Care + Treatment Plan is what makes the loss-leader entry price work.
+                    <strong style="color: var(--color-success);">Treatment plans are the highest-margin product</strong> at 69-73%, with zero acquisition cost since the patient is already in the system. Converting Assessment Only patients to Treatment Plan subscribers is what makes the loss-leader entry price work.
                 </div>
 
                 <p style="font-size: 13px; color: var(--color-text-secondary); margin-top: 10px;">CAC of £300 represents a blended average across all B2C marketing channels (Google Ads, social media, referrals, partnerships). NHS CAC of £50 reflects administrative costs only. Referrals come through NHS Right to Choose contracts.</p>
@@ -753,76 +733,6 @@
                     </tbody>
                 </table>
 
-                <div class="highlight">
-                    <strong>Why NHS matters:</strong> Right to Choose contracts cost £50 to acquire a patient (vs £300 for B2C) and the government pays reliably. NHS is how the business gets to 50%+ blended margins at scale.
-                </div>
-            </div>
-
-            <div class="section">
-                <h2>Customer Lifetime Value Analysis</h2>
-                
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Revenue Component</th>
-                            <th>B2C ADHD</th>
-                            <th>B2C ASD</th>
-                            <th>NHS (Both)</th>
-                            <th>Notes</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Initial Assessment</td>
-                            <td>£1,200</td>
-                            <td>£1,900</td>
-                            <td>£1,350 / £2,000</td>
-                            <td>One-time diagnostic fee</td>
-                        </tr>
-                        <tr>
-                            <td>Subscription Take Rate</td>
-                            <td>56.2%</td>
-                            <td>0%</td>
-                            <td>0%</td>
-                            <td>ADHD only, NHS excluded</td>
-                        </tr>
-                        <tr>
-                            <td>Subscription Value (6 months)</td>
-                            <td>£750</td>
-                            <td>-</td>
-                            <td>-</td>
-                            <td>Treatment support package</td>
-                        </tr>
-                        <tr>
-                            <td>Renewal Rate</td>
-                            <td>66.7%</td>
-                            <td>-</td>
-                            <td>-</td>
-                            <td>18 of 27 eligible renewed</td>
-                        </tr>
-                        <tr>
-                            <td>Expected Subscription Revenue</td>
-                            <td>£703</td>
-                            <td>£0</td>
-                            <td>£0</td>
-                            <td>56.2% × £750 + 56.2% × 66.7% × £750 (2 periods)</td>
-                        </tr>
-                        <tr class="total-row">
-                            <td><strong>Total LTV</strong></td>
-                            <td><strong>£1,903</strong></td>
-                            <td><strong>£1,900</strong></td>
-                            <td><strong>£1,350 / £2,000</strong></td>
-                            <td>Assessment + Expected Subscription</td>
-                        </tr>
-                        <tr>
-                            <td><strong>LTV/CAC Ratio</strong></td>
-                            <td><strong>6.3:1</strong></td>
-                            <td><strong>6.3:1</strong></td>
-                            <td><strong>27:1 / 40:1</strong></td>
-                            <td>Based on £300 B2C CAC, £50 NHS CAC</td>
-                        </tr>
-                    </tbody>
-                </table>
             </div>
         </div>
 
@@ -949,14 +859,14 @@
                 <h2>Key Risk: NHS Right to Choose Timing</h2>
 
                 <div class="highlight">
-                    <strong style="color: var(--color-error);">NHS Dependency Acknowledgment:</strong> Our realistic scenario assumes 70:30 NHS-to-private patient mix from April 2026 onwards. NHS Right to Choose contracts are subject to ICB procurement timelines, which historically experience delays. If NHS volume ramp is delayed to Q3 2026, projected annual revenue would reduce by approximately 20-25% due to the compressed scaling window. However, our B2C channel demonstrated strong standalone performance in 2025 (£822K from private patients alone), providing a revenue floor independent of NHS timelines. We are actively managing this risk through parallel applications across multiple ICBs and maintaining pipeline visibility with our NHS Partnership Lead.
+                    <strong style="color: var(--color-error);">NHS Dependency Acknowledgment:</strong> Our realistic scenario assumes 70:30 NHS-to-private patient mix from April 2026 onwards. NHS Right to Choose contracts are subject to ICB procurement timelines, which historically experience delays. If NHS volume ramp is delayed to Q3 2026, projected annual revenue would reduce by approximately 20-25% due to the compressed scaling window. However, our B2C channel demonstrated strong standalone performance (£1.2M from private patients alone), providing a revenue floor independent of NHS timelines. We are actively managing this risk through parallel applications across multiple ICBs and maintaining pipeline visibility with our NHS Partnership Lead.
                 </div>
             </div>
 
             <div class="section">
                 <h2>Sensitivity Analysis</h2>
 
-                <p style="margin-bottom: 15px;">The £10M target requires roughly 6,500 patients, under 0.3% of the 2.2M undiagnosed in the UK. The biggest variable is NHS contract timing.</p>
+                <p style="margin-bottom: 15px;">The £10M projection requires roughly 6,500 patients, under 0.3% of the 2.2M undiagnosed in the UK. The biggest variable is NHS contract timing.</p>
 
                 <table>
                     <thead>
@@ -1008,7 +918,7 @@
                 
                 <div class="gradient-box">
                     <h3 style="margin: 0 0 6px 0;">Mentalwell: ADHD and autism assessments in days, not years</h3>
-                    <p style="margin: 0; font-size: 14px;">Proprietary AI cuts assessment time in half. 906 patients in first 7 months, £822K revenue. Raising £3M to scale through NHS Right to Choose.</p>
+                    <p style="margin: 0; font-size: 14px;">Proprietary AI cuts assessment time in half. 1,190 patients, £1.2M revenue to date. Raising £3M to scale through NHS Right to Choose.</p>
                 </div>
 
                 <table>
@@ -1023,8 +933,8 @@
                     <tbody>
                         <tr>
                             <td><strong>Revenue</strong></td>
-                            <td>£822K in 7 months (Jun-Dec 2025)</td>
-                            <td>£10M annual (2026)</td>
+                            <td>£1.2M to date (Jun 2025 - Feb 2026)</td>
+                            <td>£10M projected (2026)</td>
                             <td>Depends on NHS launching April 2026</td>
                         </tr>
                         <tr>
@@ -1070,9 +980,9 @@
                     <div class="content-card">
                         <h3>Financial position</h3>
                         <ul>
-                            <li>£822K revenue in first 7 months</li>
+                            <li>£1.2M revenue to date</li>
                             <li>24% B2C margin, improving to 51-67% on NHS</li>
-                            <li>2026 target: £10M (contingent on NHS Apr 2026)</li>
+                            <li>2026 projected: £10M (contingent on NHS Apr 2026)</li>
                             <li>NHS: near-zero CAC vs £300 for B2C</li>
                         </ul>
                     </div>
@@ -1121,7 +1031,6 @@
                     <thead>
                         <tr>
                             <th>Service Line</th>
-                            <th>Target Market</th>
                             <th>Pricing Strategy</th>
                             <th>Launch Status</th>
                             <th>Revenue Contribution</th>
@@ -1130,28 +1039,24 @@
                     <tbody>
                         <tr>
                             <td><strong>ADHD B2C</strong></td>
-                            <td>Adults seeking private care</td>
                             <td>£1,200 + £750 subscription</td>
                             <td>Live & scaling</td>
                             <td>53% of Year 1 patients</td>
                         </tr>
                         <tr>
                             <td><strong>ADHD NHS</strong></td>
-                            <td>Right to Choose referrals</td>
                             <td>£1,350 contract rate</td>
                             <td>Launching April 2026</td>
                             <td>70% of patients (from April)</td>
                         </tr>
                         <tr>
                             <td><strong>ASD B2C</strong></td>
-                            <td>Autism assessment market</td>
                             <td>£1,900</td>
                             <td>Live (Jan 2026)</td>
                             <td>10% of patients</td>
                         </tr>
                         <tr>
                             <td><strong>ASD NHS</strong></td>
-                            <td>NHS autism referrals</td>
                             <td>£2,000 contract rate</td>
                             <td>In DD with NHS ICBs</td>
                             <td>10% of NHS volume</td>
@@ -1161,17 +1066,6 @@
 
                 <div class="highlight highlight-success">
                     <strong style="color: var(--color-success);">ASD pathway note:</strong> Autism assessments launched January 2026 with 15 patients in the first two months. ASD uses the same platform, clinical governance, and operational infrastructure as ADHD, so no separate build-out is required. We are currently in due diligence with NHS ICBs for ASD services under Right to Choose, which would add a second high-margin NHS revenue stream.
-                </div>
-
-                <h3>Technology stack</h3>
-                <div class="content-card">
-                    <h4>Proprietary AI architecture</h4>
-                    <ul>
-                        <li><strong>Pre-assessment Model:</strong> NLP of patient questionnaires</li>
-                        <li><strong>Assessment Model:</strong> Clinical decision support pre/post consultation</li>
-                        <li><strong>Combined Model:</strong> Integrated diagnosis generation</li>
-                        <li><strong>Machine-readable DB:</strong> Structured data for continuous model improvement</li>
-                    </ul>
                 </div>
 
                 <div class="demo-section">
@@ -1185,14 +1079,11 @@
                             allowfullscreen>
                         </iframe>
                     </div>
-                    <p style="margin: 8px 0 0 0; font-size: 13px; color: var(--color-text-secondary);">
-                        Recording of the AI companion tool during an actual psychiatric consultation.
-                    </p>
                 </div>
 
                 <div class="content-card">
                     <h3>Clinical efficiency</h3>
-                    <p>The AI handles pre-assessment questionnaire analysis and generates draft reports, cutting psychiatrist time per patient by roughly half. Assessments follow a standardized protocol so quality doesn't depend on which clinician the patient sees. The psychiatrist still makes the diagnosis - the AI surfaces relevant data and handles the paperwork.</p>
+                    <p>Our technology cuts clinical time roughly in half, while reducing human bias and improving consistency as the company scales.</p>
                 </div>
 
                 <h3>Product roadmap</h3>
@@ -1201,7 +1092,7 @@
                         <h4>Achieved (2025)</h4>
                         <ul>
                             <li>ASD pathway launched (Jan 2026)</li>
-                            <li>906 patients, £822K revenue in 7 months</li>
+                            <li>1,190 patients, £1.2M revenue to date</li>
                             <li>NHS RtC compliance certification complete</li>
                         </ul>
                     </div>
@@ -1259,7 +1150,7 @@
                         </ul>
                     </div>
                     <div class="content-card">
-                        <h4>4. SaaS Platform (2027+)</h4>
+                        <h4>4. SaaS Platform (2027+ TBC)</h4>
                         <ul>
                             <li>License AI diagnostic tools to other clinics</li>
                             <li>White-label assessment platform for health systems</li>
@@ -1273,7 +1164,7 @@
                     <div class="stats-grid">
                         <div class="stat-item">
                             <div class="stat-value">£10M</div>
-                            <div class="stat-label">2026 Revenue Target</div>
+                            <div class="stat-label">2026 Projected Revenue</div>
                         </div>
                         <div class="stat-item">
                             <div class="stat-value">50%</div>
@@ -1292,114 +1183,7 @@
             </div>
 
             <div class="section">
-                <h2>Operations & clinical governance</h2>
-
-                <div class="grid-2">
-                    <div class="content-card">
-                        <h3>Clinical operations</h3>
-                        <p>Every assessment by a GMC-registered psychiatrist. CQC-licensed with regular clinical audits. Standardized protocol means new clinician onboarding takes days, not months. Fully remote: recruit anywhere in the UK, patients aren't limited by geography.</p>
-                    </div>
-                    <div class="content-card">
-                        <h3>Clinical team structure</h3>
-                        <ul>
-                            <li><strong>Medical Director:</strong> Dr. Armando Muro</li>
-                            <li><strong>Clinical Ops Manager:</strong> Quality & compliance oversight</li>
-                            <li><strong>NHS Partnership Lead:</strong> Colbert Ncube (14yr NHS)</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="content-card">
-                    <h3>Technology</h3>
-                    <p>Cloud-based, GDPR-compliant infrastructure. Proprietary database capturing 150+ coded features per patient, feeding AI models. Entire assessment and treatment pipeline built specifically for ADHD and ASD workflows.</p>
-                </div>
-
-                <h3>Operational numbers</h3>
-                <div class="grid-2">
-                    <div class="content-card">
-                        <h4>Current</h4>
-                        <ul>
-                            <li>12 part-time ADHD assessors: 150-200 assessments/month total</li>
-                            <li>Each FTE clinician capacity: 50-60 assessments/month</li>
-                            <li>Clinicians paid per patient, zero overhead if volume drops</li>
-                            <li>Effectively zero no-show/dropout rate</li>
-                            <li>100% upfront B2C collection, zero accounts receivable</li>
-                            <li>AI halves admin time per patient</li>
-                        </ul>
-                    </div>
-                    <div class="content-card">
-                        <h4>Plan</h4>
-                        <ul>
-                            <li>Q1-Q2 2026: 15+ psychiatrists, NHS launch</li>
-                            <li>End 2026: 40+ psychiatrists, 1,500 patients/mo capacity</li>
-                            <li>Scale by increasing existing clinician utilization first, then hiring</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <div class="section">
-                <h2>Marketing & customer acquisition</h2>
-
-                <h3>Current marketing mix</h3>
-                <div class="grid-3">
-                    <div class="content-card">
-                        <h4>Digital Marketing (60%)</h4>
-                        <ul>
-                            <li>Google Ads & SEO</li>
-                            <li>Social media (FB, Instagram, TikTok)</li>
-                            <li>Content marketing & educational resources</li>
-                            <li>Mental health influencer affiliates</li>
-                        </ul>
-                    </div>
-                    <div class="content-card">
-                        <h4>Partnership Marketing (25%)</h4>
-                        <ul>
-                            <li>Insurance partnerships (Zurich pilot)</li>
-                            <li>Corporate EAP outreach</li>
-                            <li>Healthcare provider referral programs</li>
-                            <li>University health service partnerships</li>
-                        </ul>
-                    </div>
-                    <div class="content-card">
-                        <h4>Organic Growth (15%)</h4>
-                        <ul>
-                            <li>Patient referrals & word-of-mouth</li>
-                            <li>Healthcare professional recommendations</li>
-                            <li>PR and thought leadership</li>
-                            <li>Community outreach & education</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <h3>Acquisition metrics</h3>
-                <div class="grid-2">
-                    <div class="content-card">
-                        <h4>Current</h4>
-                        <ul>
-                            <li>CAC: £300 (B2C blended)</li>
-                            <li>Website-to-booking conversion: 15%</li>
-                            <li>Inquiry to assessment: 3 days average</li>
-                            <li>65% of patients would recommend us</li>
-                        </ul>
-                    </div>
-                    <div class="content-card">
-                        <h4>Targets</h4>
-                        <ul>
-                            <li>B2C CAC → £150 with better targeting</li>
-                            <li>Conversion → 25% with UX improvements</li>
-                            <li>NHS channel: volume at £50 CAC</li>
-                        </ul>
-                    </div>
-                </div>
-
-               
-
-                <div class="highlight">
-                    <strong>CQC registration as a barrier to entry:</strong> Getting CQC-licensed takes 12-18 months and requires clinical governance, safety protocols, and operational systems that most healthcare startups can't put together. We have it. Any competitor entering this market has to get through that process before they can treat a single NHS patient.
-                </div>
-
-                <h3>Competitive landscape</h3>
+                <h2>Competitive landscape</h2>
                 <table>
                     <thead>
                         <tr>
@@ -1796,8 +1580,8 @@
                     <div class="content-card">
                         <h4>Enterprise Benefits</h4>
                         <ul>
-                            <li>In discussions with enterprise customers</li>
-                            <li>EDI/HR employee benefit schemes</li>
+                            <li>1 enterprise benefit generating revenue</li>
+                            <li>Additional BD work required but pipeline is working</li>
                         </ul>
                     </div>
                 </div>
@@ -1839,10 +1623,12 @@
                         <div>
                             <h4 style="margin: 0 0 6px 0;">Use of Funds</h4>
                             <ul style="margin: 0; padding-left: 18px; font-size: 13px;">
-                                <li><strong>Clinical Scaling (40% - £1.2M)</strong> - 40+ psychiatrists</li>
-                                <li><strong>Technology & AI (25% - £750K)</strong> - Platform & automation</li>
+                                <li><strong>Technology & AI (33% - £1M)</strong> - Platform & automation</li>
+                                <li><strong>Clinical Scaling (27% - £800K)</strong> - 40+ psychiatrists</li>
                                 <li><strong>NHS Channel (20% - £600K)</strong> - Compliance & expansion</li>
                                 <li><strong>Marketing (15% - £450K)</strong> - B2C & partnerships</li>
+                                <li><strong>B2B/B2B2C BD (3% - £100K)</strong> - Enterprise partnerships</li>
+                                <li><strong>Market Research (2% - £50K)</strong> - International expansion</li>
                             </ul>
                         </div>
                         <div>
@@ -1850,7 +1636,7 @@
                             <ul style="margin: 0; padding-left: 18px; font-size: 13px;">
                                 <li>NHS Right to Choose go-live (Apr 2026)</li>
                                 <li>1,500 patients/month by Q4 2026</li>
-                                <li>£10M annual revenue run-rate</li>
+                                <li>£10M projected annual revenue</li>
                                 <li>70:30 NHS:Private mix</li>
                                 <li>B2B2C partnerships (Zurich H2 2026)</li>
                             </ul>
@@ -1870,7 +1656,7 @@
                     <tbody>
                         <tr>
                             <td><strong>Raise as % of Y1 revenue</strong></td>
-                            <td>£3M / £10M = 30%</td>
+                            <td>£3M / £10M projected = 30%</td>
                             <td>Standard for this stage</td>
                             <td style="color: var(--color-success);"><strong>Low</strong></td>
                         </tr>
@@ -2026,7 +1812,7 @@
                     <div class="content-card">
                         <h4>Traction</h4>
                         <ul>
-                            <li>£822K revenue in 7 months (£11K → £240K/mo)</li>
+                            <li>£1.2M revenue to date (£11K → £240K/mo)</li>
                             <li>100% treatment renewal rate (small sample)</li>
                             <li>NHS RtC contract signed, go-live Apr 2026</li>
                         </ul>
@@ -2063,12 +1849,12 @@
 
                     <div class="stats-grid" style="margin-bottom: 14px;">
                         <div class="stat-item">
-                            <div class="stat-value">£10M</div>
-                            <div class="stat-label">2026 Revenue Target</div>
+                            <div class="stat-value">£1.2M</div>
+                            <div class="stat-label">Revenue To Date</div>
                         </div>
                         <div class="stat-item">
-                            <div class="stat-value">6,500</div>
-                            <div class="stat-label">Patients in 2026</div>
+                            <div class="stat-value">£10M</div>
+                            <div class="stat-label">2026 Projected Revenue</div>
                         </div>
                         <div class="stat-item">
                             <div class="stat-value">$50B+</div>
@@ -2081,7 +1867,7 @@
                     </div>
 
                     <div style="text-align: center; font-size: 15px; line-height: 1.5;">
-                        <p style="margin: 0 0 10px 0;"><strong>£822K revenue in 7 months. 906 patients. NHS launching April 2026. Raising £3M to scale what's already working.</strong></p>
+                        <p style="margin: 0 0 10px 0;"><strong>£1.2M revenue to date. 1,190 patients. NHS launching April 2026. Raising £3M to scale what's already working.</strong></p>
                         <p style="margin: 0; font-weight: 600; font-size: 16px;"><a href="mailto:daniel@mentalwell.co.uk" style="color: inherit; text-decoration: none;">daniel@mentalwell.co.uk</a></p>
                     </div>
                 </div>
@@ -2335,57 +2121,6 @@
                             </ul>
                         </div>
                     </div>
-                </div>
-            </div>
-
-            <div class="section">
-                <h2>European Expansion Pipeline (2028-2030)</h2>
-                <p>Once Ireland and the US are running, EU expansion follows, starting with markets that have long wait lists and compatible regulations.</p>
-
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Market</th>
-                            <th>Priority</th>
-                            <th>Timeline</th>
-                            <th>Opportunity</th>
-                            <th>Key Barrier</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><strong>Netherlands</strong></td>
-                            <td>8.0 / 10</td>
-                            <td>2028</td>
-                            <td>80K+ on mental health wait lists, highest English proficiency in EU, expat entry point (200K internationals in Amsterdam)</td>
-                            <td>WTZi institutional license</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Germany</strong></td>
-                            <td>7.0 / 10</td>
-                            <td>2028-29</td>
-                            <td>Largest EU economy, 2.9M adults with ADHD, EUR 500M-1B private market</td>
-                            <td>Language, KV accreditation</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Sweden</strong></td>
-                            <td>6.5 / 10</td>
-                            <td>2029</td>
-                            <td>Telehealth leader, high ADHD awareness, Nordic hub potential</td>
-                            <td>Limited private market</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Spain</strong></td>
-                            <td>6.0 / 10</td>
-                            <td>2029-30</td>
-                            <td>47M population, growing awareness, EUR 300-600M market</td>
-                            <td>Full localization required</td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                <div class="highlight highlight-warning">
-                    <strong>EU AI Act (August 2026):</strong> AI for medical diagnosis classified as high-risk. Mentalwell's AI is positioned as a clinical workflow tool assisting clinicians (not autonomous diagnosis), which reduces regulatory burden. Conformity assessment and CE marking are underway.
                 </div>
             </div>
 

@@ -241,7 +241,7 @@ const financialData = {
   scenarios: {
     pessimistic: {
       name: "Pessimistic",
-      description: "Conservative growth to £5M annual (50% of target)",
+      description: "Conservative growth, 70:30 NHS:Private, 90:10 ADHD:Autism (NHS from April)",
       projections_2026: {
         // Jan: Actual, Feb-Mar: B2C only targets (no NHS)
         january: { b2c_adhd: 182, b2c_asd: 3, nhs_adhd: 0, nhs_asd: 0 },   // Actual: 185 patients
@@ -261,7 +261,7 @@ const financialData = {
     },
     realistic: {
       name: "Realistic",
-      description: "Target £10M annual revenue, 70:30 NHS:Private, 90:10 ADHD:Autism (NHS from April)",
+      description: "Base case, 70:30 NHS:Private, 90:10 ADHD:Autism (NHS from April)",
       projections_2026: {
         // Jan: Actual, Feb-Mar: B2C only targets (no NHS)
         january: { b2c_adhd: 182, b2c_asd: 3, nhs_adhd: 0, nhs_asd: 0 },   // Actual: 185 patients, £174K
@@ -281,7 +281,7 @@ const financialData = {
     },
     optimistic: {
       name: "Optimistic",
-      description: "Aggressive scaling to £15M annual (150% of target)",
+      description: "Aggressive scaling, 70:30 NHS:Private, 90:10 ADHD:Autism (NHS from April)",
       projections_2026: {
         // Jan: Actual, Feb-Mar: B2C only targets (no NHS)
         january: { b2c_adhd: 182, b2c_asd: 3, nhs_adhd: 0, nhs_asd: 0 },
