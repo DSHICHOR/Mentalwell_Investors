@@ -327,8 +327,8 @@ const financialData = {
     year_2027: {
       total_patients: 15000,
       total_revenue: 22000000,
-      markets: ['UK'],
-      strategy: 'Deepen NHS partnerships, scale B2C nationally',
+      markets: ['UK', 'US (5-10 states)', 'Ireland'],
+      strategy: 'Series B: US + Ireland market entry, scale NHS nationally',
       gross_profit: 10200000, // 46.3% blended margin maintained
       operating_expenses: 7000000,
       ebitda: 3200000,
@@ -352,8 +352,8 @@ const financialData = {
     year_2028: {
       total_patients: 30000,
       total_revenue: 50000000,
-      markets: ['UK', 'Ireland'],
-      strategy: 'Ireland launch, UK market leadership',
+      markets: ['UK', 'US (15-20 states)', 'Ireland', 'Netherlands', 'Germany'],
+      strategy: 'US insurance panels, EU beachhead markets',
       gross_profit: 23000000, // Improved margins through scale
       operating_expenses: 14000000,
       ebitda: 9000000,
@@ -377,8 +377,8 @@ const financialData = {
     year_2029: {
       total_patients: 55000,
       total_revenue: 100000000,
-      markets: ['UK', 'Ireland', 'US', 'Canada'],
-      strategy: 'North American expansion',
+      markets: ['UK', 'US (40+ states)', 'Ireland', 'NL', 'DE', 'Nordics'],
+      strategy: 'Full US coverage, Nordic hub, SaaS licensing',
       gross_profit: 46000000, // Scale efficiencies
       operating_expenses: 28000000,
       ebitda: 18000000,
