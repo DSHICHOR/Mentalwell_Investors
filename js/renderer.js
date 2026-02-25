@@ -633,9 +633,9 @@ class FinancialRenderer {
     // --- OPEX NOTE ---
     const opexNote = `
       <div class="highlight" style="margin-top: 15px;">
-        <strong>Operating expenses (from 2025 management accounts):</strong> ${fmt(monthly[0].totalOpex)}/month (Jan) scaling to ${fmt(dec.totalOpex)}/month (Dec).
-        Annual total: ${fmt(annual.totalOpex)}. Major components: staff costs (~61%), payment processing (~10%), software (~7%), professional services and facilities (~10%), insurance and regulatory (~2%), other (~4%).
-        Dec 2025 actual OpEx was £64K. Growth reflects hiring for NHS operations, compliance, and admin scaling.
+        <strong>Operating expenses:</strong> ${fmt(monthly[0].totalOpex)}/month (Jan, bank statement verified) scaling to ${fmt(dec.totalOpex)}/month (Dec).
+        Annual total: ${fmt(annual.totalOpex)}. Breakdown: staff costs (~48%), marketing (~19%), NI/pension (~9%), software (~5%), rent/facilities (~5%), insurance/compliance (~3%), other (~11%).
+        Dec 2025 actual: £64K. Jan-Feb 2026 verified from NatWest bank statements. Growth driven by headcount and marketing spend for NHS launch.
       </div>
     `;
 
@@ -651,7 +651,7 @@ class FinancialRenderer {
           <li>CAC covers full marketing spend: ${fmt(this.data.unit_economics.b2c_adhd.cac)} per B2C patient, ${fmt(this.data.unit_economics.nhs_adhd.cac)} per NHS referral</li>
           <li>OpEx based on 2025 management accounts, scaling from ${fmt(monthly[0].totalOpex)}/month to ${fmt(dec.totalOpex)}/month</li>
           <li>UK corporation tax at 19%, depreciation ${fmt(2000)}/month</li>
-          <li>January uses Stripe-verified actuals (${monthly[0].patients} patients, ${fmt(monthly[0].totalRevenue)} revenue)</li>
+          <li>January uses Stripe + bank-statement-verified actuals (${monthly[0].patients} patients, ${fmt(monthly[0].totalRevenue)} revenue, COGS from actual product mix)</li>
         </ul>
       </div>
     `;

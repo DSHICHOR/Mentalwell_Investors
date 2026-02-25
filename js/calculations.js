@@ -185,8 +185,17 @@ class FinancialCalculations {
       }
 
       const totalRevenue = b2cRevenue + nhsRevenue + subscriptionRevenue;
-      const costs = this.calculateMonthlyCosts(volumes, `${monthName} 2026`);
-      const grossProfit = totalRevenue - costs.total_costs;
+
+      // Use bank-statement-verified costs for actual months, projected costs otherwise
+      let totalCosts;
+      if (useActuals && actuals.actual_costs) {
+        const ac = actuals.actual_costs;
+        totalCosts = (ac.clinical || 0) + (ac.tech_admin || 0) + (ac.marketing_cac || 0) + (ac.subscription_cogs || 0);
+      } else {
+        const costs = this.calculateMonthlyCosts(volumes, `${monthName} 2026`);
+        totalCosts = costs.total_costs;
+      }
+      const grossProfit = totalRevenue - totalCosts;
       const grossMargin = totalRevenue > 0 ? (grossProfit / totalRevenue) : 0;
 
       projections.push({
@@ -288,26 +297,39 @@ class FinancialCalculations {
       const totalRevenue = b2cRev + nhsRev + subscriptionRev;
 
       // --- COGS (variable costs per patient) ---
-      const clinicalCosts =
-        (volumes.b2c_adhd || 0) * this.data.unit_economics.b2c_adhd.clinical_costs +
-        (volumes.b2c_asd || 0) * this.data.unit_economics.b2c_asd.clinical_costs +
-        (volumes.nhs_adhd || 0) * this.data.unit_economics.nhs_adhd.clinical_costs +
-        (volumes.nhs_asd || 0) * this.data.unit_economics.nhs_asd.clinical_costs;
+      let clinicalCosts, techAdmin, marketingCac, subscriptionCogs;
 
-      const techAdmin =
-        (volumes.b2c_adhd || 0) * this.data.unit_economics.b2c_adhd.tech_admin +
-        (volumes.b2c_asd || 0) * this.data.unit_economics.b2c_asd.tech_admin +
-        (volumes.nhs_adhd || 0) * this.data.unit_economics.nhs_adhd.tech_admin +
-        (volumes.nhs_asd || 0) * this.data.unit_economics.nhs_asd.tech_admin;
+      if (useActuals && actuals.actual_costs) {
+        // Bank-statement-verified costs for actual months
+        clinicalCosts = actuals.actual_costs.clinical;
+        techAdmin = actuals.actual_costs.tech_admin;
+        marketingCac = actuals.actual_costs.marketing_cac || 0;
+        subscriptionCogs = actuals.actual_costs.subscription_cogs || 0;
+      } else {
+        // Projected months: unit economics × volumes
+        clinicalCosts =
+          (volumes.b2c_adhd || 0) * this.data.unit_economics.b2c_adhd.clinical_costs +
+          (volumes.b2c_asd || 0) * this.data.unit_economics.b2c_asd.clinical_costs +
+          (volumes.nhs_adhd || 0) * this.data.unit_economics.nhs_adhd.clinical_costs +
+          (volumes.nhs_asd || 0) * this.data.unit_economics.nhs_asd.clinical_costs;
 
-      const marketingCac =
-        (volumes.b2c_adhd || 0) * this.data.unit_economics.b2c_adhd.cac +
-        (volumes.b2c_asd || 0) * this.data.unit_economics.b2c_asd.cac +
-        (volumes.nhs_adhd || 0) * this.data.unit_economics.nhs_adhd.cac +
-        (volumes.nhs_asd || 0) * this.data.unit_economics.nhs_asd.cac;
+        techAdmin =
+          (volumes.b2c_adhd || 0) * this.data.unit_economics.b2c_adhd.tech_admin +
+          (volumes.b2c_asd || 0) * this.data.unit_economics.b2c_asd.tech_admin +
+          (volumes.nhs_adhd || 0) * this.data.unit_economics.nhs_adhd.tech_admin +
+          (volumes.nhs_asd || 0) * this.data.unit_economics.nhs_asd.tech_admin;
+
+        marketingCac =
+          (volumes.b2c_adhd || 0) * this.data.unit_economics.b2c_adhd.cac +
+          (volumes.b2c_asd || 0) * this.data.unit_economics.b2c_asd.cac +
+          (volumes.nhs_adhd || 0) * this.data.unit_economics.nhs_adhd.cac +
+          (volumes.nhs_asd || 0) * this.data.unit_economics.nhs_asd.cac;
+      }
 
       // Subscription COGS using treatment plan unit economics (adult 6m: £230/subscription)
-      const subscriptionCogs = subscriptionCount * this.data.unit_economics.adult_6m_plan.total_costs;
+      subscriptionCogs = (subscriptionCogs !== undefined && useActuals && actuals.actual_costs)
+        ? subscriptionCogs
+        : subscriptionCount * this.data.unit_economics.adult_6m_plan.total_costs;
 
       const totalCogs = clinicalCosts + techAdmin + marketingCac + subscriptionCogs;
 

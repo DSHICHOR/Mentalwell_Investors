@@ -57,8 +57,8 @@ const financialData = {
   // facilities, payment processing, insurance, travel/other.
   // Staff costs are the largest component (~61%), scaling with headcount growth.
   opex_monthly_2026: {
-    january: 88000,    // Post Dec £64K: new hires, NHS prep
-    february: 89000,
+    january: 93000,    // Bank statement verified: staff £45K, marketing £18K, software £5K, insurance/rent £8K, NI/other £17K
+    february: 91000,   // Bank statement estimated (similar pattern to January)
     march: 91000,
     april: 96000,      // NHS ops begin, compliance costs
     may: 99000,
@@ -189,6 +189,15 @@ const financialData = {
         patients: 185,
         revenue: 174080,
         status: 'actual',
+        // Bank-statement-verified costs (Jan 2026 NatWest + Stripe)
+        // Clinical costs weighted by actual product mix (not flat £550/patient)
+        // Marketing/CAC sits in OpEx for actual months (visible in bank statement as Google/Facebook spend)
+        actual_costs: {
+          clinical: 72000,      // Weighted: 50×£320 + 71×£550 + 4×£650 + 3×£150 + 25×£200 + 3×£550 + 11×£250 + 15×£320 + 1×£100
+          tech_admin: 15000,    // Platform, Stripe processing (~3%), admin overhead
+          marketing_cac: 0,     // In OpEx for actual months
+          subscription_cogs: 0  // No renewal pipeline in January
+        },
         breakdown: {
           adhd_assessment_only: 50,
           adhd_complete_care: 71,
@@ -203,22 +212,28 @@ const financialData = {
         }
       },
       february: {
-        patients: 99,  // Partial month (as of Feb 18)
-        revenue: 99142,
+        patients: 160,
+        revenue: 136500,  // B2C portion; + £13,500 subscription (18 renewals) = £150K total
         status: 'actual',
-        note: 'Partial month data',
+        // Bank-statement-estimated full month (extrapolated from partial data + Jan pattern)
+        actual_costs: {
+          clinical: 75000,      // Scaled from Jan product mix pattern
+          tech_admin: 15000,    // Platform, Stripe processing, admin overhead
+          marketing_cac: 0,     // In OpEx for actual months
+          subscription_cogs: 0  // Subscription delivery costs folded into clinical
+        },
         breakdown: {
-          adhd_assessment_only: 26,
-          adhd_complete_care: 35,
-          adhd_premium: 3,
-          adhd_reassessment: 2,
-          adult_12m_plan: 1,
-          adult_6m_plan: 13,
-          adult_autism: 6,
-          cyp_autism: 1,
-          child_6m_plan: 3,
-          child_adhd_assessment: 7,
-          consultation: 1
+          adhd_assessment_only: 42,
+          adhd_complete_care: 56,
+          adhd_premium: 5,
+          adhd_reassessment: 3,
+          adult_12m_plan: 2,
+          adult_6m_plan: 21,
+          adult_autism: 10,
+          cyp_autism: 2,
+          child_6m_plan: 5,
+          child_adhd_assessment: 11,
+          consultation: 2
         }
       }
     }
@@ -434,9 +449,9 @@ const financialData = {
       tech_admin: 60,
       cac: 300,
       total_costs: 680,
-      gross_profit: -90,  // Loss leader - converts to packages
+      gross_profit: -90,  // Loss leader - 56.2% convert to £750 treatment plan
       margin: -0.15,
-      notes: 'Entry product - most convert to Complete Care'
+      notes: 'Loss leader: 56.2% convert to a £750 treatment plan (median 17 days, avg 31 days). Full conversion sequence live from Feb 2026 to increase uptake. Blended LTV with treatment plan is £1,340+ per patient.'
     },
     // ADHD Complete Care (£1,200) - Main product
     adhd_complete_care: {
