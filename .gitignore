@@ -23,3 +23,6 @@ Thumbs.db
 # Local environment
 .env
 .env.local
+
+# Node (Netlify Functions)
+node_modules/
