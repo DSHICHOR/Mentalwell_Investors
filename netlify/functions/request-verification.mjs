@@ -18,6 +18,27 @@ export default async (request) => {
             });
         }
 
+        const apiKey = process.env.BREVO_API_KEY;
+        const senderEmail = process.env.BREVO_SENDER_EMAIL;
+        const senderName = process.env.BREVO_SENDER_NAME || 'Mentalwell';
+        const ownerEmail = process.env.OWNER_EMAIL || 'daniel@mentalwell.co.uk';
+
+        console.log('Config check:', {
+            hasApiKey: !!apiKey,
+            senderEmail,
+            senderName,
+            ownerEmail,
+            visitorEmail: email
+        });
+
+        if (!apiKey || !senderEmail) {
+            console.error('Missing BREVO_API_KEY or BREVO_SENDER_EMAIL env vars');
+            return new Response(JSON.stringify({ error: 'Email service not configured' }), {
+                status: 500,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        }
+
         // Generate 6-digit code
         const code = String(Math.floor(100000 + Math.random() * 900000));
         const expiresAt = Date.now() + 10 * 60 * 1000; // 10 minutes
@@ -30,13 +51,10 @@ export default async (request) => {
             attempts: 0
         });
 
-        const apiKey = process.env.BREVO_API_KEY;
-        const senderEmail = process.env.BREVO_SENDER_EMAIL;
-        const senderName = process.env.BREVO_SENDER_NAME || 'Mentalwell';
-        const ownerEmail = process.env.OWNER_EMAIL || 'daniel@mentalwell.co.uk';
+        console.log('Code stored for', email.toLowerCase());
 
         // Send verification email to visitor
-        await fetch('https://api.brevo.com/v3/smtp/email', {
+        const verifyResponse = await fetch('https://api.brevo.com/v3/smtp/email', {
             method: 'POST',
             headers: {
                 'api-key': apiKey,
@@ -66,8 +84,18 @@ export default async (request) => {
             })
         });
 
+        const verifyBody = await verifyResponse.text();
+        console.log('Brevo verification email response:', verifyResponse.status, verifyBody);
+
+        if (!verifyResponse.ok) {
+            return new Response(JSON.stringify({ error: 'Failed to send verification email: ' + verifyBody }), {
+                status: 500,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        }
+
         // Send notification to site owner
-        await fetch('https://api.brevo.com/v3/smtp/email', {
+        const notifyResponse = await fetch('https://api.brevo.com/v3/smtp/email', {
             method: 'POST',
             headers: {
                 'api-key': apiKey,
@@ -88,6 +116,8 @@ export default async (request) => {
                 `
             })
         });
+
+        console.log('Brevo notification email response:', notifyResponse.status);
 
         return new Response(JSON.stringify({ success: true }), {
             status: 200,
