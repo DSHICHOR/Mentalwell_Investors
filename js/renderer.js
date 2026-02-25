@@ -418,6 +418,256 @@ class FinancialRenderer {
     `;
   }
 
+  // Render full P&L Model for 2026
+  renderPnLModel(scenario = null) {
+    const { monthly, annual } = this.calc.generatePnL2026(scenario);
+
+    // Helpers for formatting
+    const fmt = (amount) => this.calc.formatCurrency(Math.round(amount));
+    const fmtProfit = (amount) => {
+      const rounded = Math.round(amount);
+      if (rounded < 0) return `<span style="color: #ef4444;">-${this.calc.formatCurrency(Math.abs(rounded))}</span>`;
+      return `<span style="color: #22c55e;">${this.calc.formatCurrency(rounded)}</span>`;
+    };
+    const fmtPct = (decimal) => {
+      const pct = Math.round(decimal * 100);
+      if (pct < 0) return `<span style="color: #ef4444;">${pct}%</span>`;
+      return `${pct}%`;
+    };
+
+    // Find EBITDA positive month
+    let ebitdaPositiveMonth = null;
+    for (const m of monthly) {
+      if (m.ebitda > 0 && !ebitdaPositiveMonth) {
+        ebitdaPositiveMonth = m.month;
+      }
+    }
+
+    const dec = monthly[monthly.length - 1];
+    const decAnnualized = dec.totalRevenue * 12;
+
+    // --- SUMMARY CARDS ---
+    const summaryHTML = `
+      <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 30px;">
+        <div class="metric-card">
+          <div class="metric-value">${fmt(annual.totalRevenue)}</div>
+          <div class="metric-label">2026 Revenue</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-value">${Math.round(annual.grossMargin * 100)}%</div>
+          <div class="metric-label">Gross Margin</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-value">${fmt(annual.ebitda)}</div>
+          <div class="metric-label">2026 EBITDA</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-value">${fmt(decAnnualized)}</div>
+          <div class="metric-label">Dec Run Rate (annualised)</div>
+        </div>
+      </div>
+    `;
+
+    // --- P&L SUMMARY TABLE ---
+    let pnlRows = '';
+    monthly.forEach(m => {
+      const actualLabel = m.isActual ? ' <span style="font-size: 11px; color: var(--color-success); font-weight: 600;">(actual)</span>' : '';
+
+      pnlRows += `
+        <tr>
+          <td><strong>${m.month}</strong>${actualLabel}</td>
+          <td>${m.patients}</td>
+          <td>${fmt(m.totalRevenue)}</td>
+          <td>${fmt(m.totalCogs)}</td>
+          <td>${fmtProfit(m.grossProfit)}</td>
+          <td>${fmtPct(m.grossMargin)}</td>
+          <td>${fmt(m.totalOpex)}</td>
+          <td>${fmtProfit(m.ebitda)}</td>
+          <td>${fmtPct(m.ebitdaMargin)}</td>
+          <td>${fmtProfit(m.netIncome)}</td>
+        </tr>
+      `;
+    });
+
+    pnlRows += `
+      <tr class="total-row">
+        <td><strong>2026 TOTAL</strong></td>
+        <td><strong>${annual.patients.toLocaleString()}</strong></td>
+        <td><strong>${fmt(annual.totalRevenue)}</strong></td>
+        <td><strong>${fmt(annual.totalCogs)}</strong></td>
+        <td><strong>${fmtProfit(annual.grossProfit)}</strong></td>
+        <td><strong>${fmtPct(annual.grossMargin)}</strong></td>
+        <td><strong>${fmt(annual.totalOpex)}</strong></td>
+        <td><strong>${fmtProfit(annual.ebitda)}</strong></td>
+        <td><strong>${fmtPct(annual.ebitdaMargin)}</strong></td>
+        <td><strong>${fmtProfit(annual.netIncome)}</strong></td>
+      </tr>
+    `;
+
+    const pnlTableHTML = `
+      <h2>P&L Summary</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Month</th>
+            <th>Patients</th>
+            <th>Revenue</th>
+            <th>COGS</th>
+            <th>Gross Profit</th>
+            <th>GP%</th>
+            <th>OpEx</th>
+            <th>EBITDA</th>
+            <th>EBITDA%</th>
+            <th>Net Income</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${pnlRows}
+        </tbody>
+      </table>
+    `;
+
+    // --- REVENUE BREAKDOWN TABLE ---
+    let revRows = '';
+    monthly.forEach(m => {
+      const actualLabel = m.isActual ? ' <span style="font-size: 11px; color: var(--color-success); font-weight: 600;">(actual)</span>' : '';
+
+      revRows += `
+        <tr>
+          <td><strong>${m.month}</strong>${actualLabel}</td>
+          <td>${fmt(m.b2cAdhdRev)}</td>
+          <td>${fmt(m.b2cAsdRev)}</td>
+          <td>${fmt(m.nhsAdhdRev)}</td>
+          <td>${fmt(m.nhsAsdRev)}</td>
+          <td>${fmt(m.subscriptionRev)}</td>
+          <td><strong>${fmt(m.totalRevenue)}</strong></td>
+        </tr>
+      `;
+    });
+
+    revRows += `
+      <tr class="total-row">
+        <td><strong>2026 TOTAL</strong></td>
+        <td><strong>${fmt(annual.b2cAdhdRev)}</strong></td>
+        <td><strong>${fmt(annual.b2cAsdRev)}</strong></td>
+        <td><strong>${fmt(annual.nhsAdhdRev)}</strong></td>
+        <td><strong>${fmt(annual.nhsAsdRev)}</strong></td>
+        <td><strong>${fmt(annual.subscriptionRev)}</strong></td>
+        <td><strong>${fmt(annual.totalRevenue)}</strong></td>
+      </tr>
+    `;
+
+    const b2cPct = Math.round(annual.b2cRev / annual.totalRevenue * 100);
+    const nhsPct = Math.round(annual.nhsRev / annual.totalRevenue * 100);
+    const subPct = Math.round(annual.subscriptionRev / annual.totalRevenue * 100);
+
+    const revenueTableHTML = `
+      <h2>Revenue by Channel</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Month</th>
+            <th>B2C ADHD</th>
+            <th>B2C ASD</th>
+            <th>NHS ADHD</th>
+            <th>NHS ASD</th>
+            <th>Subscriptions</th>
+            <th>Total Revenue</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${revRows}
+        </tbody>
+      </table>
+      <div class="highlight" style="margin-top: 15px;">
+        <strong>Revenue mix:</strong> B2C ${b2cPct}% | NHS ${nhsPct}% | Subscriptions ${subPct}%.
+        NHS ADHD launches April 2026, NHS ASD from June. NHS becomes the primary revenue driver by mid-year.
+      </div>
+    `;
+
+    // --- COST BREAKDOWN TABLE ---
+    let costRows = '';
+    monthly.forEach(m => {
+      costRows += `
+        <tr>
+          <td><strong>${m.month}</strong></td>
+          <td>${fmt(m.clinicalCosts)}</td>
+          <td>${fmt(m.techAdmin)}</td>
+          <td>${fmt(m.marketingCac)}</td>
+          <td>${fmt(m.subscriptionCogs)}</td>
+          <td><strong>${fmt(m.totalCogs)}</strong></td>
+        </tr>
+      `;
+    });
+
+    costRows += `
+      <tr class="total-row">
+        <td><strong>2026 TOTAL</strong></td>
+        <td><strong>${fmt(annual.clinicalCosts)}</strong></td>
+        <td><strong>${fmt(annual.techAdmin)}</strong></td>
+        <td><strong>${fmt(annual.marketingCac)}</strong></td>
+        <td><strong>${fmt(annual.subscriptionCogs)}</strong></td>
+        <td><strong>${fmt(annual.totalCogs)}</strong></td>
+      </tr>
+    `;
+
+    const costTableHTML = `
+      <h2>Cost of Revenue Breakdown</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Month</th>
+            <th>Clinical Costs</th>
+            <th>Tech & Admin</th>
+            <th>Marketing (CAC)</th>
+            <th>Subscription Delivery</th>
+            <th>Total COGS</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${costRows}
+        </tbody>
+      </table>
+    `;
+
+    // --- OPEX NOTE ---
+    const opexNote = `
+      <div class="highlight" style="margin-top: 15px;">
+        <strong>Operating expenses:</strong> ${fmt(monthly[0].totalOpex)}/month (Jan, bank statement verified) scaling to ${fmt(dec.totalOpex)}/month (Dec).
+        Annual total: ${fmt(annual.totalOpex)}. Breakdown: staff costs (~48%), marketing (~19%), NI/pension (~9%), software (~5%), rent/facilities (~5%), insurance/compliance (~3%), other (~11%).
+        Dec 2025 actual: £64K. Jan-Feb 2026 verified from NatWest bank statements. Growth driven by headcount and marketing spend for NHS launch.
+      </div>
+    `;
+
+    // --- MODEL ASSUMPTIONS ---
+    const assumptionsHTML = `
+      <div class="highlight highlight-warning" style="margin-top: 20px;">
+        <strong>Model assumptions:</strong>
+        <ul style="margin: 10px 0 0 0; padding-left: 20px;">
+          <li>B2C ADHD at ${fmt(this.data.pricing.b2c_adhd_complete)} (Complete Care), B2C ASD at ${fmt(this.data.pricing.b2c_asd)}, NHS ADHD at ${fmt(this.data.pricing.nhs_adhd)}, NHS ASD at ${fmt(this.data.pricing.nhs_asd)}</li>
+          <li>NHS ADHD launches April 2026, NHS ASD launches June 2026, targeting 70:30 NHS:Private mix</li>
+          <li>Subscription revenue from Stripe-verified renewal pipeline at 50% uptake x ${fmt(this.data.pricing.subscription_6month)}</li>
+          <li>Subscription COGS at treatment plan margins (69% gross profit = ${fmt(this.data.unit_economics.adult_6m_plan.total_costs)} cost per subscription)</li>
+          <li>CAC covers full marketing spend: ${fmt(this.data.unit_economics.b2c_adhd.cac)} per B2C patient, ${fmt(this.data.unit_economics.nhs_adhd.cac)} per NHS referral</li>
+          <li>OpEx based on 2025 management accounts, scaling from ${fmt(monthly[0].totalOpex)}/month to ${fmt(dec.totalOpex)}/month</li>
+          <li>UK corporation tax at 19%, depreciation ${fmt(2000)}/month</li>
+          <li>January uses Stripe + bank-statement-verified actuals (${monthly[0].patients} patients, ${fmt(monthly[0].totalRevenue)} revenue, COGS from actual product mix)</li>
+        </ul>
+      </div>
+    `;
+
+    // --- EBITDA MILESTONE ---
+    const ebitdaNote = ebitdaPositiveMonth
+      ? `<div class="highlight" style="margin-top: 15px; background: #f0fdf4; border-left: 4px solid #22c55e;">
+          <strong>EBITDA turns positive in ${ebitdaPositiveMonth}</strong> as NHS Right to Choose volumes drive revenue past the operating cost base.
+          December EBITDA: ${fmtProfit(dec.ebitda)} on ${fmt(dec.totalRevenue)} revenue (${fmtPct(dec.ebitdaMargin)} margin).
+          Annualised December run rate: ${fmt(decAnnualized)}.
+        </div>`
+      : '';
+
+    return summaryHTML + pnlTableHTML + ebitdaNote + revenueTableHTML + costTableHTML + opexNote + assumptionsHTML;
+  }
+
   // Render 3-Statement Financial Model
   renderThreeStatementModel(scenario = null) {
     const projections = this.calc.generate2026Projections(scenario);

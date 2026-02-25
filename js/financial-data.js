@@ -52,6 +52,25 @@ const financialData = {
     unexpected_overhead_rate: 0.15 // 15% of total operating expenses for scale
   },
 
+  // 2026 Monthly OpEx schedule (based on 2025 management accounts + scaling)
+  // Dec 2025 actual total expenses: £64K. Categories: staff, software, consulting,
+  // facilities, payment processing, insurance, travel/other.
+  // Staff costs are the largest component (~61%), scaling with headcount growth.
+  opex_monthly_2026: {
+    january: 93000,    // Bank statement verified: staff £45K, marketing £18K, software £5K, insurance/rent £8K, NI/other £17K
+    february: 91000,   // Bank statement estimated (similar pattern to January)
+    march: 91000,
+    april: 96000,      // NHS ops begin, compliance costs
+    may: 99000,
+    june: 103000,      // NHS ASD launch adds complexity
+    july: 108000,
+    august: 112000,
+    september: 116000,
+    october: 119000,
+    november: 122000,
+    december: 125000
+  },
+
   // Market Assumptions
   market: {
     subscription_take_rate: 0.562,
@@ -170,6 +189,15 @@ const financialData = {
         patients: 185,
         revenue: 174080,
         status: 'actual',
+        // Bank-statement-verified costs (Jan 2026 NatWest + Stripe)
+        // Clinical costs weighted by actual product mix (not flat £550/patient)
+        // Marketing/CAC sits in OpEx for actual months (visible in bank statement as Google/Facebook spend)
+        actual_costs: {
+          clinical: 72000,      // Weighted: 50×£320 + 71×£550 + 4×£650 + 3×£150 + 25×£200 + 3×£550 + 11×£250 + 15×£320 + 1×£100
+          tech_admin: 15000,    // Platform, Stripe processing (~3%), admin overhead
+          marketing_cac: 0,     // In OpEx for actual months
+          subscription_cogs: 0  // No renewal pipeline in January
+        },
         breakdown: {
           adhd_assessment_only: 50,
           adhd_complete_care: 71,
@@ -184,22 +212,28 @@ const financialData = {
         }
       },
       february: {
-        patients: 99,  // Partial month (as of Feb 18)
-        revenue: 99142,
+        patients: 160,
+        revenue: 136500,  // B2C portion; + £13,500 subscription (18 renewals) = £150K total
         status: 'actual',
-        note: 'Partial month data',
+        // Bank-statement-estimated full month (extrapolated from partial data + Jan pattern)
+        actual_costs: {
+          clinical: 75000,      // Scaled from Jan product mix pattern
+          tech_admin: 15000,    // Platform, Stripe processing, admin overhead
+          marketing_cac: 0,     // In OpEx for actual months
+          subscription_cogs: 0  // Subscription delivery costs folded into clinical
+        },
         breakdown: {
-          adhd_assessment_only: 26,
-          adhd_complete_care: 35,
-          adhd_premium: 3,
-          adhd_reassessment: 2,
-          adult_12m_plan: 1,
-          adult_6m_plan: 13,
-          adult_autism: 6,
-          cyp_autism: 1,
-          child_6m_plan: 3,
-          child_adhd_assessment: 7,
-          consultation: 1
+          adhd_assessment_only: 42,
+          adhd_complete_care: 56,
+          adhd_premium: 5,
+          adhd_reassessment: 3,
+          adult_12m_plan: 2,
+          adult_6m_plan: 21,
+          adult_autism: 10,
+          cyp_autism: 2,
+          child_6m_plan: 5,
+          child_adhd_assessment: 11,
+          consultation: 2
         }
       }
     }
@@ -236,20 +270,20 @@ const financialData = {
   },
 
   // Growth Scenarios for 2026
-  // Target: £10M annual revenue, 70:30 NHS:Private mix (from April), 90:10 ADHD:Autism
-  // No NHS until April 2026
+  // Target: £10M annual revenue, 70:30 NHS:Private mix, 90:10 ADHD:Autism
+  // NHS ADHD from April 2026, NHS ASD from June 2026
   scenarios: {
     pessimistic: {
       name: "Pessimistic",
-      description: "Conservative growth, 70:30 NHS:Private, 90:10 ADHD:Autism (NHS from April)",
+      description: "Conservative growth, 70:30 NHS:Private, 90:10 ADHD:Autism (NHS ADHD Apr, ASD Jun)",
       projections_2026: {
         // Jan: Actual, Feb-Mar: B2C only targets (no NHS)
         january: { b2c_adhd: 182, b2c_asd: 3, nhs_adhd: 0, nhs_asd: 0 },   // Actual: 185 patients
         february: { b2c_adhd: 135, b2c_asd: 15, nhs_adhd: 0, nhs_asd: 0 }, // 150 target
         march: { b2c_adhd: 162, b2c_asd: 18, nhs_adhd: 0, nhs_asd: 0 },    // 180 target
-        // Apr onwards: NHS R2C starts, 70:30 NHS:Private, 90:10 ADHD:Autism
-        april: { b2c_adhd: 72, b2c_asd: 8, nhs_adhd: 162, nhs_asd: 18 },
-        may: { b2c_adhd: 81, b2c_asd: 9, nhs_adhd: 180, nhs_asd: 20 },
+        // Apr-May: NHS ADHD starts (ASD from June)
+        april: { b2c_adhd: 72, b2c_asd: 8, nhs_adhd: 162, nhs_asd: 0 },
+        may: { b2c_adhd: 81, b2c_asd: 9, nhs_adhd: 180, nhs_asd: 0 },
         june: { b2c_adhd: 90, b2c_asd: 10, nhs_adhd: 198, nhs_asd: 22 },
         july: { b2c_adhd: 99, b2c_asd: 11, nhs_adhd: 216, nhs_asd: 24 },
         august: { b2c_adhd: 108, b2c_asd: 12, nhs_adhd: 234, nhs_asd: 26 },
@@ -261,16 +295,16 @@ const financialData = {
     },
     realistic: {
       name: "Realistic",
-      description: "Base case, 70:30 NHS:Private, 90:10 ADHD:Autism (NHS from April)",
+      description: "Base case, 70:30 NHS:Private, 90:10 ADHD:Autism (NHS ADHD Apr, ASD Jun)",
       projections_2026: {
         // Jan: Actual, Feb-Mar: B2C only targets (no NHS)
         january: { b2c_adhd: 182, b2c_asd: 3, nhs_adhd: 0, nhs_asd: 0 },   // Actual: 185 patients, £174K
         february: { b2c_adhd: 135, b2c_asd: 15, nhs_adhd: 0, nhs_asd: 0 }, // 150 target
         march: { b2c_adhd: 162, b2c_asd: 18, nhs_adhd: 0, nhs_asd: 0 },    // 180 target
-        // Apr onwards: NHS R2C starts, targeting 70:30 NHS:Private, 90:10 ADHD:Autism
-        april: { b2c_adhd: 108, b2c_asd: 12, nhs_adhd: 252, nhs_asd: 28 },   // ~400 total, ~£540K
-        may: { b2c_adhd: 126, b2c_asd: 14, nhs_adhd: 288, nhs_asd: 32 },     // ~460 total, ~£620K
-        june: { b2c_adhd: 144, b2c_asd: 16, nhs_adhd: 324, nhs_asd: 36 },    // ~520 total, ~£700K
+        // Apr-May: NHS ADHD starts (ASD from June), targeting 70:30 NHS:Private
+        april: { b2c_adhd: 108, b2c_asd: 12, nhs_adhd: 252, nhs_asd: 0 },    // NHS ADHD launch
+        may: { b2c_adhd: 126, b2c_asd: 14, nhs_adhd: 288, nhs_asd: 0 },      // NHS ADHD ramp
+        june: { b2c_adhd: 144, b2c_asd: 16, nhs_adhd: 324, nhs_asd: 36 },    // NHS ASD launches
         july: { b2c_adhd: 162, b2c_asd: 18, nhs_adhd: 360, nhs_asd: 40 },    // ~580 total, ~£780K
         august: { b2c_adhd: 180, b2c_asd: 20, nhs_adhd: 396, nhs_asd: 44 },  // ~640 total, ~£860K
         september: { b2c_adhd: 189, b2c_asd: 21, nhs_adhd: 423, nhs_asd: 47 }, // ~680 total, ~£920K
@@ -281,15 +315,15 @@ const financialData = {
     },
     optimistic: {
       name: "Optimistic",
-      description: "Aggressive scaling, 70:30 NHS:Private, 90:10 ADHD:Autism (NHS from April)",
+      description: "Aggressive scaling, 70:30 NHS:Private, 90:10 ADHD:Autism (NHS ADHD Apr, ASD Jun)",
       projections_2026: {
         // Jan: Actual, Feb-Mar: B2C only targets (no NHS)
         january: { b2c_adhd: 182, b2c_asd: 3, nhs_adhd: 0, nhs_asd: 0 },
         february: { b2c_adhd: 135, b2c_asd: 15, nhs_adhd: 0, nhs_asd: 0 }, // 150 target
         march: { b2c_adhd: 162, b2c_asd: 18, nhs_adhd: 0, nhs_asd: 0 },    // 180 target
-        // Apr onwards: NHS R2C starts aggressively
-        april: { b2c_adhd: 162, b2c_asd: 18, nhs_adhd: 378, nhs_asd: 42 },
-        may: { b2c_adhd: 189, b2c_asd: 21, nhs_adhd: 441, nhs_asd: 49 },
+        // Apr-May: NHS ADHD starts aggressively (ASD from June)
+        april: { b2c_adhd: 162, b2c_asd: 18, nhs_adhd: 378, nhs_asd: 0 },
+        may: { b2c_adhd: 189, b2c_asd: 21, nhs_adhd: 441, nhs_asd: 0 },
         june: { b2c_adhd: 216, b2c_asd: 24, nhs_adhd: 504, nhs_asd: 56 },
         july: { b2c_adhd: 243, b2c_asd: 27, nhs_adhd: 567, nhs_asd: 63 },
         august: { b2c_adhd: 270, b2c_asd: 30, nhs_adhd: 630, nhs_asd: 70 },
@@ -310,9 +344,9 @@ const financialData = {
     january: { b2c_adhd: 182, b2c_asd: 3, nhs_adhd: 0, nhs_asd: 0 },
     february: { b2c_adhd: 135, b2c_asd: 15, nhs_adhd: 0, nhs_asd: 0 },
     march: { b2c_adhd: 162, b2c_asd: 18, nhs_adhd: 0, nhs_asd: 0 },
-    // Apr onwards: NHS R2C starts, 70:30 NHS:Private, 90:10 ADHD:Autism
-    april: { b2c_adhd: 108, b2c_asd: 12, nhs_adhd: 252, nhs_asd: 28 },
-    may: { b2c_adhd: 126, b2c_asd: 14, nhs_adhd: 288, nhs_asd: 32 },
+    // Apr-May: NHS ADHD starts (ASD from June), 70:30 NHS:Private
+    april: { b2c_adhd: 108, b2c_asd: 12, nhs_adhd: 252, nhs_asd: 0 },
+    may: { b2c_adhd: 126, b2c_asd: 14, nhs_adhd: 288, nhs_asd: 0 },
     june: { b2c_adhd: 144, b2c_asd: 16, nhs_adhd: 324, nhs_asd: 36 },
     july: { b2c_adhd: 162, b2c_asd: 18, nhs_adhd: 360, nhs_asd: 40 },
     august: { b2c_adhd: 180, b2c_asd: 20, nhs_adhd: 396, nhs_asd: 44 },
@@ -415,9 +449,9 @@ const financialData = {
       tech_admin: 60,
       cac: 300,
       total_costs: 680,
-      gross_profit: -90,  // Loss leader - converts to packages
+      gross_profit: -90,  // Loss leader - 56.2% convert to £750 treatment plan
       margin: -0.15,
-      notes: 'Entry product - most convert to Complete Care'
+      notes: 'Loss leader: 56.2% convert to a £750 treatment plan (median 17 days, avg 31 days). Full conversion sequence live from Feb 2026 to increase uptake. Blended LTV with treatment plan is £1,340+ per patient.'
     },
     // ADHD Complete Care (£1,200) - Main product
     adhd_complete_care: {
@@ -561,7 +595,8 @@ const financialData = {
     clinical_capacity_per_psychiatrist: 55, // patients per month
     ai_efficiency_gain: 0.5, // 50% time reduction
     competitive_response_time: 18, // months
-    nhs_launch_date: 'April 2026',
+    nhs_adhd_launch_date: 'April 2026',
+    nhs_asd_launch_date: 'June 2026',
     asd_launch_date: 'Q4 2025'
   }
 };
