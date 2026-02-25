@@ -243,6 +243,134 @@ class FinancialCalculations {
     return projections;
   }
 
+  // Generate full P&L for 2026 (monthly + annual totals)
+  generatePnL2026(scenario = null) {
+    const monthly = [];
+
+    const projectionData = scenario
+      ? this.data.scenarios[scenario]?.projections_2026
+      : this.data.scenarios[this.data.activeScenario]?.projections_2026 || this.data.projections_2026;
+
+    Object.entries(projectionData).forEach(([month, volumes]) => {
+      const monthName = month.charAt(0).toUpperCase() + month.slice(1);
+
+      // Check for actuals (full months only, skip partial)
+      const actuals = this.data.performance_2026?.actuals?.[month];
+      const useActuals = actuals && actuals.status === 'actual' && !actuals.note;
+
+      // --- REVENUE ---
+      let b2cAdhdRev, b2cAsdRev, nhsAdhdRev, nhsAsdRev, patients;
+
+      if (useActuals) {
+        // January actuals: allocate revenue proportionally based on projected volume mix
+        const totalB2cVol = (volumes.b2c_adhd || 0) + (volumes.b2c_asd || 0);
+        const adhdShare = totalB2cVol > 0 ? volumes.b2c_adhd / totalB2cVol : 1;
+        b2cAdhdRev = Math.round(actuals.revenue * adhdShare);
+        b2cAsdRev = actuals.revenue - b2cAdhdRev;
+        nhsAdhdRev = 0;
+        nhsAsdRev = 0;
+        patients = actuals.patients;
+      } else {
+        b2cAdhdRev = (volumes.b2c_adhd || 0) * this.data.pricing.b2c_adhd_complete;
+        b2cAsdRev = (volumes.b2c_asd || 0) * this.data.pricing.b2c_asd;
+        nhsAdhdRev = (volumes.nhs_adhd || 0) * this.data.pricing.nhs_adhd;
+        nhsAsdRev = (volumes.nhs_asd || 0) * this.data.pricing.nhs_asd;
+        patients = Object.values(volumes).reduce((sum, val) => sum + val, 0);
+      }
+
+      // Subscription revenue from renewal pipeline at 50% uptake
+      const pipelineEligible = this.data.renewal_pipeline_2026?.[month] || 0;
+      const subscriptionCount = Math.round(pipelineEligible * 0.5);
+      const subscriptionRev = subscriptionCount * this.data.pricing.subscription_6month;
+
+      const b2cRev = b2cAdhdRev + b2cAsdRev;
+      const nhsRev = nhsAdhdRev + nhsAsdRev;
+      const totalRevenue = b2cRev + nhsRev + subscriptionRev;
+
+      // --- COGS (variable costs per patient) ---
+      const clinicalCosts =
+        (volumes.b2c_adhd || 0) * this.data.unit_economics.b2c_adhd.clinical_costs +
+        (volumes.b2c_asd || 0) * this.data.unit_economics.b2c_asd.clinical_costs +
+        (volumes.nhs_adhd || 0) * this.data.unit_economics.nhs_adhd.clinical_costs +
+        (volumes.nhs_asd || 0) * this.data.unit_economics.nhs_asd.clinical_costs;
+
+      const techAdmin =
+        (volumes.b2c_adhd || 0) * this.data.unit_economics.b2c_adhd.tech_admin +
+        (volumes.b2c_asd || 0) * this.data.unit_economics.b2c_asd.tech_admin +
+        (volumes.nhs_adhd || 0) * this.data.unit_economics.nhs_adhd.tech_admin +
+        (volumes.nhs_asd || 0) * this.data.unit_economics.nhs_asd.tech_admin;
+
+      const marketingCac =
+        (volumes.b2c_adhd || 0) * this.data.unit_economics.b2c_adhd.cac +
+        (volumes.b2c_asd || 0) * this.data.unit_economics.b2c_asd.cac +
+        (volumes.nhs_adhd || 0) * this.data.unit_economics.nhs_adhd.cac +
+        (volumes.nhs_asd || 0) * this.data.unit_economics.nhs_asd.cac;
+
+      // Subscription COGS using treatment plan unit economics (adult 6m: £230/subscription)
+      const subscriptionCogs = subscriptionCount * this.data.unit_economics.adult_6m_plan.total_costs;
+
+      const totalCogs = clinicalCosts + techAdmin + marketingCac + subscriptionCogs;
+
+      // --- GROSS PROFIT ---
+      const grossProfit = totalRevenue - totalCogs;
+      const grossMargin = totalRevenue > 0 ? grossProfit / totalRevenue : 0;
+
+      // --- OPERATING EXPENSES (fixed monthly) ---
+      const insurance = this.data.operating_expenses.insurance;
+      const cqc = this.data.operating_expenses.cqc_registration;
+      const officeRent = this.data.operating_expenses.office_rent.monthly_cost;
+      const adminSalaries = this.data.operating_expenses.admin_salaries.monthly_cost_total;
+      const baseOpex = insurance + cqc + officeRent + adminSalaries;
+      const overhead = Math.round(baseOpex * this.data.operating_expenses.unexpected_overhead_rate);
+      const totalOpex = baseOpex + overhead;
+
+      // --- EBITDA ---
+      const ebitda = grossProfit - totalOpex;
+      const ebitdaMargin = totalRevenue > 0 ? ebitda / totalRevenue : 0;
+
+      // --- NET INCOME ---
+      const depreciation = 2000;
+      const ebt = ebitda - depreciation;
+      const tax = Math.max(0, ebt * 0.19);
+      const netIncome = ebt - tax;
+
+      monthly.push({
+        month: `${monthName} 2026`,
+        monthKey: month,
+        isActual: useActuals || false,
+        patients,
+        b2cAdhdRev, b2cAsdRev, nhsAdhdRev, nhsAsdRev,
+        b2cRev, nhsRev, subscriptionRev, totalRevenue,
+        clinicalCosts, techAdmin, marketingCac, subscriptionCogs, totalCogs,
+        grossProfit, grossMargin,
+        insurance, cqc, officeRent, adminSalaries, overhead, totalOpex,
+        ebitda, ebitdaMargin, depreciation, tax, netIncome
+      });
+    });
+
+    // --- ANNUAL TOTALS ---
+    const numericKeys = [
+      'patients', 'b2cAdhdRev', 'b2cAsdRev', 'nhsAdhdRev', 'nhsAsdRev',
+      'b2cRev', 'nhsRev', 'subscriptionRev', 'totalRevenue',
+      'clinicalCosts', 'techAdmin', 'marketingCac', 'subscriptionCogs', 'totalCogs',
+      'grossProfit', 'insurance', 'cqc', 'officeRent', 'adminSalaries', 'overhead', 'totalOpex',
+      'ebitda', 'depreciation', 'tax', 'netIncome'
+    ];
+
+    const annual = {};
+    numericKeys.forEach(key => { annual[key] = 0; });
+    monthly.forEach(m => {
+      numericKeys.forEach(key => { annual[key] += m[key]; });
+    });
+
+    annual.grossMargin = annual.totalRevenue > 0 ? annual.grossProfit / annual.totalRevenue : 0;
+    annual.ebitdaMargin = annual.totalRevenue > 0 ? annual.ebitda / annual.totalRevenue : 0;
+    annual.month = '2026 ANNUAL TOTAL';
+    annual.isTotal = true;
+
+    return { monthly, annual };
+  }
+
   // Calculate month-over-month growth
   calculateMoMGrowth(performanceArray, currentRevenue) {
     if (performanceArray.length === 0) return '-';

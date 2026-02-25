@@ -47,6 +47,7 @@
             <div class="tab active" onclick="showTab('company-intro')">Company Intro</div>
             <div class="tab" onclick="showTab('overview')">Overview & Actuals</div>
             <div class="tab" onclick="showTab('projections')">Financial Projections</div>
+            <div class="tab" onclick="showTab('pnl-model')">P&L Model</div>
             <div class="tab" onclick="showTab('unit-economics')">Unit Economics</div>
             <div class="tab" onclick="showTab('assumptions')">Key Assumptions</div>
             <div class="tab" onclick="showTab('business-plan')">Business Plan</div>
@@ -588,6 +589,29 @@
                 </div>
             </div>
 
+        </div>
+
+        <!-- P&L Model Tab -->
+        <div id="pnl-model" class="tab-content">
+            <div class="section">
+                <div class="controls">
+                    <h2>2026 P&L Projection</h2>
+                    <div class="scenario-selector">
+                        <div class="scenario-buttons">
+                            <button class="scenario-btn" data-scenario="pessimistic" onclick="switchScenario('pessimistic')">
+                                Pessimistic
+                            </button>
+                            <button class="scenario-btn active" data-scenario="realistic" onclick="switchScenario('realistic')">
+                                Realistic
+                            </button>
+                            <button class="scenario-btn" data-scenario="optimistic" onclick="switchScenario('optimistic')">
+                                Optimistic
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div id="pnl-model-content"></div>
+            </div>
         </div>
 
         <!-- Unit Economics Tab -->
@@ -2454,7 +2478,13 @@
             if (scenarioComparisonElement) {
                 scenarioComparisonElement.innerHTML = renderer.renderScenarioComparison();
             }
-            
+
+            // P&L Model (scenario-aware)
+            const pnlElement = document.getElementById('pnl-model-content');
+            if (pnlElement) {
+                pnlElement.innerHTML = renderer.renderPnLModel(currentScenario);
+            }
+
         }
 
         // Initialize financial model when page loads
