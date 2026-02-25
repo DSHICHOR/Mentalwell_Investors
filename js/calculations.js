@@ -315,14 +315,8 @@ class FinancialCalculations {
       const grossProfit = totalRevenue - totalCogs;
       const grossMargin = totalRevenue > 0 ? grossProfit / totalRevenue : 0;
 
-      // --- OPERATING EXPENSES (fixed monthly) ---
-      const insurance = this.data.operating_expenses.insurance;
-      const cqc = this.data.operating_expenses.cqc_registration;
-      const officeRent = this.data.operating_expenses.office_rent.monthly_cost;
-      const adminSalaries = this.data.operating_expenses.admin_salaries.monthly_cost_total;
-      const baseOpex = insurance + cqc + officeRent + adminSalaries;
-      const overhead = Math.round(baseOpex * this.data.operating_expenses.unexpected_overhead_rate);
-      const totalOpex = baseOpex + overhead;
+      // --- OPERATING EXPENSES (monthly schedule from 2025 management accounts) ---
+      const totalOpex = this.data.opex_monthly_2026?.[month] || 90000;
 
       // --- EBITDA ---
       const ebitda = grossProfit - totalOpex;
@@ -343,7 +337,7 @@ class FinancialCalculations {
         b2cRev, nhsRev, subscriptionRev, totalRevenue,
         clinicalCosts, techAdmin, marketingCac, subscriptionCogs, totalCogs,
         grossProfit, grossMargin,
-        insurance, cqc, officeRent, adminSalaries, overhead, totalOpex,
+        totalOpex,
         ebitda, ebitdaMargin, depreciation, tax, netIncome
       });
     });
@@ -353,7 +347,7 @@ class FinancialCalculations {
       'patients', 'b2cAdhdRev', 'b2cAsdRev', 'nhsAdhdRev', 'nhsAsdRev',
       'b2cRev', 'nhsRev', 'subscriptionRev', 'totalRevenue',
       'clinicalCosts', 'techAdmin', 'marketingCac', 'subscriptionCogs', 'totalCogs',
-      'grossProfit', 'insurance', 'cqc', 'officeRent', 'adminSalaries', 'overhead', 'totalOpex',
+      'grossProfit', 'totalOpex',
       'ebitda', 'depreciation', 'tax', 'netIncome'
     ];
 

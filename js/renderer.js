@@ -581,7 +581,7 @@ class FinancialRenderer {
       </table>
       <div class="highlight" style="margin-top: 15px;">
         <strong>Revenue mix:</strong> B2C ${b2cPct}% | NHS ${nhsPct}% | Subscriptions ${subPct}%.
-        NHS Right to Choose launches April 2026 and becomes the primary revenue driver by mid-year.
+        NHS ADHD launches April 2026, NHS ASD from June. NHS becomes the primary revenue driver by mid-year.
       </div>
     `;
 
@@ -630,12 +630,12 @@ class FinancialRenderer {
       </table>
     `;
 
-    // --- FIXED OPEX NOTE ---
+    // --- OPEX NOTE ---
     const opexNote = `
       <div class="highlight" style="margin-top: 15px;">
-        <strong>Fixed operating expenses:</strong> ${fmt(monthly[0].totalOpex)}/month
-        (Insurance ${fmt(monthly[0].insurance)} + CQC ${fmt(monthly[0].cqc)} + Office ${fmt(monthly[0].officeRent)} + Admin salaries ${fmt(monthly[0].adminSalaries)} + 15% overhead ${fmt(monthly[0].overhead)}).
-        Fixed costs stay flat while revenue scales from ${fmt(monthly[0].totalRevenue)} to ${fmt(dec.totalRevenue)} per month.
+        <strong>Operating expenses (from 2025 management accounts):</strong> ${fmt(monthly[0].totalOpex)}/month (Jan) scaling to ${fmt(dec.totalOpex)}/month (Dec).
+        Annual total: ${fmt(annual.totalOpex)}. Major components: staff costs (~61%), payment processing (~10%), software (~7%), professional services and facilities (~10%), insurance and regulatory (~2%), other (~4%).
+        Dec 2025 actual OpEx was £64K. Growth reflects hiring for NHS operations, compliance, and admin scaling.
       </div>
     `;
 
@@ -645,10 +645,11 @@ class FinancialRenderer {
         <strong>Model assumptions:</strong>
         <ul style="margin: 10px 0 0 0; padding-left: 20px;">
           <li>B2C ADHD at ${fmt(this.data.pricing.b2c_adhd_complete)} (Complete Care), B2C ASD at ${fmt(this.data.pricing.b2c_asd)}, NHS ADHD at ${fmt(this.data.pricing.nhs_adhd)}, NHS ASD at ${fmt(this.data.pricing.nhs_asd)}</li>
-          <li>NHS Right to Choose launches April 2026, targeting 70:30 NHS:Private mix</li>
+          <li>NHS ADHD launches April 2026, NHS ASD launches June 2026, targeting 70:30 NHS:Private mix</li>
           <li>Subscription revenue from Stripe-verified renewal pipeline at 50% uptake x ${fmt(this.data.pricing.subscription_6month)}</li>
           <li>Subscription COGS at treatment plan margins (69% gross profit = ${fmt(this.data.unit_economics.adult_6m_plan.total_costs)} cost per subscription)</li>
           <li>CAC covers full marketing spend: ${fmt(this.data.unit_economics.b2c_adhd.cac)} per B2C patient, ${fmt(this.data.unit_economics.nhs_adhd.cac)} per NHS referral</li>
+          <li>OpEx based on 2025 management accounts, scaling from ${fmt(monthly[0].totalOpex)}/month to ${fmt(dec.totalOpex)}/month</li>
           <li>UK corporation tax at 19%, depreciation ${fmt(2000)}/month</li>
           <li>January uses Stripe-verified actuals (${monthly[0].patients} patients, ${fmt(monthly[0].totalRevenue)} revenue)</li>
         </ul>
@@ -658,7 +659,7 @@ class FinancialRenderer {
     // --- EBITDA MILESTONE ---
     const ebitdaNote = ebitdaPositiveMonth
       ? `<div class="highlight" style="margin-top: 15px; background: #f0fdf4; border-left: 4px solid #22c55e;">
-          <strong>EBITDA turns positive in ${ebitdaPositiveMonth}</strong> as NHS volumes drive revenue past the fixed cost base.
+          <strong>EBITDA turns positive in ${ebitdaPositiveMonth}</strong> as NHS Right to Choose volumes drive revenue past the operating cost base.
           December EBITDA: ${fmtProfit(dec.ebitda)} on ${fmt(dec.totalRevenue)} revenue (${fmtPct(dec.ebitdaMargin)} margin).
           Annualised December run rate: ${fmt(decAnnualized)}.
         </div>`
