@@ -1207,6 +1207,40 @@ td:first-child, th:first-child {
     display: none;
 }
 
+.verification-code-input {
+    font-size: 28px;
+    font-weight: var(--font-weight-semibold);
+    text-align: center;
+    letter-spacing: 8px;
+    font-family: 'DM Sans', monospace;
+}
+
+.verification-code-input::placeholder {
+    font-size: 16px;
+    letter-spacing: normal;
+}
+
+.resend-link {
+    color: var(--color-text-secondary);
+    font-size: 13px;
+    margin-top: 16px;
+}
+
+.resend-link a {
+    color: var(--color-primary-accent);
+    text-decoration: none;
+    font-weight: var(--font-weight-medium);
+}
+
+.resend-link a:hover {
+    text-decoration: underline;
+}
+
+.password-submit:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
 #watermark-overlay {
     position: fixed;
     top: 0;
