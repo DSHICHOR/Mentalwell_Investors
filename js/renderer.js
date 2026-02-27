@@ -1195,18 +1195,18 @@ class FinancialRenderer {
           <tr><td>US subscription take rate</td><td>60%</td><td>ADHD patients converting to monthly management</td></tr>
           <tr><td>US avg retention</td><td>14 months</td><td>7.1% monthly churn</td></tr>
           <tr><td>UK subscription take rate</td><td>50%</td><td>From renewal pipeline at ${fmt(this.data.pricing.subscription_6month)}/6mo</td></tr>
-          <tr><td>US market launch</td><td>April ${year === 2027 ? '2027' : '(launched 2027)'}</td><td>Self-pay first, insurance panels from month 2</td></tr>
-          <tr><td>Ireland market launch</td><td>July ${year === 2027 ? '2027' : '(launched 2027)'}</td><td>B2C only, no NHS equivalent</td></tr>
           <tr><td>Series A</td><td>${fmt(this.data.funding_rounds.series_a.amount_gbp)}</td><td>${this.data.funding_rounds.series_a.date} (${this.data.funding_rounds.series_a.status})</td></tr>
-          <tr><td>Series B</td><td>${fmt(this.data.funding_rounds.series_b.amount_gbp)}</td><td>${this.data.funding_rounds.series_b.date} (${this.data.funding_rounds.series_b.status})</td></tr>
-          <tr><td>Depreciation (UK)</td><td>${fmt(2000)}/mo</td><td>Equipment and fitout</td></tr>
-          <tr><td>Depreciation (US)</td><td>$1,500/mo</td><td>MSO setup amortisation</td></tr>
-          <tr><td>Depreciation (IE)</td><td>\u20AC500/mo</td><td>Clinic fitout</td></tr>
+          <tr><td>Series B</td><td>${fmt(this.data.funding_rounds.series_b.amount_gbp)}</td><td>${this.data.funding_rounds.series_b.date} (${this.data.funding_rounds.series_b.status}) -- primarily funds US market entry</td></tr>
+          <tr><td>US market launch</td><td>April ${year === 2027 ? '2027' : '(launched 2027)'}</td><td>Self-pay first. Credentialing takes 90-180 days, so insurance panels come online from May</td></tr>
+          <tr><td>Ireland market launch</td><td>July ${year === 2027 ? '2027' : '(launched 2027)'}</td><td>B2C only, no NHS equivalent</td></tr>
+          <tr><td>US staffing model</td><td>PMHNP-heavy</td><td>PMHNPs at $130-165K/yr are 50-60% cheaper than psychiatrists at $260-305K/yr. Cerebral and Done both scaled with NPs</td></tr>
+          <tr><td>US marketing approach</td><td>Lean (38% of OpEx)</td><td>Talkspace spent 61-89% of revenue on S&M during growth. Cerebral burned $8-12M/mo at peak. Our model is intentionally leaner</td></tr>
+          <tr><td>Q1 2027 setup costs</td><td>$200-350K one-time</td><td>MSO/PC legal ($50-100K), state licensing 10 states ($40K), DEA $888/state/prescriber ($44K), HIPAA+SOC2 ($50-80K)</td></tr>
         </tbody>
       </table>
 
       <h3>US OpEx allocation (benchmarked against Cerebral / Talkspace)</h3>
-      <p style="color: #6b7280; margin-bottom: 10px;">Series B (${fmt(this.data.funding_rounds.series_b.amount_gbp)}) primarily funds US market entry. Talkspace spent 61-89% of revenue on S&M during growth phase. Cerebral burned $25-40M/month at peak with 5,000 staff. This model uses a lean PMHNP-heavy approach.</p>
+      <p style="color: #6b7280; margin-bottom: 10px;">Series B (${fmt(this.data.funding_rounds.series_b.amount_gbp)}) primarily funds US market entry. Talkspace spent 61-89% of revenue on S&M during growth. Cerebral burned $25-40M/month at peak with 5,000 staff. This model uses a lean PMHNP-heavy approach at ~$4.8M/yr (2027) and ~$8.6M/yr (2028).</p>
       <table style="font-size: 13px;">
         <thead><tr><th>Category</th><th>% of US OpEx</th><th>Steady-state $/mo</th><th>Detail</th></tr></thead>
         <tbody>
