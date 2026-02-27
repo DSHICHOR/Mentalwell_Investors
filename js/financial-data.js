@@ -865,6 +865,10 @@ const financialData = {
   },
 
   // US Market Configuration (launches Q2 2027)
+  // Benchmarked against Cerebral ($462M raised, $225M rev at scale),
+  // Talkspace (public P&L), and Done ($100M+ rev).
+  // Uses PMHNP-heavy lean model (50-60% cheaper than psychiatrists).
+  // MSO structure required for corporate practice of medicine compliance.
   us_market: {
     launch_month: 'april',
     launch_year: 2027,
@@ -880,6 +884,10 @@ const financialData = {
     },
 
     unit_economics: {
+      // Clinical costs reflect PMHNP model at $70-90/hr (vs $126-146/hr psychiatrist)
+      // CAC: self-pay $400 (Talkspace benchmarked $297-449/member),
+      //       in-network $100 (referral-based, lower acquisition cost),
+      //       OON $350 (superbill reimbursement model, still needs marketing)
       selfpay_adhd:   { revenue: 1295, clinical_costs: 450, tech_admin: 80, cac: 400, total_costs: 930,  gross_profit: 365,  margin: 0.28 },
       selfpay_asd:    { revenue: 2200, clinical_costs: 500, tech_admin: 80, cac: 400, total_costs: 980,  gross_profit: 1220, margin: 0.55 },
       innetwork_adhd: { revenue: 1100, clinical_costs: 450, tech_admin: 80, cac: 100, total_costs: 630,  gross_profit: 470,  margin: 0.43 },
@@ -893,6 +901,26 @@ const financialData = {
       take_rate: 0.60,            // 60% of ADHD assessments convert
       avg_retention_months: 14,
       monthly_churn_rate: 0.071   // ~1/14
+    },
+
+    // OpEx breakdown (approximate monthly allocation at steady state):
+    // Clinical staff (10 PMHNPs @ $140K + 1 MD @ $280K): ~$140K/mo
+    // Marketing/CAC (30-40% of revenue, per Talkspace/Cerebral): ~$150K/mo
+    // Billing/RCM (3-5% of collections): ~$15K/mo
+    // Licensing/DEA/compliance (amortised): ~$15K/mo
+    // Technology (HIPAA infra, EHR, platform): ~$20K/mo
+    // G&A (US ops lead, legal, office): ~$40K/mo
+    // Insurance credentialing (ongoing): ~$5K/mo
+    // Malpractice insurance: ~$2K/mo
+    opex_breakdown: {
+      clinical_staff: 0.36,     // Largest line item after marketing
+      marketing: 0.38,          // Aggressive acquisition per Cerebral playbook
+      billing_rcm: 0.04,
+      licensing_compliance: 0.04,
+      technology: 0.05,
+      general_admin: 0.10,
+      credentialing: 0.02,
+      malpractice: 0.01
     },
 
     tax_rate: 0.27 // ~21% federal + ~6% state blended
@@ -932,12 +960,17 @@ const financialData = {
         july: 150000, august: 153000, september: 156000,
         october: 160000, november: 163000, december: 166000
       },
-      // US: MSO setup costs pre-launch, then ramp (USD)
+      // US: Series B funds US market entry. Pre-launch: MSO/PC setup ($100K legal),
+      // state licensing 10 states ($40K), DEA registration ($44K), HIPAA+SOC2 ($60K),
+      // 3 PMHNPs + 1 supervising MD hired Q1, marketing ramp.
+      // Post-launch: clinical staff scaling to 10 PMHNPs, aggressive marketing
+      // (30-40% of revenue per Cerebral/Talkspace benchmarks), billing/RCM, compliance.
+      // Annual 2027 total: ~$4.7M USD
       us: {
-        january: 80000, february: 80000, march: 85000,
-        april: 120000, may: 130000, june: 140000,
-        july: 150000, august: 155000, september: 160000,
-        october: 165000, november: 170000, december: 175000
+        january: 220000, february: 240000, march: 250000,
+        april: 350000, may: 380000, june: 410000,
+        july: 440000, august: 460000, september: 480000,
+        october: 500000, november: 520000, december: 550000
       },
       // Ireland: no costs pre-launch, lightweight from July (EUR)
       ireland: {
@@ -954,11 +987,15 @@ const financialData = {
         july: 190000, august: 193000, september: 196000,
         october: 200000, november: 203000, december: 206000
       },
+      // US 2028: 15-20 state operations, 15+ PMHNPs, 2-3 supervising MDs,
+      // full insurance panel billing, marketing at scale (Talkspace spent 61%
+      // of revenue on S&M at this stage), compliance team, US operations lead.
+      // Annual 2028 total: ~$8.6M USD
       us: {
-        january: 200000, february: 210000, march: 220000,
-        april: 230000, may: 240000, june: 250000,
-        july: 260000, august: 270000, september: 280000,
-        october: 290000, november: 300000, december: 310000
+        january: 580000, february: 600000, march: 630000,
+        april: 660000, may: 690000, june: 720000,
+        july: 740000, august: 760000, september: 780000,
+        october: 800000, november: 820000, december: 850000
       },
       ireland: {
         january: 30000, february: 32000, march: 34000,

@@ -1205,6 +1205,34 @@ class FinancialRenderer {
         </tbody>
       </table>
 
+      <h3>US OpEx allocation (benchmarked against Cerebral / Talkspace)</h3>
+      <p style="color: #6b7280; margin-bottom: 10px;">Series B (${fmt(this.data.funding_rounds.series_b.amount_gbp)}) primarily funds US market entry. Talkspace spent 61-89% of revenue on S&M during growth phase. Cerebral burned $25-40M/month at peak with 5,000 staff. This model uses a lean PMHNP-heavy approach.</p>
+      <table style="font-size: 13px;">
+        <thead><tr><th>Category</th><th>% of US OpEx</th><th>Steady-state $/mo</th><th>Detail</th></tr></thead>
+        <tbody>
+          <tr><td>Clinical staff</td><td>36%</td><td>~$140K</td><td>10 PMHNPs @ $140K/yr + 1 supervising MD @ $280K/yr (PMHNPs are 50-60% cheaper than psychiatrists)</td></tr>
+          <tr><td>Marketing / acquisition</td><td>38%</td><td>~$150K</td><td>30-40% of revenue. Cerebral spent $8-12M/mo at peak; Talkspace CAC was $297-449/member</td></tr>
+          <tr><td>G&A</td><td>10%</td><td>~$40K</td><td>US operations lead, legal counsel, virtual office</td></tr>
+          <tr><td>Technology</td><td>5%</td><td>~$20K</td><td>HIPAA-compliant infrastructure, EHR integration, platform hosting</td></tr>
+          <tr><td>Licensing & compliance</td><td>4%</td><td>~$15K</td><td>State licensing ($500/state avg), DEA ($888/state/prescriber), Joint Commission</td></tr>
+          <tr><td>Billing / RCM</td><td>4%</td><td>~$15K</td><td>Revenue cycle management at 3-5% of collections</td></tr>
+          <tr><td>Credentialing</td><td>2%</td><td>~$5K</td><td>Insurance panel credentialing ($300-600/payer), 90-180 day timeline</td></tr>
+          <tr><td>Malpractice insurance</td><td>1%</td><td>~$2K</td><td>$375-1,000/yr per PMHNP, $5-12K/yr per psychiatrist</td></tr>
+        </tbody>
+      </table>
+
+      <h3>US setup costs (one-time, amortised into Q1 2027 OpEx)</h3>
+      <table style="font-size: 13px;">
+        <thead><tr><th>Item</th><th>Cost</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>MSO / PC legal structure</td><td>$50,000-$100,000</td><td>Required in most states (corporate practice of medicine doctrine)</td></tr>
+          <tr><td>State licensing (10 states, 5 providers)</td><td>~$40,000</td><td>$500 avg per state per provider + IMLC at $700</td></tr>
+          <tr><td>DEA registration (10 states, 5 prescribers)</td><td>~$44,000</td><td>$888 per state per prescriber for Schedule II (ADHD meds)</td></tr>
+          <tr><td>HIPAA + SOC 2 compliance</td><td>$50,000-$80,000</td><td>Risk assessment, audit, ongoing monitoring</td></tr>
+          <tr><td>Insurance credentialing (initial batch)</td><td>$15,000-$30,000</td><td>$300-600 per payer x 5 providers x 5-10 payers</td></tr>
+        </tbody>
+      </table>
+
       <h3>Volume Assumptions (${year}, ${scenario || 'realistic'} scenario)</h3>
       <table style="font-size: 13px;">
         <thead><tr><th>Market</th><th>Annual Patients</th><th>Trajectory</th></tr></thead>
