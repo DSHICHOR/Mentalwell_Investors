@@ -610,18 +610,25 @@
         <div id="pnl-model" class="tab-content">
             <div class="section">
                 <div class="controls">
-                    <h2>2026 P&L Projection</h2>
-                    <div class="scenario-selector">
-                        <div class="scenario-buttons">
-                            <button class="scenario-btn" data-scenario="pessimistic" onclick="switchScenario('pessimistic')">
-                                Pessimistic
-                            </button>
-                            <button class="scenario-btn active" data-scenario="realistic" onclick="switchScenario('realistic')">
-                                Realistic
-                            </button>
-                            <button class="scenario-btn" data-scenario="optimistic" onclick="switchScenario('optimistic')">
-                                Optimistic
-                            </button>
+                    <h2 id="pnl-year-heading">2026 P&L Projection</h2>
+                    <div style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
+                        <div class="year-selector">
+                            <button class="year-btn active" data-year="2026" onclick="switchPnLYear(2026)">2026</button>
+                            <button class="year-btn" data-year="2027" onclick="switchPnLYear(2027)">2027</button>
+                            <button class="year-btn" data-year="2028" onclick="switchPnLYear(2028)">2028</button>
+                        </div>
+                        <div class="scenario-selector">
+                            <div class="scenario-buttons">
+                                <button class="scenario-btn" data-scenario="pessimistic" onclick="switchScenario('pessimistic')">
+                                    Pessimistic
+                                </button>
+                                <button class="scenario-btn active" data-scenario="realistic" onclick="switchScenario('realistic')">
+                                    Realistic
+                                </button>
+                                <button class="scenario-btn" data-scenario="optimistic" onclick="switchScenario('optimistic')">
+                                    Optimistic
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -2441,13 +2448,42 @@
         }
 
         // Switch growth scenarios
+        // Track selected P&L year
+        var currentPnLYear = 2026;
+
+        function switchPnLYear(year) {
+            currentPnLYear = year;
+            document.querySelectorAll('.year-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (parseInt(btn.getAttribute('data-year')) === year) {
+                    btn.classList.add('active');
+                }
+            });
+            const heading = document.getElementById('pnl-year-heading');
+            if (heading) heading.textContent = year + ' P&L Projection';
+            updatePnLDisplay();
+        }
+
+        function updatePnLDisplay() {
+            if (!calculator || !renderer) return;
+            const currentScenario = calculator.getCurrentScenario().key;
+            const pnlElement = document.getElementById('pnl-model-content');
+            if (!pnlElement) return;
+
+            if (currentPnLYear === 2026) {
+                pnlElement.innerHTML = renderer.renderPnLModel(currentScenario);
+            } else {
+                pnlElement.innerHTML = renderer.renderMultiMarketPnLModel(currentPnLYear, currentScenario);
+            }
+        }
+
         function switchScenario(scenarioName) {
             // Only run if calculator is initialized
             if (!calculator) return;
-            
+
             // Update active scenario in data
             calculator.switchScenario(scenarioName);
-            
+
             // Update button states
             document.querySelectorAll('.scenario-btn').forEach(btn => {
                 btn.classList.remove('active');
@@ -2455,17 +2491,17 @@
                     btn.classList.add('active');
                 }
             });
-            
+
             // Update scenario display
             const scenario = calculator.getCurrentScenario();
             const nameElement = document.getElementById('current-scenario-name');
             const descElement = document.getElementById('current-scenario-desc');
             const scenarioDescElement = document.getElementById('scenario-description');
-            
+
             if (nameElement) nameElement.textContent = scenario.name + ' Scenario';
             if (descElement) descElement.textContent = scenario.description;
             if (scenarioDescElement) scenarioDescElement.textContent = scenario.description;
-            
+
             // Update all financial displays
             updateDisplay();
         }
@@ -2473,32 +2509,29 @@
         // Update all displays
         function updateDisplay() {
             if (!calculator || !renderer) return;
-            
+
             const currentScenario = calculator.getCurrentScenario().key;
-            
+
             // 2026 projections table (scenario-aware)
             const projections2026Element = document.getElementById('projections-2026-table');
             if (projections2026Element) {
                 projections2026Element.innerHTML = renderer.render2026ProjectionsTable(currentScenario);
             }
-            
+
             // KPI cards (scenario-aware)
             const kpiElement = document.getElementById('kpi-cards');
             if (kpiElement) {
                 kpiElement.innerHTML = renderer.renderKPICards(currentScenario);
             }
-            
+
             // Scenario comparison table
             const scenarioComparisonElement = document.getElementById('scenario-comparison-table');
             if (scenarioComparisonElement) {
                 scenarioComparisonElement.innerHTML = renderer.renderScenarioComparison();
             }
 
-            // P&L Model (scenario-aware)
-            const pnlElement = document.getElementById('pnl-model-content');
-            if (pnlElement) {
-                pnlElement.innerHTML = renderer.renderPnLModel(currentScenario);
-            }
+            // P&L Model (year + scenario aware)
+            updatePnLDisplay();
 
         }
 

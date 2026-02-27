@@ -668,6 +668,558 @@ class FinancialRenderer {
     return summaryHTML + pnlTableHTML + ebitdaNote + revenueTableHTML + costTableHTML + opexNote + assumptionsHTML;
   }
 
+  // Multi-market P&L renderer for 2027 and 2028
+  renderMultiMarketPnLModel(year, scenario = null) {
+    const { monthly, annual, byMarket } = year === 2027
+      ? this.calc.generatePnL2027(scenario)
+      : this.calc.generatePnL2028(scenario);
+
+    if (!monthly.length) return '<p>No data available for this year/scenario combination.</p>';
+
+    const fmt = (amount) => this.calc.formatCurrency(Math.round(amount));
+    const fmtUSD = (amount) => '$' + Math.round(amount).toLocaleString();
+    const fmtEUR = (amount) => '\u20AC' + Math.round(amount).toLocaleString();
+    const fmtProfit = (amount) => {
+      const rounded = Math.round(amount);
+      if (rounded < 0) return `<span style="color: #ef4444;">-${this.calc.formatCurrency(Math.abs(rounded))}</span>`;
+      return `<span style="color: #22c55e;">${this.calc.formatCurrency(rounded)}</span>`;
+    };
+    const fmtProfitUSD = (amount) => {
+      const rounded = Math.round(amount);
+      if (rounded < 0) return `<span style="color: #ef4444;">-$${Math.abs(rounded).toLocaleString()}</span>`;
+      return `<span style="color: #22c55e;">$${rounded.toLocaleString()}</span>`;
+    };
+    const fmtProfitEUR = (amount) => {
+      const rounded = Math.round(amount);
+      if (rounded < 0) return `<span style="color: #ef4444;">-\u20AC${Math.abs(rounded).toLocaleString()}</span>`;
+      return `<span style="color: #22c55e;">\u20AC${rounded.toLocaleString()}</span>`;
+    };
+    const fmtPct = (decimal) => {
+      const pct = Math.round(decimal * 100);
+      if (pct < 0) return `<span style="color: #ef4444;">${pct}%</span>`;
+      return `${pct}%`;
+    };
+
+    // Find EBITDA positive month
+    let ebitdaPositiveMonth = null;
+    for (const m of monthly) {
+      if (m.ebitda > 0 && !ebitdaPositiveMonth) {
+        ebitdaPositiveMonth = m.month;
+      }
+    }
+
+    const dec = monthly[monthly.length - 1];
+    const decAnnualized = dec.totalRevenue * 12;
+
+    // ==========================================
+    // 1. SUMMARY CARDS
+    // ==========================================
+    const summaryHTML = `
+      <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 30px;">
+        <div class="metric-card">
+          <div class="metric-value">${fmt(annual.totalRevenue)}</div>
+          <div class="metric-label">${year} Revenue (consolidated GBP)</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-value">${Math.round(annual.grossMargin * 100)}%</div>
+          <div class="metric-label">Blended Gross Margin</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-value">${fmtProfit(annual.ebitda)}</div>
+          <div class="metric-label">${year} EBITDA</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-value">${fmt(decAnnualized)}</div>
+          <div class="metric-label">Dec Run Rate (annualised)</div>
+        </div>
+      </div>
+    `;
+
+    // ==========================================
+    // 2. CONSOLIDATED P&L TABLE
+    // ==========================================
+    let pnlRows = '';
+    monthly.forEach(m => {
+      pnlRows += `
+        <tr>
+          <td><strong>${m.month}</strong></td>
+          <td>${m.patients.toLocaleString()}</td>
+          <td>${fmt(m.totalRevenue)}</td>
+          <td>${fmt(m.totalCogs)}</td>
+          <td>${fmtProfit(m.grossProfit)}</td>
+          <td>${fmtPct(m.grossMargin)}</td>
+          <td>${fmt(m.totalOpex)}</td>
+          <td>${fmtProfit(m.ebitda)}</td>
+          <td>${fmtPct(m.ebitdaMargin)}</td>
+          <td>${fmtProfit(m.netIncome)}</td>
+        </tr>
+      `;
+    });
+    pnlRows += `
+      <tr class="total-row">
+        <td><strong>${year} TOTAL</strong></td>
+        <td><strong>${annual.patients.toLocaleString()}</strong></td>
+        <td><strong>${fmt(annual.totalRevenue)}</strong></td>
+        <td><strong>${fmt(annual.totalCogs)}</strong></td>
+        <td><strong>${fmtProfit(annual.grossProfit)}</strong></td>
+        <td><strong>${fmtPct(annual.grossMargin)}</strong></td>
+        <td><strong>${fmt(annual.totalOpex)}</strong></td>
+        <td><strong>${fmtProfit(annual.ebitda)}</strong></td>
+        <td><strong>${fmtPct(annual.ebitdaMargin)}</strong></td>
+        <td><strong>${fmtProfit(annual.netIncome)}</strong></td>
+      </tr>
+    `;
+
+    const pnlTableHTML = `
+      <h2>Consolidated P&L -- ${year}</h2>
+      <p style="color: #6b7280; margin-bottom: 10px;">All figures in GBP. US and Ireland revenues converted at planning rates (1 USD = 0.79 GBP, 1 EUR = 0.86 GBP).</p>
+      <table>
+        <thead>
+          <tr>
+            <th>Month</th>
+            <th>Patients</th>
+            <th>Revenue</th>
+            <th>COGS</th>
+            <th>Gross Profit</th>
+            <th>GP%</th>
+            <th>OpEx</th>
+            <th>EBITDA</th>
+            <th>EBITDA%</th>
+            <th>Net Income</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${pnlRows}
+        </tbody>
+      </table>
+    `;
+
+    // EBITDA milestone
+    const ebitdaNote = ebitdaPositiveMonth
+      ? `<div class="highlight" style="margin-top: 15px; background: #f0fdf4; border-left: 4px solid #22c55e;">
+          <strong>EBITDA turns positive in ${ebitdaPositiveMonth}.</strong>
+          December EBITDA: ${fmtProfit(dec.ebitda)} on ${fmt(dec.totalRevenue)} revenue (${fmtPct(dec.ebitdaMargin)} margin).
+          Annualised December run rate: ${fmt(decAnnualized)}.
+        </div>`
+      : '';
+
+    // ==========================================
+    // 3. REVENUE BY MARKET
+    // ==========================================
+    let revMarketRows = '';
+    monthly.forEach(m => {
+      const ukRev = m.uk.rev.totalRevenue;
+      const usRevGBP = m.us.revenueGBP;
+      const ieRevGBP = m.ie.revenueGBP;
+      const total = m.totalRevenue;
+      revMarketRows += `
+        <tr>
+          <td><strong>${m.month}</strong></td>
+          <td>${fmt(ukRev)}</td>
+          <td>${fmt(usRevGBP)} <span style="color:#6b7280;font-size:11px;">(${fmtUSD(m.us.revenueUSD)})</span></td>
+          <td>${fmt(ieRevGBP)} <span style="color:#6b7280;font-size:11px;">(${fmtEUR(m.ie.revenueEUR)})</span></td>
+          <td><strong>${fmt(total)}</strong></td>
+        </tr>
+      `;
+    });
+    revMarketRows += `
+      <tr class="total-row">
+        <td><strong>${year} TOTAL</strong></td>
+        <td><strong>${fmt(byMarket.uk.revenue)}</strong></td>
+        <td><strong>${fmt(byMarket.us.revenueGBP)}</strong> <span style="color:#6b7280;font-size:11px;">(${fmtUSD(byMarket.us.revenueUSD)})</span></td>
+        <td><strong>${fmt(byMarket.ireland.revenueGBP)}</strong> <span style="color:#6b7280;font-size:11px;">(${fmtEUR(byMarket.ireland.revenueEUR)})</span></td>
+        <td><strong>${fmt(annual.totalRevenue)}</strong></td>
+      </tr>
+    `;
+
+    const ukRevPct = annual.totalRevenue > 0 ? Math.round(byMarket.uk.revenue / annual.totalRevenue * 100) : 0;
+    const usRevPct = annual.totalRevenue > 0 ? Math.round(byMarket.us.revenueGBP / annual.totalRevenue * 100) : 0;
+    const ieRevPct = annual.totalRevenue > 0 ? Math.round(byMarket.ireland.revenueGBP / annual.totalRevenue * 100) : 0;
+
+    const revMarketHTML = `
+      <h2>Revenue by Market</h2>
+      <table>
+        <thead><tr><th>Month</th><th>UK (GBP)</th><th>US (GBP)</th><th>Ireland (GBP)</th><th>Total</th></tr></thead>
+        <tbody>${revMarketRows}</tbody>
+      </table>
+      <div class="highlight" style="margin-top: 15px;">
+        <strong>Revenue mix:</strong> UK ${ukRevPct}% | US ${usRevPct}% | Ireland ${ieRevPct}%.
+      </div>
+    `;
+
+    // ==========================================
+    // 4. UK REVENUE BY CHANNEL
+    // ==========================================
+    let ukRevRows = '';
+    monthly.forEach(m => {
+      const r = m.uk.rev;
+      ukRevRows += `
+        <tr>
+          <td><strong>${m.month}</strong></td>
+          <td>${fmt(r.b2cAdhdRev)}</td>
+          <td>${fmt(r.b2cAsdRev)}</td>
+          <td>${fmt(r.nhsAdhdRev)}</td>
+          <td>${fmt(r.nhsAsdRev)}</td>
+          <td>${fmt(r.subscriptionRev)}</td>
+          <td><strong>${fmt(r.totalRevenue)}</strong></td>
+        </tr>
+      `;
+    });
+    ukRevRows += `
+      <tr class="total-row">
+        <td><strong>TOTAL</strong></td>
+        <td><strong>${fmt(monthly.reduce((s,m) => s + m.uk.rev.b2cAdhdRev, 0))}</strong></td>
+        <td><strong>${fmt(monthly.reduce((s,m) => s + m.uk.rev.b2cAsdRev, 0))}</strong></td>
+        <td><strong>${fmt(monthly.reduce((s,m) => s + m.uk.rev.nhsAdhdRev, 0))}</strong></td>
+        <td><strong>${fmt(monthly.reduce((s,m) => s + m.uk.rev.nhsAsdRev, 0))}</strong></td>
+        <td><strong>${fmt(monthly.reduce((s,m) => s + m.uk.rev.subscriptionRev, 0))}</strong></td>
+        <td><strong>${fmt(byMarket.uk.revenue)}</strong></td>
+      </tr>
+    `;
+
+    const ukRevHTML = `
+      <h2>UK Revenue by Channel</h2>
+      <table>
+        <thead><tr><th>Month</th><th>B2C ADHD</th><th>B2C ASD</th><th>NHS ADHD</th><th>NHS ASD</th><th>Subscriptions</th><th>UK Total</th></tr></thead>
+        <tbody>${ukRevRows}</tbody>
+      </table>
+    `;
+
+    // ==========================================
+    // 5. US REVENUE BY CHANNEL (USD)
+    // ==========================================
+    let usRevRows = '';
+    monthly.forEach(m => {
+      const r = m.us.rev;
+      usRevRows += `
+        <tr>
+          <td><strong>${m.month}</strong></td>
+          <td>${fmtUSD(r.selfpayAdhdRev)}</td>
+          <td>${fmtUSD(r.selfpayAsdRev)}</td>
+          <td>${fmtUSD(r.innetworkAdhdRev)}</td>
+          <td>${fmtUSD(r.innetworkAsdRev)}</td>
+          <td>${fmtUSD(r.oonAdhdRev)}</td>
+          <td>${fmtUSD(r.oonAsdRev)}</td>
+          <td>${fmtUSD(r.subscriptionRev)}</td>
+          <td>${fmtUSD(r.totalRevenue)}</td>
+          <td>${fmt(m.us.revenueGBP)}</td>
+        </tr>
+      `;
+    });
+    usRevRows += `
+      <tr class="total-row">
+        <td><strong>TOTAL</strong></td>
+        <td><strong>${fmtUSD(monthly.reduce((s,m) => s + m.us.rev.selfpayAdhdRev, 0))}</strong></td>
+        <td><strong>${fmtUSD(monthly.reduce((s,m) => s + m.us.rev.selfpayAsdRev, 0))}</strong></td>
+        <td><strong>${fmtUSD(monthly.reduce((s,m) => s + m.us.rev.innetworkAdhdRev, 0))}</strong></td>
+        <td><strong>${fmtUSD(monthly.reduce((s,m) => s + m.us.rev.innetworkAsdRev, 0))}</strong></td>
+        <td><strong>${fmtUSD(monthly.reduce((s,m) => s + m.us.rev.oonAdhdRev, 0))}</strong></td>
+        <td><strong>${fmtUSD(monthly.reduce((s,m) => s + m.us.rev.oonAsdRev, 0))}</strong></td>
+        <td><strong>${fmtUSD(monthly.reduce((s,m) => s + m.us.rev.subscriptionRev, 0))}</strong></td>
+        <td><strong>${fmtUSD(byMarket.us.revenueUSD)}</strong></td>
+        <td><strong>${fmt(byMarket.us.revenueGBP)}</strong></td>
+      </tr>
+    `;
+
+    const usRevHTML = `
+      <h2>US Revenue by Channel (USD)</h2>
+      <p style="color: #6b7280; margin-bottom: 10px;">${year === 2027 ? 'US launches April 2027. Jan-Mar shows zero revenue (pre-launch setup costs only).' : 'Full-year US operations across 15-20 states.'}</p>
+      <table style="font-size: 13px;">
+        <thead><tr><th>Month</th><th>Self-Pay ADHD</th><th>Self-Pay ASD</th><th>In-Network ADHD</th><th>In-Network ASD</th><th>OON ADHD</th><th>OON ASD</th><th>Subscriptions</th><th>US Total (USD)</th><th>US Total (GBP)</th></tr></thead>
+        <tbody>${usRevRows}</tbody>
+      </table>
+    `;
+
+    // ==========================================
+    // 6. IRELAND REVENUE (EUR)
+    // ==========================================
+    let ieRevRows = '';
+    monthly.forEach(m => {
+      const r = m.ie.rev;
+      ieRevRows += `
+        <tr>
+          <td><strong>${m.month}</strong></td>
+          <td>${fmtEUR(r.adhdRev)}</td>
+          <td>${fmtEUR(r.asdRev)}</td>
+          <td>${fmtEUR(r.totalRevenue)}</td>
+          <td>${fmt(m.ie.revenueGBP)}</td>
+        </tr>
+      `;
+    });
+    ieRevRows += `
+      <tr class="total-row">
+        <td><strong>TOTAL</strong></td>
+        <td><strong>${fmtEUR(monthly.reduce((s,m) => s + m.ie.rev.adhdRev, 0))}</strong></td>
+        <td><strong>${fmtEUR(monthly.reduce((s,m) => s + m.ie.rev.asdRev, 0))}</strong></td>
+        <td><strong>${fmtEUR(byMarket.ireland.revenueEUR)}</strong></td>
+        <td><strong>${fmt(byMarket.ireland.revenueGBP)}</strong></td>
+      </tr>
+    `;
+
+    const ieRevHTML = `
+      <h2>Ireland Revenue (EUR)</h2>
+      <p style="color: #6b7280; margin-bottom: 10px;">${year === 2027 ? 'Ireland launches July 2027. B2C only, no NHS equivalent.' : 'Full-year Ireland operations.'}</p>
+      <table>
+        <thead><tr><th>Month</th><th>B2C ADHD</th><th>B2C ASD</th><th>IE Total (EUR)</th><th>IE Total (GBP)</th></tr></thead>
+        <tbody>${ieRevRows}</tbody>
+      </table>
+    `;
+
+    // ==========================================
+    // 7. COST BREAKDOWN BY MARKET
+    // ==========================================
+    let costRows = '';
+    monthly.forEach(m => {
+      costRows += `
+        <tr>
+          <td><strong>${m.month}</strong></td>
+          <td>${fmt(m.uk.cogs.total)}</td>
+          <td>${fmt(m.us.cogsGBP)} <span style="color:#6b7280;font-size:11px;">(${fmtUSD(m.us.cogsUSD)})</span></td>
+          <td>${fmt(m.ie.cogsGBP)} <span style="color:#6b7280;font-size:11px;">(${fmtEUR(m.ie.cogsEUR)})</span></td>
+          <td><strong>${fmt(m.totalCogs)}</strong></td>
+        </tr>
+      `;
+    });
+    costRows += `
+      <tr class="total-row">
+        <td><strong>TOTAL</strong></td>
+        <td><strong>${fmt(byMarket.uk.cogs)}</strong></td>
+        <td><strong>${fmt(byMarket.us.cogsGBP)}</strong></td>
+        <td><strong>${fmt(byMarket.ireland.cogsGBP)}</strong></td>
+        <td><strong>${fmt(annual.totalCogs)}</strong></td>
+      </tr>
+    `;
+
+    const costHTML = `
+      <h2>COGS by Market</h2>
+      <table>
+        <thead><tr><th>Month</th><th>UK COGS</th><th>US COGS (GBP)</th><th>Ireland COGS (GBP)</th><th>Total COGS</th></tr></thead>
+        <tbody>${costRows}</tbody>
+      </table>
+    `;
+
+    // ==========================================
+    // 8. OPEX BY MARKET
+    // ==========================================
+    let opexRows = '';
+    monthly.forEach(m => {
+      opexRows += `
+        <tr>
+          <td><strong>${m.month}</strong></td>
+          <td>${fmt(m.uk.opex)}</td>
+          <td>${fmt(m.us.opexGBP)} <span style="color:#6b7280;font-size:11px;">(${fmtUSD(m.us.opexUSD)})</span></td>
+          <td>${fmt(m.ie.opexGBP)} <span style="color:#6b7280;font-size:11px;">(${fmtEUR(m.ie.opexEUR)})</span></td>
+          <td><strong>${fmt(m.totalOpex)}</strong></td>
+        </tr>
+      `;
+    });
+    opexRows += `
+      <tr class="total-row">
+        <td><strong>TOTAL</strong></td>
+        <td><strong>${fmt(byMarket.uk.opex)}</strong></td>
+        <td><strong>${fmt(byMarket.us.opexGBP)}</strong></td>
+        <td><strong>${fmt(byMarket.ireland.opexGBP)}</strong></td>
+        <td><strong>${fmt(annual.totalOpex)}</strong></td>
+      </tr>
+    `;
+
+    const opexHTML = `
+      <h2>Operating Expenses by Market</h2>
+      <table>
+        <thead><tr><th>Month</th><th>UK OpEx</th><th>US OpEx (GBP)</th><th>Ireland OpEx (GBP)</th><th>Total OpEx</th></tr></thead>
+        <tbody>${opexRows}</tbody>
+      </table>
+    `;
+
+    // ==========================================
+    // 9. TAX BY JURISDICTION
+    // ==========================================
+    let taxRows = '';
+    monthly.forEach(m => {
+      taxRows += `
+        <tr>
+          <td><strong>${m.month}</strong></td>
+          <td>${fmt(m.uk.tax)}</td>
+          <td>${fmt(m.us.taxGBP)} <span style="color:#6b7280;font-size:11px;">(${fmtUSD(m.us.taxUSD)})</span></td>
+          <td>${fmt(m.ie.taxGBP)} <span style="color:#6b7280;font-size:11px;">(${fmtEUR(m.ie.taxEUR)})</span></td>
+          <td><strong>${fmt(m.tax)}</strong></td>
+        </tr>
+      `;
+    });
+    taxRows += `
+      <tr class="total-row">
+        <td><strong>TOTAL</strong></td>
+        <td><strong>${fmt(byMarket.uk.tax)}</strong></td>
+        <td><strong>${fmt(byMarket.us.taxGBP)}</strong></td>
+        <td><strong>${fmt(byMarket.ireland.taxGBP)}</strong></td>
+        <td><strong>${fmt(annual.tax)}</strong></td>
+      </tr>
+    `;
+
+    const taxHTML = `
+      <h2>Tax by Jurisdiction</h2>
+      <table>
+        <thead><tr><th>Month</th><th>UK (25%)</th><th>US (27%)</th><th>Ireland (12.5%)</th><th>Total Tax</th></tr></thead>
+        <tbody>${taxRows}</tbody>
+      </table>
+    `;
+
+    // ==========================================
+    // 10. US UNIT ECONOMICS TABLE
+    // ==========================================
+    const usUE = this.data.us_market.unit_economics;
+    const usUERows = [
+      ['Self-Pay ADHD', usUE.selfpay_adhd],
+      ['Self-Pay ASD', usUE.selfpay_asd],
+      ['In-Network ADHD', usUE.innetwork_adhd],
+      ['In-Network ASD', usUE.innetwork_asd],
+      ['Out-of-Network ADHD', usUE.oon_adhd],
+      ['Out-of-Network ASD', usUE.oon_asd],
+      ['Monthly Subscription', usUE.subscription]
+    ].map(([name, ue]) => `
+      <tr>
+        <td>${name}</td>
+        <td>${fmtUSD(ue.revenue)}</td>
+        <td>${fmtUSD(ue.clinical_costs)}</td>
+        <td>${fmtUSD(ue.tech_admin)}</td>
+        <td>${fmtUSD(ue.cac)}</td>
+        <td>${fmtUSD(ue.total_costs)}</td>
+        <td>${fmtProfitUSD(ue.gross_profit)}</td>
+        <td>${fmtPct(ue.margin)}</td>
+      </tr>
+    `).join('');
+
+    const usUEHTML = `
+      <h2>US Unit Economics (USD)</h2>
+      <table>
+        <thead><tr><th>Channel</th><th>Revenue</th><th>Clinical</th><th>Tech/Admin</th><th>CAC</th><th>Total Cost</th><th>Profit</th><th>Margin</th></tr></thead>
+        <tbody>${usUERows}</tbody>
+      </table>
+    `;
+
+    // ==========================================
+    // 11. IRELAND UNIT ECONOMICS TABLE
+    // ==========================================
+    const ieUE = this.data.ireland_market.unit_economics;
+    const ieUERows = [
+      ['B2C ADHD', ieUE.b2c_adhd],
+      ['B2C ASD', ieUE.b2c_asd]
+    ].map(([name, ue]) => `
+      <tr>
+        <td>${name}</td>
+        <td>${fmtEUR(ue.revenue)}</td>
+        <td>${fmtEUR(ue.clinical_costs)}</td>
+        <td>${fmtEUR(ue.tech_admin)}</td>
+        <td>${fmtEUR(ue.cac)}</td>
+        <td>${fmtEUR(ue.total_costs)}</td>
+        <td>${fmtProfitEUR(ue.gross_profit)}</td>
+        <td>${fmtPct(ue.margin)}</td>
+      </tr>
+    `).join('');
+
+    const ieUEHTML = `
+      <h2>Ireland Unit Economics (EUR)</h2>
+      <table>
+        <thead><tr><th>Service</th><th>Revenue</th><th>Clinical</th><th>Tech/Admin</th><th>CAC</th><th>Total Cost</th><th>Profit</th><th>Margin</th></tr></thead>
+        <tbody>${ieUERows}</tbody>
+      </table>
+    `;
+
+    // ==========================================
+    // 12. UK UNIT ECONOMICS SUMMARY
+    // ==========================================
+    const ukUEData = [
+      ['B2C ADHD (Complete)', this.data.unit_economics.b2c_adhd],
+      ['B2C ASD', this.data.unit_economics.b2c_asd],
+      ['NHS ADHD', this.data.unit_economics.nhs_adhd],
+      ['NHS ASD', this.data.unit_economics.nhs_asd],
+      ['Treatment Plan (6m)', this.data.unit_economics.adult_6m_plan]
+    ];
+    const ukUERows = ukUEData.map(([name, ue]) => `
+      <tr>
+        <td>${name}</td>
+        <td>${fmt(ue.revenue)}</td>
+        <td>${fmt(ue.clinical_costs)}</td>
+        <td>${fmt(ue.tech_admin)}</td>
+        <td>${fmt(ue.cac)}</td>
+        <td>${fmt(ue.total_costs)}</td>
+        <td>${fmtProfit(ue.gross_profit)}</td>
+        <td>${fmtPct(ue.margin)}</td>
+      </tr>
+    `).join('');
+
+    const ukUEHTML = `
+      <h2>UK Unit Economics (GBP)</h2>
+      <table>
+        <thead><tr><th>Service</th><th>Revenue</th><th>Clinical</th><th>Tech/Admin</th><th>CAC</th><th>Total Cost</th><th>Profit</th><th>Margin</th></tr></thead>
+        <tbody>${ukUERows}</tbody>
+      </table>
+    `;
+
+    // ==========================================
+    // 13. MODEL ASSUMPTIONS (structured tables)
+    // ==========================================
+    const assumptionsHTML = `
+      <h2>Model Assumptions</h2>
+
+      <h3>Pricing</h3>
+      <table style="font-size: 13px;">
+        <thead><tr><th>Market</th><th>Service</th><th>Price</th><th>Currency</th></tr></thead>
+        <tbody>
+          <tr><td>UK</td><td>B2C ADHD Complete Care</td><td>${fmt(this.data.pricing.b2c_adhd_complete)}</td><td>GBP</td></tr>
+          <tr><td>UK</td><td>B2C ASD Assessment</td><td>${fmt(this.data.pricing.b2c_asd)}</td><td>GBP</td></tr>
+          <tr><td>UK</td><td>NHS ADHD</td><td>${fmt(this.data.pricing.nhs_adhd)}</td><td>GBP</td></tr>
+          <tr><td>UK</td><td>NHS ASD</td><td>${fmt(this.data.pricing.nhs_asd)}</td><td>GBP</td></tr>
+          <tr><td>UK</td><td>Treatment Plan (6m)</td><td>${fmt(this.data.pricing.subscription_6month)}</td><td>GBP</td></tr>
+          <tr><td>US</td><td>Self-Pay ADHD</td><td>${fmtUSD(this.data.us_market.pricing.selfpay_adhd)}</td><td>USD</td></tr>
+          <tr><td>US</td><td>Self-Pay ASD</td><td>${fmtUSD(this.data.us_market.pricing.selfpay_asd)}</td><td>USD</td></tr>
+          <tr><td>US</td><td>In-Network ADHD</td><td>${fmtUSD(this.data.us_market.pricing.innetwork_adhd)}</td><td>USD</td></tr>
+          <tr><td>US</td><td>In-Network ASD</td><td>${fmtUSD(this.data.us_market.pricing.innetwork_asd)}</td><td>USD</td></tr>
+          <tr><td>US</td><td>Out-of-Network ADHD</td><td>${fmtUSD(this.data.us_market.pricing.oon_adhd)}</td><td>USD</td></tr>
+          <tr><td>US</td><td>Out-of-Network ASD</td><td>${fmtUSD(this.data.us_market.pricing.oon_asd)}</td><td>USD</td></tr>
+          <tr><td>US</td><td>Monthly Subscription</td><td>${fmtUSD(this.data.us_market.pricing.subscription_monthly)}/mo</td><td>USD</td></tr>
+          <tr><td>Ireland</td><td>B2C ADHD</td><td>${fmtEUR(this.data.ireland_market.pricing.b2c_adhd)}</td><td>EUR</td></tr>
+          <tr><td>Ireland</td><td>B2C ASD</td><td>${fmtEUR(this.data.ireland_market.pricing.b2c_asd)}</td><td>EUR</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Operating Assumptions</h3>
+      <table style="font-size: 13px;">
+        <thead><tr><th>Parameter</th><th>Value</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>USD/GBP planning rate</td><td>0.79</td><td>1 USD = 0.79 GBP</td></tr>
+          <tr><td>EUR/GBP planning rate</td><td>0.86</td><td>1 EUR = 0.86 GBP</td></tr>
+          <tr><td>UK corporation tax</td><td>25%</td><td>From April 2023</td></tr>
+          <tr><td>US effective tax rate</td><td>27%</td><td>21% federal + ~6% state blend</td></tr>
+          <tr><td>Ireland corporation tax</td><td>12.5%</td><td>Standard Irish rate</td></tr>
+          <tr><td>US subscription take rate</td><td>60%</td><td>ADHD patients converting to monthly management</td></tr>
+          <tr><td>US avg retention</td><td>14 months</td><td>7.1% monthly churn</td></tr>
+          <tr><td>UK subscription take rate</td><td>50%</td><td>From renewal pipeline at ${fmt(this.data.pricing.subscription_6month)}/6mo</td></tr>
+          <tr><td>US market launch</td><td>April ${year === 2027 ? '2027' : '(launched 2027)'}</td><td>Self-pay first, insurance panels from month 2</td></tr>
+          <tr><td>Ireland market launch</td><td>July ${year === 2027 ? '2027' : '(launched 2027)'}</td><td>B2C only, no NHS equivalent</td></tr>
+          <tr><td>Series A</td><td>${fmt(this.data.funding_rounds.series_a.amount_gbp)}</td><td>${this.data.funding_rounds.series_a.date} (${this.data.funding_rounds.series_a.status})</td></tr>
+          <tr><td>Series B</td><td>${fmt(this.data.funding_rounds.series_b.amount_gbp)}</td><td>${this.data.funding_rounds.series_b.date} (${this.data.funding_rounds.series_b.status})</td></tr>
+          <tr><td>Depreciation (UK)</td><td>${fmt(2000)}/mo</td><td>Equipment and fitout</td></tr>
+          <tr><td>Depreciation (US)</td><td>$1,500/mo</td><td>MSO setup amortisation</td></tr>
+          <tr><td>Depreciation (IE)</td><td>\u20AC500/mo</td><td>Clinic fitout</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Volume Assumptions (${year}, ${scenario || 'realistic'} scenario)</h3>
+      <table style="font-size: 13px;">
+        <thead><tr><th>Market</th><th>Annual Patients</th><th>Trajectory</th></tr></thead>
+        <tbody>
+          <tr><td>UK</td><td>${byMarket.uk.patients.toLocaleString()}</td><td>Continued NHS scale-up, ~70:30 NHS:B2C mix</td></tr>
+          <tr><td>US</td><td>${byMarket.us.patients.toLocaleString()}</td><td>${year === 2027 ? 'Ramp from April, self-pay first, insurance panels from May' : 'Full year, 15-20 state coverage'}</td></tr>
+          <tr><td>Ireland</td><td>${byMarket.ireland.patients.toLocaleString()}</td><td>${year === 2027 ? 'Ramp from July, B2C only' : 'Full year B2C operations'}</td></tr>
+          <tr><td><strong>Total</strong></td><td><strong>${annual.patients.toLocaleString()}</strong></td><td></td></tr>
+        </tbody>
+      </table>
+    `;
+
+    return summaryHTML + pnlTableHTML + ebitdaNote + revMarketHTML + ukRevHTML + usRevHTML + ieRevHTML + costHTML + opexHTML + taxHTML + usUEHTML + ieUEHTML + ukUEHTML + assumptionsHTML;
+  }
+
   // Render 3-Statement Financial Model
   renderThreeStatementModel(scenario = null) {
     const projections = this.calc.generate2026Projections(scenario);

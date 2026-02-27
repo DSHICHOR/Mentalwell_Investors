@@ -498,6 +498,341 @@ class FinancialCalculations {
       avg_revenue_per_patient: this.formatCurrency(Math.round(totals.total_revenue / totals.total_patients))
     };
   }
+
+  // --- MULTI-MARKET P&L ENGINE (2027-2028) ---
+
+  convertToGBP(amount, currencyCode) {
+    const rate = this.data.currencies[currencyCode]?.rate || 1;
+    return Math.round(amount * rate);
+  }
+
+  // Calculate UK monthly revenue from volumes + subscription pipeline
+  calculateUKMonthlyRevenue(ukVolumes, month, year) {
+    const b2cAdhdRev = (ukVolumes.b2c_adhd || 0) * this.data.pricing.b2c_adhd_complete;
+    const b2cAsdRev = (ukVolumes.b2c_asd || 0) * this.data.pricing.b2c_asd;
+    const nhsAdhdRev = (ukVolumes.nhs_adhd || 0) * this.data.pricing.nhs_adhd;
+    const nhsAsdRev = (ukVolumes.nhs_asd || 0) * this.data.pricing.nhs_asd;
+
+    const pipeline = year === 2027
+      ? this.data.renewal_pipeline_2027
+      : this.data.renewal_pipeline_2028;
+    const pipelineEligible = pipeline?.[month] || 0;
+    const subscriptionCount = Math.round(pipelineEligible * 0.5);
+    const subscriptionRev = subscriptionCount * this.data.pricing.subscription_6month;
+
+    return {
+      b2cAdhdRev, b2cAsdRev, nhsAdhdRev, nhsAsdRev, subscriptionRev, subscriptionCount,
+      assessmentRevenue: b2cAdhdRev + b2cAsdRev + nhsAdhdRev + nhsAsdRev,
+      totalRevenue: b2cAdhdRev + b2cAsdRev + nhsAdhdRev + nhsAsdRev + subscriptionRev
+    };
+  }
+
+  // Calculate UK monthly COGS
+  calculateUKMonthlyCOGS(ukVolumes, subscriptionCount) {
+    const clinical =
+      (ukVolumes.b2c_adhd || 0) * this.data.unit_economics.b2c_adhd.clinical_costs +
+      (ukVolumes.b2c_asd || 0) * this.data.unit_economics.b2c_asd.clinical_costs +
+      (ukVolumes.nhs_adhd || 0) * this.data.unit_economics.nhs_adhd.clinical_costs +
+      (ukVolumes.nhs_asd || 0) * this.data.unit_economics.nhs_asd.clinical_costs;
+
+    const techAdmin =
+      (ukVolumes.b2c_adhd || 0) * this.data.unit_economics.b2c_adhd.tech_admin +
+      (ukVolumes.b2c_asd || 0) * this.data.unit_economics.b2c_asd.tech_admin +
+      (ukVolumes.nhs_adhd || 0) * this.data.unit_economics.nhs_adhd.tech_admin +
+      (ukVolumes.nhs_asd || 0) * this.data.unit_economics.nhs_asd.tech_admin;
+
+    const cac =
+      (ukVolumes.b2c_adhd || 0) * this.data.unit_economics.b2c_adhd.cac +
+      (ukVolumes.b2c_asd || 0) * this.data.unit_economics.b2c_asd.cac +
+      (ukVolumes.nhs_adhd || 0) * this.data.unit_economics.nhs_adhd.cac +
+      (ukVolumes.nhs_asd || 0) * this.data.unit_economics.nhs_asd.cac;
+
+    const subscriptionCogs = subscriptionCount * this.data.unit_economics.adult_6m_plan.total_costs;
+
+    return { clinical, techAdmin, cac, subscriptionCogs, total: clinical + techAdmin + cac + subscriptionCogs };
+  }
+
+  // Calculate US monthly revenue from volumes + subscriptions (all in USD)
+  calculateUSMonthlyRevenue(usVolumes, month, year) {
+    const ue = this.data.us_market.unit_economics;
+    const selfpayAdhdRev = (usVolumes.selfpay_adhd || 0) * ue.selfpay_adhd.revenue;
+    const selfpayAsdRev = (usVolumes.selfpay_asd || 0) * ue.selfpay_asd.revenue;
+    const innetworkAdhdRev = (usVolumes.innetwork_adhd || 0) * ue.innetwork_adhd.revenue;
+    const innetworkAsdRev = (usVolumes.innetwork_asd || 0) * ue.innetwork_asd.revenue;
+    const oonAdhdRev = (usVolumes.oon_adhd || 0) * ue.oon_adhd.revenue;
+    const oonAsdRev = (usVolumes.oon_asd || 0) * ue.oon_asd.revenue;
+
+    const pipeline = this.data.us_subscription_pipeline[`year_${year}`];
+    const activeSubscribers = pipeline?.[month] || 0;
+    const subscriptionRev = activeSubscribers * ue.subscription.revenue;
+
+    const assessmentRevenue = selfpayAdhdRev + selfpayAsdRev + innetworkAdhdRev + innetworkAsdRev + oonAdhdRev + oonAsdRev;
+
+    return {
+      selfpayAdhdRev, selfpayAsdRev, innetworkAdhdRev, innetworkAsdRev,
+      oonAdhdRev, oonAsdRev, subscriptionRev, activeSubscribers,
+      assessmentRevenue,
+      totalRevenue: assessmentRevenue + subscriptionRev
+    };
+  }
+
+  // Calculate US monthly COGS (all in USD)
+  calculateUSMonthlyCOGS(usVolumes, activeSubscribers) {
+    const ue = this.data.us_market.unit_economics;
+
+    const clinical =
+      (usVolumes.selfpay_adhd || 0) * ue.selfpay_adhd.clinical_costs +
+      (usVolumes.selfpay_asd || 0) * ue.selfpay_asd.clinical_costs +
+      (usVolumes.innetwork_adhd || 0) * ue.innetwork_adhd.clinical_costs +
+      (usVolumes.innetwork_asd || 0) * ue.innetwork_asd.clinical_costs +
+      (usVolumes.oon_adhd || 0) * ue.oon_adhd.clinical_costs +
+      (usVolumes.oon_asd || 0) * ue.oon_asd.clinical_costs;
+
+    const techAdmin =
+      (usVolumes.selfpay_adhd || 0) * ue.selfpay_adhd.tech_admin +
+      (usVolumes.selfpay_asd || 0) * ue.selfpay_asd.tech_admin +
+      (usVolumes.innetwork_adhd || 0) * ue.innetwork_adhd.tech_admin +
+      (usVolumes.innetwork_asd || 0) * ue.innetwork_asd.tech_admin +
+      (usVolumes.oon_adhd || 0) * ue.oon_adhd.tech_admin +
+      (usVolumes.oon_asd || 0) * ue.oon_asd.tech_admin;
+
+    const cac =
+      (usVolumes.selfpay_adhd || 0) * ue.selfpay_adhd.cac +
+      (usVolumes.selfpay_asd || 0) * ue.selfpay_asd.cac +
+      (usVolumes.innetwork_adhd || 0) * ue.innetwork_adhd.cac +
+      (usVolumes.innetwork_asd || 0) * ue.innetwork_asd.cac +
+      (usVolumes.oon_adhd || 0) * ue.oon_adhd.cac +
+      (usVolumes.oon_asd || 0) * ue.oon_asd.cac;
+
+    const subscriptionCogs = activeSubscribers * ue.subscription.clinical_costs + activeSubscribers * ue.subscription.tech_admin;
+
+    return { clinical, techAdmin, cac, subscriptionCogs, total: clinical + techAdmin + cac + subscriptionCogs };
+  }
+
+  // Calculate Ireland monthly revenue (all in EUR)
+  calculateIrelandMonthlyRevenue(ieVolumes) {
+    const ue = this.data.ireland_market.unit_economics;
+    const adhdRev = (ieVolumes.b2c_adhd || 0) * ue.b2c_adhd.revenue;
+    const asdRev = (ieVolumes.b2c_asd || 0) * ue.b2c_asd.revenue;
+    return { adhdRev, asdRev, totalRevenue: adhdRev + asdRev };
+  }
+
+  // Calculate Ireland monthly COGS (all in EUR)
+  calculateIrelandMonthlyCOGS(ieVolumes) {
+    const ue = this.data.ireland_market.unit_economics;
+    const clinical =
+      (ieVolumes.b2c_adhd || 0) * ue.b2c_adhd.clinical_costs +
+      (ieVolumes.b2c_asd || 0) * ue.b2c_asd.clinical_costs;
+    const techAdmin =
+      (ieVolumes.b2c_adhd || 0) * ue.b2c_adhd.tech_admin +
+      (ieVolumes.b2c_asd || 0) * ue.b2c_asd.tech_admin;
+    const cac =
+      (ieVolumes.b2c_adhd || 0) * ue.b2c_adhd.cac +
+      (ieVolumes.b2c_asd || 0) * ue.b2c_asd.cac;
+    return { clinical, techAdmin, cac, total: clinical + techAdmin + cac };
+  }
+
+  // Core multi-market P&L generator for 2027 and 2028
+  generateMultiMarketPnL(year, scenario = null) {
+    const months = ['january','february','march','april','may','june','july','august','september','october','november','december'];
+    const scenarioKey = scenario || this.data.activeScenario || 'realistic';
+    const yearKey = `year_${year}`;
+    const yearData = this.data.annual_projections[yearKey];
+
+    if (!yearData?.scenarios?.[scenarioKey]) return { monthly: [], annual: {}, byMarket: {} };
+
+    const scenarioData = yearData.scenarios[scenarioKey];
+    const monthly = [];
+
+    months.forEach(month => {
+      const monthName = month.charAt(0).toUpperCase() + month.slice(1);
+      const ukVol = scenarioData.uk?.[month] || { b2c_adhd: 0, b2c_asd: 0, nhs_adhd: 0, nhs_asd: 0 };
+      const usVol = scenarioData.us?.[month] || { selfpay_adhd: 0, selfpay_asd: 0, innetwork_adhd: 0, innetwork_asd: 0, oon_adhd: 0, oon_asd: 0 };
+      const ieVol = scenarioData.ireland?.[month] || { b2c_adhd: 0, b2c_asd: 0 };
+
+      // --- UK (GBP) ---
+      const ukRev = this.calculateUKMonthlyRevenue(ukVol, month, year);
+      const ukCogs = this.calculateUKMonthlyCOGS(ukVol, ukRev.subscriptionCount);
+      const ukOpex = this.data.opex_by_market[yearKey]?.uk?.[month] || 0;
+      const ukGP = ukRev.totalRevenue - ukCogs.total;
+      const ukEbitda = ukGP - ukOpex;
+      const ukDepreciation = 2000;
+      const ukEbt = ukEbitda - ukDepreciation;
+      const ukTax = Math.max(0, ukEbt * this.data.uk_market.tax_rate);
+      const ukNet = ukEbt - ukTax;
+      const ukPatients = (ukVol.b2c_adhd || 0) + (ukVol.b2c_asd || 0) + (ukVol.nhs_adhd || 0) + (ukVol.nhs_asd || 0);
+
+      // --- US (USD -> GBP) ---
+      const usRev = this.calculateUSMonthlyRevenue(usVol, month, year);
+      const usCogs = this.calculateUSMonthlyCOGS(usVol, usRev.activeSubscribers);
+      const usOpexUSD = this.data.opex_by_market[yearKey]?.us?.[month] || 0;
+      const usGP_USD = usRev.totalRevenue - usCogs.total;
+      const usEbitda_USD = usGP_USD - usOpexUSD;
+      const usDepreciation_USD = 1500;
+      const usEbt_USD = usEbitda_USD - usDepreciation_USD;
+      const usTax_USD = Math.max(0, usEbt_USD * this.data.us_market.tax_rate);
+      const usNet_USD = usEbt_USD - usTax_USD;
+      const usPatients = (usVol.selfpay_adhd || 0) + (usVol.selfpay_asd || 0) + (usVol.innetwork_adhd || 0) + (usVol.innetwork_asd || 0) + (usVol.oon_adhd || 0) + (usVol.oon_asd || 0);
+
+      // Convert US to GBP
+      const usRevGBP = this.convertToGBP(usRev.totalRevenue, 'USD');
+      const usCogsGBP = this.convertToGBP(usCogs.total, 'USD');
+      const usOpexGBP = this.convertToGBP(usOpexUSD, 'USD');
+      const usGP_GBP = this.convertToGBP(usGP_USD, 'USD');
+      const usEbitdaGBP = this.convertToGBP(usEbitda_USD, 'USD');
+      const usTaxGBP = this.convertToGBP(usTax_USD, 'USD');
+      const usNetGBP = this.convertToGBP(usNet_USD, 'USD');
+
+      // --- Ireland (EUR -> GBP) ---
+      const ieRev = this.calculateIrelandMonthlyRevenue(ieVol);
+      const ieCogs = this.calculateIrelandMonthlyCOGS(ieVol);
+      const ieOpexEUR = this.data.opex_by_market[yearKey]?.ireland?.[month] || 0;
+      const ieGP_EUR = ieRev.totalRevenue - ieCogs.total;
+      const ieEbitda_EUR = ieGP_EUR - ieOpexEUR;
+      const ieDepreciation_EUR = 500;
+      const ieEbt_EUR = ieEbitda_EUR - ieDepreciation_EUR;
+      const ieTax_EUR = Math.max(0, ieEbt_EUR * this.data.ireland_market.tax_rate);
+      const ieNet_EUR = ieEbt_EUR - ieTax_EUR;
+      const iePatients = (ieVol.b2c_adhd || 0) + (ieVol.b2c_asd || 0);
+
+      // Convert Ireland to GBP
+      const ieRevGBP = this.convertToGBP(ieRev.totalRevenue, 'EUR');
+      const ieCogsGBP = this.convertToGBP(ieCogs.total, 'EUR');
+      const ieOpexGBP = this.convertToGBP(ieOpexEUR, 'EUR');
+      const ieGP_GBP = this.convertToGBP(ieGP_EUR, 'EUR');
+      const ieEbitdaGBP = this.convertToGBP(ieEbitda_EUR, 'EUR');
+      const ieTaxGBP = this.convertToGBP(ieTax_EUR, 'EUR');
+      const ieNetGBP = this.convertToGBP(ieNet_EUR, 'EUR');
+
+      // --- CONSOLIDATED (GBP) ---
+      const totalPatients = ukPatients + usPatients + iePatients;
+      const totalRevenue = ukRev.totalRevenue + usRevGBP + ieRevGBP;
+      const totalCogs = ukCogs.total + usCogsGBP + ieCogsGBP;
+      const grossProfit = totalRevenue - totalCogs;
+      const grossMargin = totalRevenue > 0 ? grossProfit / totalRevenue : 0;
+      const totalOpex = ukOpex + usOpexGBP + ieOpexGBP;
+      const ebitda = grossProfit - totalOpex;
+      const ebitdaMargin = totalRevenue > 0 ? ebitda / totalRevenue : 0;
+      const totalDepreciation = ukDepreciation + this.convertToGBP(usDepreciation_USD, 'USD') + this.convertToGBP(ieDepreciation_EUR, 'EUR');
+      const totalTax = ukTax + usTaxGBP + ieTaxGBP;
+      const netIncome = ebitda - totalDepreciation - totalTax;
+
+      monthly.push({
+        month: `${monthName} ${year}`,
+        monthKey: month,
+        patients: totalPatients,
+        totalRevenue, totalCogs, grossProfit, grossMargin,
+        totalOpex, ebitda, ebitdaMargin,
+        depreciation: totalDepreciation, tax: totalTax, netIncome,
+
+        // Per-market detail for drilldown
+        uk: {
+          patients: ukPatients, volumes: ukVol, rev: ukRev, cogs: ukCogs,
+          opex: ukOpex, grossProfit: ukGP, ebitda: ukEbitda,
+          depreciation: ukDepreciation, tax: ukTax, netIncome: ukNet,
+          currency: 'GBP'
+        },
+        us: {
+          patients: usPatients, volumes: usVol, rev: usRev, cogs: usCogs,
+          opexUSD: usOpexUSD, opexGBP: usOpexGBP,
+          grossProfitUSD: usGP_USD, grossProfitGBP: usGP_GBP,
+          ebitdaUSD: usEbitda_USD, ebitdaGBP: usEbitdaGBP,
+          depreciationUSD: usDepreciation_USD,
+          taxUSD: usTax_USD, taxGBP: usTaxGBP,
+          netIncomeUSD: usNet_USD, netIncomeGBP: usNetGBP,
+          revenueUSD: usRev.totalRevenue, revenueGBP: usRevGBP,
+          cogsUSD: usCogs.total, cogsGBP: usCogsGBP,
+          currency: 'USD'
+        },
+        ie: {
+          patients: iePatients, volumes: ieVol, rev: ieRev, cogs: ieCogs,
+          opexEUR: ieOpexEUR, opexGBP: ieOpexGBP,
+          grossProfitEUR: ieGP_EUR, grossProfitGBP: ieGP_GBP,
+          ebitdaEUR: ieEbitda_EUR, ebitdaGBP: ieEbitdaGBP,
+          depreciationEUR: ieDepreciation_EUR,
+          taxEUR: ieTax_EUR, taxGBP: ieTaxGBP,
+          netIncomeEUR: ieNet_EUR, netIncomeGBP: ieNetGBP,
+          revenueEUR: ieRev.totalRevenue, revenueGBP: ieRevGBP,
+          cogsEUR: ieCogs.total, cogsGBP: ieCogsGBP,
+          currency: 'EUR'
+        }
+      });
+    });
+
+    // --- ANNUAL TOTALS ---
+    const numericKeys = [
+      'patients', 'totalRevenue', 'totalCogs', 'grossProfit',
+      'totalOpex', 'ebitda', 'depreciation', 'tax', 'netIncome'
+    ];
+
+    const annual = {};
+    numericKeys.forEach(key => { annual[key] = 0; });
+    monthly.forEach(m => {
+      numericKeys.forEach(key => { annual[key] += m[key]; });
+    });
+    annual.grossMargin = annual.totalRevenue > 0 ? annual.grossProfit / annual.totalRevenue : 0;
+    annual.ebitdaMargin = annual.totalRevenue > 0 ? annual.ebitda / annual.totalRevenue : 0;
+    annual.month = `${year} ANNUAL TOTAL`;
+    annual.isTotal = true;
+
+    // Per-market annual totals
+    const ukAnnual = { revenue: 0, cogs: 0, opex: 0, grossProfit: 0, ebitda: 0, tax: 0, netIncome: 0, patients: 0 };
+    const usAnnual = { revenueUSD: 0, revenueGBP: 0, cogsUSD: 0, cogsGBP: 0, opexUSD: 0, opexGBP: 0, grossProfitUSD: 0, grossProfitGBP: 0, ebitdaUSD: 0, ebitdaGBP: 0, taxUSD: 0, taxGBP: 0, netIncomeUSD: 0, netIncomeGBP: 0, patients: 0 };
+    const ieAnnual = { revenueEUR: 0, revenueGBP: 0, cogsEUR: 0, cogsGBP: 0, opexEUR: 0, opexGBP: 0, grossProfitEUR: 0, grossProfitGBP: 0, ebitdaEUR: 0, ebitdaGBP: 0, taxEUR: 0, taxGBP: 0, netIncomeEUR: 0, netIncomeGBP: 0, patients: 0 };
+
+    monthly.forEach(m => {
+      ukAnnual.revenue += m.uk.rev.totalRevenue;
+      ukAnnual.cogs += m.uk.cogs.total;
+      ukAnnual.opex += m.uk.opex;
+      ukAnnual.grossProfit += m.uk.grossProfit;
+      ukAnnual.ebitda += m.uk.ebitda;
+      ukAnnual.tax += m.uk.tax;
+      ukAnnual.netIncome += m.uk.netIncome;
+      ukAnnual.patients += m.uk.patients;
+
+      usAnnual.revenueUSD += m.us.revenueUSD;
+      usAnnual.revenueGBP += m.us.revenueGBP;
+      usAnnual.cogsUSD += m.us.cogsUSD;
+      usAnnual.cogsGBP += m.us.cogsGBP;
+      usAnnual.opexUSD += m.us.opexUSD;
+      usAnnual.opexGBP += m.us.opexGBP;
+      usAnnual.grossProfitUSD += m.us.grossProfitUSD;
+      usAnnual.grossProfitGBP += m.us.grossProfitGBP;
+      usAnnual.ebitdaUSD += m.us.ebitdaUSD;
+      usAnnual.ebitdaGBP += m.us.ebitdaGBP;
+      usAnnual.taxUSD += m.us.taxUSD;
+      usAnnual.taxGBP += m.us.taxGBP;
+      usAnnual.netIncomeUSD += m.us.netIncomeUSD;
+      usAnnual.netIncomeGBP += m.us.netIncomeGBP;
+      usAnnual.patients += m.us.patients;
+
+      ieAnnual.revenueEUR += m.ie.revenueEUR;
+      ieAnnual.revenueGBP += m.ie.revenueGBP;
+      ieAnnual.cogsEUR += m.ie.cogsEUR;
+      ieAnnual.cogsGBP += m.ie.cogsGBP;
+      ieAnnual.opexEUR += m.ie.opexEUR;
+      ieAnnual.opexGBP += m.ie.opexGBP;
+      ieAnnual.grossProfitEUR += m.ie.grossProfitEUR;
+      ieAnnual.grossProfitGBP += m.ie.grossProfitGBP;
+      ieAnnual.ebitdaEUR += m.ie.ebitdaEUR;
+      ieAnnual.ebitdaGBP += m.ie.ebitdaGBP;
+      ieAnnual.taxEUR += m.ie.taxEUR;
+      ieAnnual.taxGBP += m.ie.taxGBP;
+      ieAnnual.netIncomeEUR += m.ie.netIncomeEUR;
+      ieAnnual.netIncomeGBP += m.ie.netIncomeGBP;
+      ieAnnual.patients += m.ie.patients;
+    });
+
+    return { monthly, annual, byMarket: { uk: ukAnnual, us: usAnnual, ireland: ieAnnual } };
+  }
+
+  generatePnL2027(scenario = null) {
+    return this.generateMultiMarketPnL(2027, scenario);
+  }
+
+  generatePnL2028(scenario = null) {
+    return this.generateMultiMarketPnL(2028, scenario);
+  }
 }
 
 // Export for use in other files

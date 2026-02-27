@@ -356,18 +356,12 @@ const financialData = {
     december: { b2c_adhd: 207, b2c_asd: 23, nhs_adhd: 468, nhs_asd: 52 }
   },
 
-  // Multi-year projections (phased expansion, pending NHS integration + market entry)
+  // Multi-year projections with per-market scenario volumes
   annual_projections: {
     year_2027: {
-      total_patients: 15000,
-      total_revenue: 22000000,
       markets: ['UK', 'US (5-10 states)', 'Ireland'],
       strategy: 'Series B: US + Ireland market entry, scale NHS nationally',
-      gross_profit: 10200000, // 46.3% blended margin maintained
-      operating_expenses: 7000000,
-      ebitda: 3200000,
-      net_profit: 2400000,
-      // Detailed monthly breakdown for titration tracking
+      // Legacy fields kept for backward compat (titration tables read these)
       monthly_breakdown: {
         january: { b2c_adhd: 250, b2c_asd: 120, nhs_adhd: 550, nhs_asd: 280 },
         february: { b2c_adhd: 270, b2c_asd: 130, nhs_adhd: 600, nhs_asd: 300 },
@@ -381,18 +375,138 @@ const financialData = {
         october: { b2c_adhd: 340, b2c_asd: 175, nhs_adhd: 720, nhs_asd: 390 },
         november: { b2c_adhd: 350, b2c_asd: 180, nhs_adhd: 740, nhs_asd: 400 },
         december: { b2c_adhd: 350, b2c_asd: 185, nhs_adhd: 740, nhs_asd: 410 }
+      },
+      // Per-market scenario volumes for P&L model
+      scenarios: {
+        pessimistic: {
+          uk: {
+            january:   { b2c_adhd: 200, b2c_asd: 96,  nhs_adhd: 440, nhs_asd: 224 },
+            february:  { b2c_adhd: 216, b2c_asd: 104, nhs_adhd: 480, nhs_asd: 240 },
+            march:     { b2c_adhd: 232, b2c_asd: 112, nhs_adhd: 496, nhs_asd: 248 },
+            april:     { b2c_adhd: 240, b2c_asd: 116, nhs_adhd: 512, nhs_asd: 256 },
+            may:       { b2c_adhd: 248, b2c_asd: 120, nhs_adhd: 528, nhs_asd: 272 },
+            june:      { b2c_adhd: 256, b2c_asd: 124, nhs_adhd: 544, nhs_asd: 280 },
+            july:      { b2c_adhd: 264, b2c_asd: 128, nhs_adhd: 560, nhs_asd: 288 },
+            august:    { b2c_adhd: 264, b2c_asd: 132, nhs_adhd: 560, nhs_asd: 296 },
+            september: { b2c_adhd: 272, b2c_asd: 136, nhs_adhd: 576, nhs_asd: 304 },
+            october:   { b2c_adhd: 272, b2c_asd: 140, nhs_adhd: 576, nhs_asd: 312 },
+            november:  { b2c_adhd: 280, b2c_asd: 144, nhs_adhd: 592, nhs_asd: 320 },
+            december:  { b2c_adhd: 280, b2c_asd: 148, nhs_adhd: 592, nhs_asd: 328 }
+          },
+          us: {
+            january:   { selfpay_adhd: 0,  selfpay_asd: 0,  innetwork_adhd: 0,   innetwork_asd: 0,  oon_adhd: 0,  oon_asd: 0 },
+            february:  { selfpay_adhd: 0,  selfpay_asd: 0,  innetwork_adhd: 0,   innetwork_asd: 0,  oon_adhd: 0,  oon_asd: 0 },
+            march:     { selfpay_adhd: 0,  selfpay_asd: 0,  innetwork_adhd: 0,   innetwork_asd: 0,  oon_adhd: 0,  oon_asd: 0 },
+            april:     { selfpay_adhd: 15, selfpay_asd: 3,  innetwork_adhd: 0,   innetwork_asd: 0,  oon_adhd: 10, oon_asd: 2 },
+            may:       { selfpay_adhd: 25, selfpay_asd: 5,  innetwork_adhd: 10,  innetwork_asd: 2,  oon_adhd: 15, oon_asd: 3 },
+            june:      { selfpay_adhd: 35, selfpay_asd: 7,  innetwork_adhd: 25,  innetwork_asd: 5,  oon_adhd: 20, oon_asd: 4 },
+            july:      { selfpay_adhd: 45, selfpay_asd: 9,  innetwork_adhd: 40,  innetwork_asd: 8,  oon_adhd: 25, oon_asd: 5 },
+            august:    { selfpay_adhd: 50, selfpay_asd: 10, innetwork_adhd: 55,  innetwork_asd: 11, oon_adhd: 30, oon_asd: 6 },
+            september: { selfpay_adhd: 55, selfpay_asd: 11, innetwork_adhd: 70,  innetwork_asd: 14, oon_adhd: 35, oon_asd: 7 },
+            october:   { selfpay_adhd: 60, selfpay_asd: 12, innetwork_adhd: 85,  innetwork_asd: 17, oon_adhd: 40, oon_asd: 8 },
+            november:  { selfpay_adhd: 65, selfpay_asd: 13, innetwork_adhd: 100, innetwork_asd: 20, oon_adhd: 45, oon_asd: 9 },
+            december:  { selfpay_adhd: 70, selfpay_asd: 14, innetwork_adhd: 110, innetwork_asd: 22, oon_adhd: 50, oon_asd: 10 }
+          },
+          ireland: {
+            january: { b2c_adhd: 0, b2c_asd: 0 }, february: { b2c_adhd: 0, b2c_asd: 0 },
+            march: { b2c_adhd: 0, b2c_asd: 0 }, april: { b2c_adhd: 0, b2c_asd: 0 },
+            may: { b2c_adhd: 0, b2c_asd: 0 }, june: { b2c_adhd: 0, b2c_asd: 0 },
+            july:      { b2c_adhd: 10, b2c_asd: 2 },
+            august:    { b2c_adhd: 15, b2c_asd: 3 },
+            september: { b2c_adhd: 20, b2c_asd: 4 },
+            october:   { b2c_adhd: 25, b2c_asd: 5 },
+            november:  { b2c_adhd: 30, b2c_asd: 6 },
+            december:  { b2c_adhd: 35, b2c_asd: 7 }
+          }
+        },
+        realistic: {
+          uk: {
+            january:   { b2c_adhd: 250, b2c_asd: 120, nhs_adhd: 550, nhs_asd: 280 },
+            february:  { b2c_adhd: 270, b2c_asd: 130, nhs_adhd: 600, nhs_asd: 300 },
+            march:     { b2c_adhd: 290, b2c_asd: 140, nhs_adhd: 620, nhs_asd: 310 },
+            april:     { b2c_adhd: 300, b2c_asd: 145, nhs_adhd: 640, nhs_asd: 320 },
+            may:       { b2c_adhd: 310, b2c_asd: 150, nhs_adhd: 660, nhs_asd: 340 },
+            june:      { b2c_adhd: 320, b2c_asd: 155, nhs_adhd: 680, nhs_asd: 350 },
+            july:      { b2c_adhd: 330, b2c_asd: 160, nhs_adhd: 700, nhs_asd: 360 },
+            august:    { b2c_adhd: 330, b2c_asd: 165, nhs_adhd: 700, nhs_asd: 370 },
+            september: { b2c_adhd: 340, b2c_asd: 170, nhs_adhd: 720, nhs_asd: 380 },
+            october:   { b2c_adhd: 340, b2c_asd: 175, nhs_adhd: 720, nhs_asd: 390 },
+            november:  { b2c_adhd: 350, b2c_asd: 180, nhs_adhd: 740, nhs_asd: 400 },
+            december:  { b2c_adhd: 350, b2c_asd: 185, nhs_adhd: 740, nhs_asd: 410 }
+          },
+          us: {
+            january:   { selfpay_adhd: 0,  selfpay_asd: 0,  innetwork_adhd: 0,   innetwork_asd: 0,  oon_adhd: 0,  oon_asd: 0 },
+            february:  { selfpay_adhd: 0,  selfpay_asd: 0,  innetwork_adhd: 0,   innetwork_asd: 0,  oon_adhd: 0,  oon_asd: 0 },
+            march:     { selfpay_adhd: 0,  selfpay_asd: 0,  innetwork_adhd: 0,   innetwork_asd: 0,  oon_adhd: 0,  oon_asd: 0 },
+            april:     { selfpay_adhd: 20, selfpay_asd: 4,  innetwork_adhd: 0,   innetwork_asd: 0,  oon_adhd: 15, oon_asd: 3 },
+            may:       { selfpay_adhd: 35, selfpay_asd: 7,  innetwork_adhd: 15,  innetwork_asd: 3,  oon_adhd: 20, oon_asd: 4 },
+            june:      { selfpay_adhd: 50, selfpay_asd: 10, innetwork_adhd: 35,  innetwork_asd: 7,  oon_adhd: 30, oon_asd: 6 },
+            july:      { selfpay_adhd: 65, selfpay_asd: 13, innetwork_adhd: 55,  innetwork_asd: 11, oon_adhd: 35, oon_asd: 7 },
+            august:    { selfpay_adhd: 70, selfpay_asd: 14, innetwork_adhd: 75,  innetwork_asd: 15, oon_adhd: 40, oon_asd: 8 },
+            september: { selfpay_adhd: 75, selfpay_asd: 15, innetwork_adhd: 95,  innetwork_asd: 19, oon_adhd: 50, oon_asd: 10 },
+            october:   { selfpay_adhd: 80, selfpay_asd: 16, innetwork_adhd: 115, innetwork_asd: 23, oon_adhd: 55, oon_asd: 11 },
+            november:  { selfpay_adhd: 90, selfpay_asd: 18, innetwork_adhd: 135, innetwork_asd: 27, oon_adhd: 60, oon_asd: 12 },
+            december:  { selfpay_adhd: 95, selfpay_asd: 19, innetwork_adhd: 150, innetwork_asd: 30, oon_adhd: 65, oon_asd: 13 }
+          },
+          ireland: {
+            january: { b2c_adhd: 0, b2c_asd: 0 }, february: { b2c_adhd: 0, b2c_asd: 0 },
+            march: { b2c_adhd: 0, b2c_asd: 0 }, april: { b2c_adhd: 0, b2c_asd: 0 },
+            may: { b2c_adhd: 0, b2c_asd: 0 }, june: { b2c_adhd: 0, b2c_asd: 0 },
+            july:      { b2c_adhd: 15, b2c_asd: 3 },
+            august:    { b2c_adhd: 20, b2c_asd: 4 },
+            september: { b2c_adhd: 28, b2c_asd: 6 },
+            october:   { b2c_adhd: 35, b2c_asd: 7 },
+            november:  { b2c_adhd: 42, b2c_asd: 8 },
+            december:  { b2c_adhd: 50, b2c_asd: 10 }
+          }
+        },
+        optimistic: {
+          uk: {
+            january:   { b2c_adhd: 350, b2c_asd: 168, nhs_adhd: 770, nhs_asd: 392 },
+            february:  { b2c_adhd: 378, b2c_asd: 182, nhs_adhd: 840, nhs_asd: 420 },
+            march:     { b2c_adhd: 406, b2c_asd: 196, nhs_adhd: 868, nhs_asd: 434 },
+            april:     { b2c_adhd: 420, b2c_asd: 203, nhs_adhd: 896, nhs_asd: 448 },
+            may:       { b2c_adhd: 434, b2c_asd: 210, nhs_adhd: 924, nhs_asd: 476 },
+            june:      { b2c_adhd: 448, b2c_asd: 217, nhs_adhd: 952, nhs_asd: 490 },
+            july:      { b2c_adhd: 462, b2c_asd: 224, nhs_adhd: 980, nhs_asd: 504 },
+            august:    { b2c_adhd: 462, b2c_asd: 231, nhs_adhd: 980, nhs_asd: 518 },
+            september: { b2c_adhd: 476, b2c_asd: 238, nhs_adhd: 1008, nhs_asd: 532 },
+            october:   { b2c_adhd: 476, b2c_asd: 245, nhs_adhd: 1008, nhs_asd: 546 },
+            november:  { b2c_adhd: 490, b2c_asd: 252, nhs_adhd: 1036, nhs_asd: 560 },
+            december:  { b2c_adhd: 490, b2c_asd: 259, nhs_adhd: 1036, nhs_asd: 574 }
+          },
+          us: {
+            january:   { selfpay_adhd: 0,   selfpay_asd: 0,  innetwork_adhd: 0,   innetwork_asd: 0,  oon_adhd: 0,  oon_asd: 0 },
+            february:  { selfpay_adhd: 0,   selfpay_asd: 0,  innetwork_adhd: 0,   innetwork_asd: 0,  oon_adhd: 0,  oon_asd: 0 },
+            march:     { selfpay_adhd: 0,   selfpay_asd: 0,  innetwork_adhd: 0,   innetwork_asd: 0,  oon_adhd: 0,  oon_asd: 0 },
+            april:     { selfpay_adhd: 28,  selfpay_asd: 6,  innetwork_adhd: 0,   innetwork_asd: 0,  oon_adhd: 21, oon_asd: 4 },
+            may:       { selfpay_adhd: 49,  selfpay_asd: 10, innetwork_adhd: 21,  innetwork_asd: 4,  oon_adhd: 28, oon_asd: 6 },
+            june:      { selfpay_adhd: 70,  selfpay_asd: 14, innetwork_adhd: 49,  innetwork_asd: 10, oon_adhd: 42, oon_asd: 8 },
+            july:      { selfpay_adhd: 91,  selfpay_asd: 18, innetwork_adhd: 77,  innetwork_asd: 15, oon_adhd: 49, oon_asd: 10 },
+            august:    { selfpay_adhd: 98,  selfpay_asd: 20, innetwork_adhd: 105, innetwork_asd: 21, oon_adhd: 56, oon_asd: 11 },
+            september: { selfpay_adhd: 105, selfpay_asd: 21, innetwork_adhd: 133, innetwork_asd: 27, oon_adhd: 70, oon_asd: 14 },
+            october:   { selfpay_adhd: 112, selfpay_asd: 22, innetwork_adhd: 161, innetwork_asd: 32, oon_adhd: 77, oon_asd: 15 },
+            november:  { selfpay_adhd: 126, selfpay_asd: 25, innetwork_adhd: 189, innetwork_asd: 38, oon_adhd: 84, oon_asd: 17 },
+            december:  { selfpay_adhd: 133, selfpay_asd: 27, innetwork_adhd: 210, innetwork_asd: 42, oon_adhd: 91, oon_asd: 18 }
+          },
+          ireland: {
+            january: { b2c_adhd: 0, b2c_asd: 0 }, february: { b2c_adhd: 0, b2c_asd: 0 },
+            march: { b2c_adhd: 0, b2c_asd: 0 }, april: { b2c_adhd: 0, b2c_asd: 0 },
+            may: { b2c_adhd: 0, b2c_asd: 0 }, june: { b2c_adhd: 0, b2c_asd: 0 },
+            july:      { b2c_adhd: 21, b2c_asd: 4 },
+            august:    { b2c_adhd: 28, b2c_asd: 6 },
+            september: { b2c_adhd: 39, b2c_asd: 8 },
+            october:   { b2c_adhd: 49, b2c_asd: 10 },
+            november:  { b2c_adhd: 59, b2c_asd: 11 },
+            december:  { b2c_adhd: 70, b2c_asd: 14 }
+          }
+        }
       }
     },
     year_2028: {
-      total_patients: 30000,
-      total_revenue: 50000000,
       markets: ['UK', 'US (15-20 states)', 'Ireland', 'Netherlands', 'Germany'],
       strategy: 'US insurance panels, EU beachhead markets',
-      gross_profit: 23000000, // Improved margins through scale
-      operating_expenses: 14000000,
-      ebitda: 9000000,
-      net_profit: 6800000,
-      // Detailed monthly breakdown for titration tracking
+      // Legacy fields for backward compat
       monthly_breakdown: {
         january: { b2c_adhd: 450, b2c_asd: 250, nhs_adhd: 900, nhs_asd: 600 },
         february: { b2c_adhd: 475, b2c_asd: 260, nhs_adhd: 950, nhs_asd: 625 },
@@ -406,6 +520,140 @@ const financialData = {
         october: { b2c_adhd: 600, b2c_asd: 360, nhs_adhd: 1200, nhs_asd: 825 },
         november: { b2c_adhd: 625, b2c_asd: 375, nhs_adhd: 1250, nhs_asd: 850 },
         december: { b2c_adhd: 625, b2c_asd: 390, nhs_adhd: 1250, nhs_asd: 875 }
+      },
+      scenarios: {
+        pessimistic: {
+          uk: {
+            january:   { b2c_adhd: 360, b2c_asd: 200, nhs_adhd: 720, nhs_asd: 480 },
+            february:  { b2c_adhd: 380, b2c_asd: 208, nhs_adhd: 760, nhs_asd: 500 },
+            march:     { b2c_adhd: 400, b2c_asd: 220, nhs_adhd: 800, nhs_asd: 520 },
+            april:     { b2c_adhd: 420, b2c_asd: 232, nhs_adhd: 840, nhs_asd: 540 },
+            may:       { b2c_adhd: 440, b2c_asd: 240, nhs_adhd: 880, nhs_asd: 560 },
+            june:      { b2c_adhd: 440, b2c_asd: 248, nhs_adhd: 880, nhs_asd: 580 },
+            july:      { b2c_adhd: 460, b2c_asd: 260, nhs_adhd: 920, nhs_asd: 600 },
+            august:    { b2c_adhd: 460, b2c_asd: 272, nhs_adhd: 920, nhs_asd: 620 },
+            september: { b2c_adhd: 480, b2c_asd: 280, nhs_adhd: 960, nhs_asd: 640 },
+            october:   { b2c_adhd: 480, b2c_asd: 288, nhs_adhd: 960, nhs_asd: 660 },
+            november:  { b2c_adhd: 500, b2c_asd: 300, nhs_adhd: 1000, nhs_asd: 680 },
+            december:  { b2c_adhd: 500, b2c_asd: 312, nhs_adhd: 1000, nhs_asd: 700 }
+          },
+          us: {
+            january:   { selfpay_adhd: 80,  selfpay_asd: 16, innetwork_adhd: 120, innetwork_asd: 24, oon_adhd: 55,  oon_asd: 11 },
+            february:  { selfpay_adhd: 85,  selfpay_asd: 17, innetwork_adhd: 135, innetwork_asd: 27, oon_adhd: 60,  oon_asd: 12 },
+            march:     { selfpay_adhd: 90,  selfpay_asd: 18, innetwork_adhd: 150, innetwork_asd: 30, oon_adhd: 65,  oon_asd: 13 },
+            april:     { selfpay_adhd: 95,  selfpay_asd: 19, innetwork_adhd: 165, innetwork_asd: 33, oon_adhd: 70,  oon_asd: 14 },
+            may:       { selfpay_adhd: 100, selfpay_asd: 20, innetwork_adhd: 180, innetwork_asd: 36, oon_adhd: 75,  oon_asd: 15 },
+            june:      { selfpay_adhd: 105, selfpay_asd: 21, innetwork_adhd: 195, innetwork_asd: 39, oon_adhd: 80,  oon_asd: 16 },
+            july:      { selfpay_adhd: 110, selfpay_asd: 22, innetwork_adhd: 210, innetwork_asd: 42, oon_adhd: 85,  oon_asd: 17 },
+            august:    { selfpay_adhd: 115, selfpay_asd: 23, innetwork_adhd: 225, innetwork_asd: 45, oon_adhd: 90,  oon_asd: 18 },
+            september: { selfpay_adhd: 120, selfpay_asd: 24, innetwork_adhd: 240, innetwork_asd: 48, oon_adhd: 95,  oon_asd: 19 },
+            october:   { selfpay_adhd: 125, selfpay_asd: 25, innetwork_adhd: 255, innetwork_asd: 51, oon_adhd: 100, oon_asd: 20 },
+            november:  { selfpay_adhd: 130, selfpay_asd: 26, innetwork_adhd: 270, innetwork_asd: 54, oon_adhd: 105, oon_asd: 21 },
+            december:  { selfpay_adhd: 135, selfpay_asd: 27, innetwork_adhd: 285, innetwork_asd: 57, oon_adhd: 110, oon_asd: 22 }
+          },
+          ireland: {
+            january:   { b2c_adhd: 40,  b2c_asd: 8 },
+            february:  { b2c_adhd: 43,  b2c_asd: 9 },
+            march:     { b2c_adhd: 46,  b2c_asd: 9 },
+            april:     { b2c_adhd: 50,  b2c_asd: 10 },
+            may:       { b2c_adhd: 53,  b2c_asd: 11 },
+            june:      { b2c_adhd: 56,  b2c_asd: 11 },
+            july:      { b2c_adhd: 60,  b2c_asd: 12 },
+            august:    { b2c_adhd: 63,  b2c_asd: 13 },
+            september: { b2c_adhd: 66,  b2c_asd: 13 },
+            october:   { b2c_adhd: 70,  b2c_asd: 14 },
+            november:  { b2c_adhd: 73,  b2c_asd: 15 },
+            december:  { b2c_adhd: 76,  b2c_asd: 15 }
+          }
+        },
+        realistic: {
+          uk: {
+            january:   { b2c_adhd: 450, b2c_asd: 250, nhs_adhd: 900,  nhs_asd: 600 },
+            february:  { b2c_adhd: 475, b2c_asd: 260, nhs_adhd: 950,  nhs_asd: 625 },
+            march:     { b2c_adhd: 500, b2c_asd: 275, nhs_adhd: 1000, nhs_asd: 650 },
+            april:     { b2c_adhd: 525, b2c_asd: 290, nhs_adhd: 1050, nhs_asd: 675 },
+            may:       { b2c_adhd: 550, b2c_asd: 300, nhs_adhd: 1100, nhs_asd: 700 },
+            june:      { b2c_adhd: 550, b2c_asd: 310, nhs_adhd: 1100, nhs_asd: 725 },
+            july:      { b2c_adhd: 575, b2c_asd: 325, nhs_adhd: 1150, nhs_asd: 750 },
+            august:    { b2c_adhd: 575, b2c_asd: 340, nhs_adhd: 1150, nhs_asd: 775 },
+            september: { b2c_adhd: 600, b2c_asd: 350, nhs_adhd: 1200, nhs_asd: 800 },
+            october:   { b2c_adhd: 600, b2c_asd: 360, nhs_adhd: 1200, nhs_asd: 825 },
+            november:  { b2c_adhd: 625, b2c_asd: 375, nhs_adhd: 1250, nhs_asd: 850 },
+            december:  { b2c_adhd: 625, b2c_asd: 390, nhs_adhd: 1250, nhs_asd: 875 }
+          },
+          us: {
+            january:   { selfpay_adhd: 100, selfpay_asd: 20, innetwork_adhd: 150, innetwork_asd: 30, oon_adhd: 70,  oon_asd: 14 },
+            february:  { selfpay_adhd: 105, selfpay_asd: 21, innetwork_adhd: 170, innetwork_asd: 34, oon_adhd: 75,  oon_asd: 15 },
+            march:     { selfpay_adhd: 115, selfpay_asd: 23, innetwork_adhd: 190, innetwork_asd: 38, oon_adhd: 80,  oon_asd: 16 },
+            april:     { selfpay_adhd: 120, selfpay_asd: 24, innetwork_adhd: 210, innetwork_asd: 42, oon_adhd: 90,  oon_asd: 18 },
+            may:       { selfpay_adhd: 130, selfpay_asd: 26, innetwork_adhd: 230, innetwork_asd: 46, oon_adhd: 95,  oon_asd: 19 },
+            june:      { selfpay_adhd: 135, selfpay_asd: 27, innetwork_adhd: 250, innetwork_asd: 50, oon_adhd: 100, oon_asd: 20 },
+            july:      { selfpay_adhd: 140, selfpay_asd: 28, innetwork_adhd: 270, innetwork_asd: 54, oon_adhd: 110, oon_asd: 22 },
+            august:    { selfpay_adhd: 145, selfpay_asd: 29, innetwork_adhd: 290, innetwork_asd: 58, oon_adhd: 115, oon_asd: 23 },
+            september: { selfpay_adhd: 150, selfpay_asd: 30, innetwork_adhd: 310, innetwork_asd: 62, oon_adhd: 120, oon_asd: 24 },
+            october:   { selfpay_adhd: 160, selfpay_asd: 32, innetwork_adhd: 330, innetwork_asd: 66, oon_adhd: 125, oon_asd: 25 },
+            november:  { selfpay_adhd: 165, selfpay_asd: 33, innetwork_adhd: 350, innetwork_asd: 70, oon_adhd: 130, oon_asd: 26 },
+            december:  { selfpay_adhd: 170, selfpay_asd: 34, innetwork_adhd: 370, innetwork_asd: 74, oon_adhd: 135, oon_asd: 27 }
+          },
+          ireland: {
+            january:   { b2c_adhd: 55,  b2c_asd: 11 },
+            february:  { b2c_adhd: 58,  b2c_asd: 12 },
+            march:     { b2c_adhd: 62,  b2c_asd: 12 },
+            april:     { b2c_adhd: 65,  b2c_asd: 13 },
+            may:       { b2c_adhd: 70,  b2c_asd: 14 },
+            june:      { b2c_adhd: 73,  b2c_asd: 15 },
+            july:      { b2c_adhd: 78,  b2c_asd: 16 },
+            august:    { b2c_adhd: 82,  b2c_asd: 16 },
+            september: { b2c_adhd: 86,  b2c_asd: 17 },
+            october:   { b2c_adhd: 90,  b2c_asd: 18 },
+            november:  { b2c_adhd: 95,  b2c_asd: 19 },
+            december:  { b2c_adhd: 100, b2c_asd: 20 }
+          }
+        },
+        optimistic: {
+          uk: {
+            january:   { b2c_adhd: 630, b2c_asd: 350, nhs_adhd: 1260, nhs_asd: 840 },
+            february:  { b2c_adhd: 665, b2c_asd: 364, nhs_adhd: 1330, nhs_asd: 875 },
+            march:     { b2c_adhd: 700, b2c_asd: 385, nhs_adhd: 1400, nhs_asd: 910 },
+            april:     { b2c_adhd: 735, b2c_asd: 406, nhs_adhd: 1470, nhs_asd: 945 },
+            may:       { b2c_adhd: 770, b2c_asd: 420, nhs_adhd: 1540, nhs_asd: 980 },
+            june:      { b2c_adhd: 770, b2c_asd: 434, nhs_adhd: 1540, nhs_asd: 1015 },
+            july:      { b2c_adhd: 805, b2c_asd: 455, nhs_adhd: 1610, nhs_asd: 1050 },
+            august:    { b2c_adhd: 805, b2c_asd: 476, nhs_adhd: 1610, nhs_asd: 1085 },
+            september: { b2c_adhd: 840, b2c_asd: 490, nhs_adhd: 1680, nhs_asd: 1120 },
+            october:   { b2c_adhd: 840, b2c_asd: 504, nhs_adhd: 1680, nhs_asd: 1155 },
+            november:  { b2c_adhd: 875, b2c_asd: 525, nhs_adhd: 1750, nhs_asd: 1190 },
+            december:  { b2c_adhd: 875, b2c_asd: 546, nhs_adhd: 1750, nhs_asd: 1225 }
+          },
+          us: {
+            january:   { selfpay_adhd: 140, selfpay_asd: 28, innetwork_adhd: 210, innetwork_asd: 42, oon_adhd: 98,  oon_asd: 20 },
+            february:  { selfpay_adhd: 147, selfpay_asd: 29, innetwork_adhd: 238, innetwork_asd: 48, oon_adhd: 105, oon_asd: 21 },
+            march:     { selfpay_adhd: 161, selfpay_asd: 32, innetwork_adhd: 266, innetwork_asd: 53, oon_adhd: 112, oon_asd: 22 },
+            april:     { selfpay_adhd: 168, selfpay_asd: 34, innetwork_adhd: 294, innetwork_asd: 59, oon_adhd: 126, oon_asd: 25 },
+            may:       { selfpay_adhd: 182, selfpay_asd: 36, innetwork_adhd: 322, innetwork_asd: 64, oon_adhd: 133, oon_asd: 27 },
+            june:      { selfpay_adhd: 189, selfpay_asd: 38, innetwork_adhd: 350, innetwork_asd: 70, oon_adhd: 140, oon_asd: 28 },
+            july:      { selfpay_adhd: 196, selfpay_asd: 39, innetwork_adhd: 378, innetwork_asd: 76, oon_adhd: 154, oon_asd: 31 },
+            august:    { selfpay_adhd: 203, selfpay_asd: 41, innetwork_adhd: 406, innetwork_asd: 81, oon_adhd: 161, oon_asd: 32 },
+            september: { selfpay_adhd: 210, selfpay_asd: 42, innetwork_adhd: 434, innetwork_asd: 87, oon_adhd: 168, oon_asd: 34 },
+            october:   { selfpay_adhd: 224, selfpay_asd: 45, innetwork_adhd: 462, innetwork_asd: 92, oon_adhd: 175, oon_asd: 35 },
+            november:  { selfpay_adhd: 231, selfpay_asd: 46, innetwork_adhd: 490, innetwork_asd: 98, oon_adhd: 182, oon_asd: 36 },
+            december:  { selfpay_adhd: 238, selfpay_asd: 48, innetwork_adhd: 518, innetwork_asd: 104, oon_adhd: 189, oon_asd: 38 }
+          },
+          ireland: {
+            january:   { b2c_adhd: 77,  b2c_asd: 15 },
+            february:  { b2c_adhd: 81,  b2c_asd: 17 },
+            march:     { b2c_adhd: 87,  b2c_asd: 17 },
+            april:     { b2c_adhd: 91,  b2c_asd: 18 },
+            may:       { b2c_adhd: 98,  b2c_asd: 20 },
+            june:      { b2c_adhd: 102, b2c_asd: 21 },
+            july:      { b2c_adhd: 109, b2c_asd: 22 },
+            august:    { b2c_adhd: 115, b2c_asd: 22 },
+            september: { b2c_adhd: 120, b2c_asd: 24 },
+            october:   { b2c_adhd: 126, b2c_asd: 25 },
+            november:  { b2c_adhd: 133, b2c_asd: 27 },
+            december:  { b2c_adhd: 140, b2c_asd: 28 }
+          }
+        }
       }
     },
     year_2029: {
@@ -413,7 +661,7 @@ const financialData = {
       total_revenue: 100000000,
       markets: ['UK', 'US (40+ states)', 'Ireland', 'NL', 'DE', 'Nordics'],
       strategy: 'Full US coverage, Nordic hub, SaaS licensing',
-      gross_profit: 46000000, // Scale efficiencies
+      gross_profit: 46000000,
       operating_expenses: 28000000,
       ebitda: 18000000,
       net_profit: 13500000
@@ -598,6 +846,157 @@ const financialData = {
     nhs_adhd_launch_date: 'April 2026',
     nhs_asd_launch_date: 'June 2026',
     asd_launch_date: 'Q4 2025'
+  },
+
+  // ============================================================
+  // MULTI-MARKET EXPANSION (2027-2028)
+  // ============================================================
+
+  // Currency configuration -- static planning rates for financial model
+  currencies: {
+    GBP: { symbol: '\u00A3', rate: 1.00, code: 'GBP' },
+    USD: { symbol: '$', rate: 0.79, code: 'USD' },   // 1 USD = 0.79 GBP
+    EUR: { symbol: '\u20AC', rate: 0.86, code: 'EUR' } // 1 EUR = 0.86 GBP
+  },
+
+  // UK market config (tax corrected from 19% to 25%)
+  uk_market: {
+    tax_rate: 0.25 // UK corporation tax from April 2023
+  },
+
+  // US Market Configuration (launches Q2 2027)
+  us_market: {
+    launch_month: 'april',
+    launch_year: 2027,
+
+    pricing: {
+      selfpay_adhd: 1295,        // USD, midpoint of $995-$1,495 range
+      selfpay_asd: 2200,         // USD, midpoint of $1,800-$2,500
+      innetwork_adhd: 1100,      // USD, contracted insurer rate
+      innetwork_asd: 1800,       // USD, contracted insurer rate
+      oon_adhd: 1295,            // USD, same as self-pay
+      oon_asd: 2200,             // USD, same as self-pay
+      subscription_monthly: 199  // USD/month medication management
+    },
+
+    unit_economics: {
+      selfpay_adhd:   { revenue: 1295, clinical_costs: 450, tech_admin: 80, cac: 400, total_costs: 930,  gross_profit: 365,  margin: 0.28 },
+      selfpay_asd:    { revenue: 2200, clinical_costs: 500, tech_admin: 80, cac: 400, total_costs: 980,  gross_profit: 1220, margin: 0.55 },
+      innetwork_adhd: { revenue: 1100, clinical_costs: 450, tech_admin: 80, cac: 100, total_costs: 630,  gross_profit: 470,  margin: 0.43 },
+      innetwork_asd:  { revenue: 1800, clinical_costs: 500, tech_admin: 80, cac: 100, total_costs: 680,  gross_profit: 1120, margin: 0.62 },
+      oon_adhd:       { revenue: 1295, clinical_costs: 450, tech_admin: 80, cac: 350, total_costs: 880,  gross_profit: 415,  margin: 0.32 },
+      oon_asd:        { revenue: 2200, clinical_costs: 500, tech_admin: 80, cac: 350, total_costs: 930,  gross_profit: 1270, margin: 0.58 },
+      subscription:   { revenue: 199,  clinical_costs: 60,  tech_admin: 15, cac: 0,   total_costs: 75,   gross_profit: 124,  margin: 0.62 }
+    },
+
+    subscription: {
+      take_rate: 0.60,            // 60% of ADHD assessments convert
+      avg_retention_months: 14,
+      monthly_churn_rate: 0.071   // ~1/14
+    },
+
+    tax_rate: 0.27 // ~21% federal + ~6% state blended
+  },
+
+  // Ireland Market Configuration (launches Q3 2027)
+  ireland_market: {
+    launch_month: 'july',
+    launch_year: 2027,
+
+    pricing: {
+      b2c_adhd: 1100, // EUR
+      b2c_asd: 1800   // EUR
+    },
+
+    unit_economics: {
+      b2c_adhd: { revenue: 1100, clinical_costs: 480, tech_admin: 50, cac: 200, total_costs: 730, gross_profit: 370,  margin: 0.34 },
+      b2c_asd:  { revenue: 1800, clinical_costs: 500, tech_admin: 50, cac: 200, total_costs: 750, gross_profit: 1050, margin: 0.58 }
+    },
+
+    tax_rate: 0.125 // 12.5% Ireland corporate tax
+  },
+
+  // Funding rounds (cash injection, not revenue)
+  funding_rounds: {
+    series_a: { amount_gbp: 3000000,  date: 'Q1 2026', status: 'completed' },
+    series_b: { amount_gbp: 10000000, date: 'Q1 2027', status: 'planned' }
+  },
+
+  // OpEx schedules by market and year
+  opex_by_market: {
+    year_2027: {
+      // UK: continues from 2026 Dec trajectory (~125K), scales with NHS
+      uk: {
+        january: 130000, february: 133000, march: 136000,
+        april: 140000, may: 143000, june: 146000,
+        july: 150000, august: 153000, september: 156000,
+        october: 160000, november: 163000, december: 166000
+      },
+      // US: MSO setup costs pre-launch, then ramp (USD)
+      us: {
+        january: 80000, february: 80000, march: 85000,
+        april: 120000, may: 130000, june: 140000,
+        july: 150000, august: 155000, september: 160000,
+        october: 165000, november: 170000, december: 175000
+      },
+      // Ireland: no costs pre-launch, lightweight from July (EUR)
+      ireland: {
+        january: 0, february: 0, march: 0,
+        april: 0, may: 0, june: 0,
+        july: 15000, august: 18000, september: 20000,
+        october: 22000, november: 25000, december: 27000
+      }
+    },
+    year_2028: {
+      uk: {
+        january: 170000, february: 173000, march: 176000,
+        april: 180000, may: 183000, june: 186000,
+        july: 190000, august: 193000, september: 196000,
+        october: 200000, november: 203000, december: 206000
+      },
+      us: {
+        january: 200000, february: 210000, march: 220000,
+        april: 230000, may: 240000, june: 250000,
+        july: 260000, august: 270000, september: 280000,
+        october: 290000, november: 300000, december: 310000
+      },
+      ireland: {
+        january: 30000, february: 32000, march: 34000,
+        april: 36000, may: 38000, june: 40000,
+        july: 42000, august: 44000, september: 46000,
+        october: 48000, november: 50000, december: 52000
+      }
+    }
+  },
+
+  // US subscription pipeline: active subscriber count per month
+  us_subscription_pipeline: {
+    year_2027: {
+      january: 0, february: 0, march: 0,
+      april: 15, may: 44, june: 78,
+      july: 115, august: 153, september: 192,
+      october: 232, november: 270, december: 308
+    },
+    year_2028: {
+      january: 340, february: 370, march: 400,
+      april: 430, may: 460, june: 490,
+      july: 520, august: 550, september: 580,
+      october: 610, november: 640, december: 670
+    }
+  },
+
+  // UK subscription renewal pipelines (continues from 2026 pattern)
+  renewal_pipeline_2027: {
+    january: 90, february: 70, march: 80,
+    april: 90, may: 100, june: 110,
+    july: 120, august: 130, september: 140,
+    october: 150, november: 160, december: 170
+  },
+  renewal_pipeline_2028: {
+    january: 180, february: 190, march: 200,
+    april: 210, may: 220, june: 230,
+    july: 240, august: 250, september: 260,
+    october: 270, november: 280, december: 290
   }
 };
 
