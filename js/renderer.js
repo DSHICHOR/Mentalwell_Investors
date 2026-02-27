@@ -659,7 +659,7 @@ class FinancialRenderer {
     // --- EBITDA MILESTONE ---
     const ebitdaNote = ebitdaPositiveMonth
       ? `<div class="highlight" style="margin-top: 15px; background: #f0fdf4; border-left: 4px solid #22c55e;">
-          <strong>EBITDA turns positive in ${ebitdaPositiveMonth}</strong> as NHS Right to Choose volumes drive revenue past the operating cost base.
+          <strong>EBITDA turns positive in ${ebitdaPositiveMonth}</strong> once NHS volumes push revenue past the cost base.
           December EBITDA: ${fmtProfit(dec.ebitda)} on ${fmt(dec.totalRevenue)} revenue (${fmtPct(dec.ebitdaMargin)} margin).
           Annualised December run rate: ${fmt(decAnnualized)}.
         </div>`
