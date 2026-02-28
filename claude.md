@@ -84,8 +84,8 @@ Central data repository containing:
 | ADHD Premium | £1,990 | £650 | £60 | £300 | 49% |
 | Child ADHD | £890 | £320 | £60 | £300 | 24% |
 | ASD Assessment | £1,900 | £550 | £60 | £300 | 52% |
-| NHS ADHD | £1,350 | £550 | £60 | £0 | 55% |
-| NHS ASD | £2,000 | £550 | £60 | £0 | 70% |
+| NHS ADHD | £1,350 | £550 | £60 | £50 | 51% |
+| NHS ASD | £2,000 | £550 | £60 | £50 | 67% |
 
 ## Growth Scenarios (2026)
 
