@@ -806,8 +806,8 @@ const financialData = {
 
   // Key Performance Metrics (updated with unit economics)
   metrics: {
-    year_1_revenue_target: 10000000, // £10M target for 2026
-    year_1_patients_target: 6500, // Estimated patients for £10M target
+    year_1_revenue_target: 10000000, // £8-10M target for 2026 (range depends on NHS ramp)
+    year_1_patients_target: 6000, // Estimated patients for £8-10M target (realistic model: ~5,965)
     blended_gross_margin: 0.50, // ~50% blended margin with NHS
     avg_revenue_per_patient: 1540, // Blended average with NHS/Private mix
     monthly_fixed_costs_2026: 8250, // Insurance + CQC + Office + Admin + 10% overhead
