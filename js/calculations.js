@@ -69,27 +69,280 @@ class FinancialCalculations {
     return costs;
   }
 
-  // Calculate monthly operating expenses based on date
+  // Calculate monthly operating expenses based on date (legacy — kept for backward compat)
   calculateMonthlyOperatingExpenses(monthYear = null) {
     let totalOperatingExpenses = 0;
-    
-    // Insurance (always present)
     totalOperatingExpenses += this.data.operating_expenses.insurance;
-    
-    // CQC registration (always present) 
     totalOperatingExpenses += this.data.operating_expenses.cqc_registration;
-    
-    // Office rent (from 2026 onwards)
     if (monthYear && monthYear.includes('2026')) {
       totalOperatingExpenses += this.data.operating_expenses.office_rent.monthly_cost;
-    }
-    
-    // Admin salaries (from 2026 onwards)
-    if (monthYear && monthYear.includes('2026')) {
       totalOperatingExpenses += this.data.operating_expenses.admin_salaries.monthly_cost_total;
     }
-    
     return totalOperatingExpenses;
+  }
+
+  // ============================================================
+  // NEW: Bottom-Up OpEx Calculation
+  // ============================================================
+  calculateBottomUpOpex(monthKey, b2cPatients = 185) {
+    const model = this.data.opex_model_2026;
+    if (!model) {
+      // Fallback to legacy schedule
+      return { total: this.data.opex_monthly_2026?.[monthKey] || 90000, breakdown: {} };
+    }
+
+    const months = ['january','february','march','april','may','june','july','august','september','october','november','december'];
+    const monthIndex = months.indexOf(monthKey);
+
+    // Base costs (verified from Jan bank statement)
+    const base = model.base;
+    let staffBase = base.staff_salaries;
+    let marketing = base.marketing_spend;
+    const software = base.software_platforms;
+    const insurance = base.insurance;
+    const rent = base.office_rent;
+    const cqc = base.cqc_compliance;
+    const niOther = base.ni_pension_other;
+
+    // Marketing scales with B2C patient volume (diminishing returns)
+    if (b2cPatients > model.marketing_scale_base_patients) {
+      const growthRatio = b2cPatients / model.marketing_scale_base_patients;
+      marketing = Math.round(base.marketing_spend * Math.pow(growthRatio, model.marketing_scale_factor));
+    }
+
+    // New hires: add cost from their start month onwards
+    let newHireCost = 0;
+    const newHireDetail = [];
+    for (const hire of model.new_hires) {
+      const hireMonthIdx = months.indexOf(hire.start_month);
+      if (hireMonthIdx >= 0 && monthIndex >= hireMonthIdx) {
+        const monthlyCost = hire.monthly_cost;
+        const withOverhead = Math.round(monthlyCost * (1 + model.employer_overhead_rate));
+        newHireCost += withOverhead;
+        newHireDetail.push({ role: hire.role, cost: withOverhead });
+      }
+    }
+
+    const subtotal = staffBase + marketing + software + insurance + rent + cqc + niOther + newHireCost;
+    const contingency = Math.round(subtotal * model.contingency_rate);
+    const total = subtotal + contingency;
+
+    return {
+      total,
+      breakdown: {
+        staff_salaries: staffBase,
+        marketing: marketing,
+        software: software,
+        insurance: insurance,
+        rent: rent,
+        cqc: cqc,
+        ni_pension_other: niOther,
+        new_hires: newHireCost,
+        new_hire_detail: newHireDetail,
+        contingency: contingency,
+        subtotal: subtotal
+      }
+    };
+  }
+
+  // ============================================================
+  // NEW: Subscription Cohort Revenue
+  // ============================================================
+  calculateSubscriptionCohortRevenue(monthKey, scenario = null) {
+    const model = this.data.subscription_model;
+    if (!model) {
+      // Fallback to legacy pipeline
+      const eligible = this.data.renewal_pipeline_2026?.[monthKey] || 0;
+      return {
+        eligible,
+        renewals: Math.round(eligible * 0.5),
+        revenue: Math.round(eligible * 0.5) * this.data.pricing.subscription_6month,
+        source: 'legacy_pipeline'
+      };
+    }
+
+    // Use the renewal pipeline (which is now annotated with cohort sources)
+    const eligible = this.data.renewal_pipeline_2026?.[monthKey] || 0;
+    const renewals = Math.round(eligible * model.renewal_rate);
+    const revenue = renewals * model.plan_price;
+
+    return {
+      eligible,
+      renewals,
+      revenue,
+      renewal_rate: model.renewal_rate,
+      source: 'cohort_model'
+    };
+  }
+
+  // ============================================================
+  // NEW: Prescriber Demand Model
+  // ============================================================
+  calculatePrescriberDemand(monthlyPatientData) {
+    const config = this.data.prescriber_capacity;
+    if (!config) return null;
+
+    const months = ['january','february','march','april','may','june','july','august','september','october','november','december'];
+    const results = [];
+    const cohorts = []; // Each entry: { startMonth, count }
+
+    for (let i = 0; i < months.length; i++) {
+      const monthData = monthlyPatientData[i];
+      // Only ADHD patients need prescribers (B2C + NHS ADHD)
+      const adhdPatients = (monthData.b2c_adhd || 0) + (monthData.nhs_adhd || 0);
+      const newTitrating = Math.round(adhdPatients * config.titration_start_rate);
+
+      // Patients assessed this month start titration NEXT month (1-month delay)
+      cohorts.push({ startMonth: i + 1, count: newTitrating });
+
+      // Currently titrating = cohorts whose titration window includes this month
+      // A cohort with startMonth=s is titrating during months s, s+1, s+2 (3 months)
+      const currentTitrating = cohorts
+        .filter(c => i >= c.startMonth && i < c.startMonth + config.titration_duration_months)
+        .reduce((sum, c) => sum + c.count, 0);
+
+      // Maintenance patients: completed titration, need monthly check-in
+      // Only count last 6 months of completers (patients eventually transfer to GP shared care)
+      const maintenanceWindow = 6;
+      const completedTitrating = cohorts
+        .filter(c => {
+          const completedMonth = c.startMonth + config.titration_duration_months;
+          return i >= completedMonth && i < completedMonth + maintenanceWindow;
+        })
+        .reduce((sum, c) => sum + c.count, 0);
+      const maintenancePatients = Math.round(completedTitrating * config.maintenance_rate);
+
+      // Total follow-up demand
+      const titrationDemand = currentTitrating * config.followups_per_titrating_patient;
+      const maintenanceDemand = maintenancePatients * config.maintenance_followups;
+      const totalDemand = titrationDemand + maintenanceDemand;
+
+      // Required prescribers
+      const requiredPrescribers = Math.ceil(totalDemand / config.followups_per_prescriber_month);
+      const available = config.initial_prescribers; // Can be updated with hiring plan
+      const utilisation = available > 0 ? totalDemand / (available * config.followups_per_prescriber_month) : 0;
+      const deficit = Math.max(0, requiredPrescribers - available);
+
+      results.push({
+        month: months[i],
+        adhdPatients,
+        newTitrating,
+        currentTitrating,
+        maintenancePatients,
+        titrationDemand,
+        maintenanceDemand,
+        totalDemand,
+        requiredPrescribers,
+        available,
+        utilisation: Math.round(utilisation * 100) / 100,
+        deficit,
+        needsHiring: utilisation > config.max_utilisation_target
+      });
+    }
+
+    return results;
+  }
+
+  // ============================================================
+  // NEW: Clinician Capacity Model
+  // ============================================================
+  calculateClinicianCapacity(monthlyPatientData) {
+    const config = this.data.clinician_capacity;
+    if (!config) return null;
+
+    const months = ['january','february','march','april','may','june','july','august','september','october','november','december'];
+    const results = [];
+
+    for (let i = 0; i < months.length; i++) {
+      const monthData = monthlyPatientData[i];
+      const totalPatients = monthData.total_patients || (
+        (monthData.b2c_adhd || 0) + (monthData.b2c_asd || 0) +
+        (monthData.nhs_adhd || 0) + (monthData.nhs_asd || 0)
+      );
+
+      const requiredFte = totalPatients / config.assessments_per_fte_month;
+      const currentFte = (config.current_adhd_assessors + config.current_asd_assessors) * config.effective_fte_ratio;
+      const targetFte = (config.current_adhd_assessors + config.current_asd_assessors) * config.target_fte_ratio;
+      const utilisation = currentFte > 0 ? requiredFte / currentFte : 0;
+      const targetUtilisation = targetFte > 0 ? requiredFte / targetFte : 0;
+      const gap = Math.max(0, requiredFte - targetFte);
+      const additionalHeadcount = gap > 0 ? Math.ceil(gap / config.target_fte_ratio) : 0;
+
+      results.push({
+        month: months[i],
+        totalPatients,
+        requiredFte: Math.round(requiredFte * 10) / 10,
+        currentFte: Math.round(currentFte * 10) / 10,
+        targetFte: Math.round(targetFte * 10) / 10,
+        utilisationCurrent: Math.round(utilisation * 100),
+        utilisationTarget: Math.round(targetUtilisation * 100),
+        fteGap: Math.round(gap * 10) / 10,
+        additionalHeadcount,
+        status: utilisation > 1.0 ? 'OVER_CAPACITY' : utilisation > 0.85 ? 'HIGH' : 'OK'
+      });
+    }
+
+    return results;
+  }
+
+  // ============================================================
+  // NEW: Working Capital / Cash Flow Model
+  // ============================================================
+  calculateWorkingCapital(monthlyPnL) {
+    const terms = this.data.payment_terms;
+    if (!terms) return null;
+
+    const results = [];
+    let runningCash = terms.starting_cash;
+    const nhsReceivables = []; // Queue of NHS revenue awaiting payment
+
+    for (let i = 0; i < monthlyPnL.length; i++) {
+      const m = monthlyPnL[i];
+
+      // Cash IN: B2C revenue (immediate) + subscription revenue (immediate)
+      const b2cCashIn = m.b2cRev + m.subscriptionRev;
+
+      // NHS revenue goes into receivables (collected after DSO period)
+      nhsReceivables.push({ amount: m.nhsRev, dueMonth: i + Math.round(terms.nhs_dso / 30) });
+
+      // Collect NHS receivables that are due
+      let nhsCashIn = 0;
+      for (const receivable of nhsReceivables) {
+        if (receivable.dueMonth <= i && receivable.amount > 0) {
+          nhsCashIn += receivable.amount;
+          receivable.amount = 0; // Mark as collected
+        }
+      }
+
+      const totalCashIn = b2cCashIn + nhsCashIn;
+
+      // Cash OUT: COGS (paid next month for clinicians, immediate for others) + OpEx
+      // Simplification: all costs paid in current month (conservative)
+      const totalCashOut = m.totalCogs + m.totalOpex;
+
+      // Outstanding NHS receivables
+      const outstandingReceivables = nhsReceivables
+        .filter(r => r.amount > 0)
+        .reduce((sum, r) => sum + r.amount, 0);
+
+      const netCashFlow = totalCashIn - totalCashOut;
+      runningCash += netCashFlow;
+
+      results.push({
+        month: m.month,
+        b2cCashIn,
+        nhsCashIn,
+        totalCashIn,
+        totalCashOut,
+        netCashFlow,
+        runningCash: Math.round(runningCash),
+        outstandingReceivables,
+        // Tax is deferred (paid quarterly/annually) — not modeled monthly for cash
+        monthsOfRunway: totalCashOut > 0 ? Math.round((runningCash / totalCashOut) * 10) / 10 : 999
+      });
+    }
+
+    return results;
   }
 
   // Generate 2025 performance data with actuals and projections
@@ -164,9 +417,9 @@ class FinancialCalculations {
       const monthName = month.charAt(0).toUpperCase() + month.slice(1);
       const totalPatients = Object.values(volumes).reduce((sum, val) => sum + val, 0);
 
-      // Subscription revenue from renewal pipeline at 50% uptake
-      const pipelineEligible = this.data.renewal_pipeline_2026?.[month] || 0;
-      const subscriptionRevenue = Math.round(pipelineEligible * 0.5) * this.data.pricing.subscription_6month;
+      // Subscription revenue from cohort-based renewal model
+      const subCohort = this.calculateSubscriptionCohortRevenue(month);
+      const subscriptionRevenue = subCohort.revenue;
 
       // Check for actuals (full months only, skip partial)
       const actuals = this.data.performance_2026?.actuals?.[month];
@@ -287,10 +540,10 @@ class FinancialCalculations {
         patients = Object.values(volumes).reduce((sum, val) => sum + val, 0);
       }
 
-      // Subscription revenue from renewal pipeline at 50% uptake
-      const pipelineEligible = this.data.renewal_pipeline_2026?.[month] || 0;
-      const subscriptionCount = Math.round(pipelineEligible * 0.5);
-      const subscriptionRev = subscriptionCount * this.data.pricing.subscription_6month;
+      // Subscription revenue from cohort-based renewal model
+      const subData = this.calculateSubscriptionCohortRevenue(month);
+      const subscriptionCount = subData.renewals;
+      const subscriptionRev = subData.revenue;
 
       const b2cRev = b2cAdhdRev + b2cAsdRev;
       const nhsRev = nhsAdhdRev + nhsAsdRev;
@@ -337,8 +590,14 @@ class FinancialCalculations {
       const grossProfit = totalRevenue - totalCogs;
       const grossMargin = totalRevenue > 0 ? grossProfit / totalRevenue : 0;
 
-      // --- OPERATING EXPENSES (monthly schedule from 2025 management accounts) ---
-      const totalOpex = this.data.opex_monthly_2026?.[month] || 90000;
+      // --- OPERATING EXPENSES (bottom-up model with verified Jan anchor) ---
+      const b2cPatients = (volumes.b2c_adhd || 0) + (volumes.b2c_asd || 0);
+      const opexResult = this.calculateBottomUpOpex(month, b2cPatients);
+      // For actual months (Jan/Feb), use bank-verified OpEx
+      const totalOpex = (useActuals && month === 'january') ? 93000 :
+                         (useActuals && month === 'february') ? 91000 :
+                         opexResult.total;
+      const opexBreakdown = opexResult.breakdown;
 
       // --- EBITDA ---
       const ebitda = grossProfit - totalOpex;
@@ -347,7 +606,7 @@ class FinancialCalculations {
       // --- NET INCOME ---
       const depreciation = 2000;
       const ebt = ebitda - depreciation;
-      const tax = Math.max(0, ebt * 0.19);
+      const tax = Math.max(0, ebt * (this.data.uk_market?.tax_rate || 0.25));
       const netIncome = ebt - tax;
 
       monthly.push({
@@ -357,9 +616,10 @@ class FinancialCalculations {
         patients,
         b2cAdhdRev, b2cAsdRev, nhsAdhdRev, nhsAsdRev,
         b2cRev, nhsRev, subscriptionRev, totalRevenue,
+        subscriptionEligible: subData.eligible, subscriptionRenewals: subscriptionCount,
         clinicalCosts, techAdmin, marketingCac, subscriptionCogs, totalCogs,
         grossProfit, grossMargin,
-        totalOpex,
+        totalOpex, opexBreakdown,
         ebitda, ebitdaMargin, depreciation, tax, netIncome
       });
     });
@@ -832,6 +1092,128 @@ class FinancialCalculations {
 
   generatePnL2028(scenario = null) {
     return this.generateMultiMarketPnL(2028, scenario);
+  }
+
+  // ============================================================
+  // NEW: Sensitivity Analysis Table
+  // ============================================================
+  // Varies: NHS launch month × Subscription renewal rate
+  // Returns a matrix of { revenue, ebitda, ebitdaMargin } for each combination
+  generateSensitivityTable(scenario = null) {
+    const nhsDelays = [
+      { label: 'April (On Time)', delayMonths: 0 },
+      { label: 'July (+3 months)', delayMonths: 3 },
+      { label: 'September (+5 months)', delayMonths: 5 }
+    ];
+    const renewalRates = [0.40, 0.55, 0.70];
+
+    const results = [];
+
+    for (const delay of nhsDelays) {
+      const row = { nhsDelay: delay.label, cells: [] };
+
+      for (const rate of renewalRates) {
+        // Temporarily override renewal rate and shift NHS volumes
+        const originalRate = this.data.subscription_model?.renewal_rate;
+        const originalPipeline = { ...this.data.renewal_pipeline_2026 };
+
+        // Override renewal rate
+        if (this.data.subscription_model) {
+          this.data.subscription_model.renewal_rate = rate;
+        }
+
+        // Shift NHS volumes by delay
+        const scenarioKey = scenario || this.data.activeScenario || 'realistic';
+        const projData = this.data.scenarios[scenarioKey]?.projections_2026;
+        const originalProj = {};
+        const months = ['january','february','march','april','may','june','july','august','september','october','november','december'];
+
+        if (delay.delayMonths > 0 && projData) {
+          // Save originals and zero out NHS for delayed months
+          months.forEach((m, i) => {
+            originalProj[m] = { ...projData[m] };
+            if (i >= 3 && i < 3 + delay.delayMonths) {
+              // Zero out NHS for months that are now delayed
+              projData[m] = { ...projData[m], nhs_adhd: 0, nhs_asd: 0 };
+            }
+          });
+        }
+
+        // Run P&L with overrides
+        const pnl = this.generatePnL2026(scenarioKey);
+
+        // Restore originals
+        if (this.data.subscription_model && originalRate !== undefined) {
+          this.data.subscription_model.renewal_rate = originalRate;
+        }
+        if (delay.delayMonths > 0 && projData) {
+          months.forEach(m => {
+            if (originalProj[m]) {
+              projData[m].nhs_adhd = originalProj[m].nhs_adhd;
+              projData[m].nhs_asd = originalProj[m].nhs_asd;
+            }
+          });
+        }
+
+        row.cells.push({
+          renewalRate: Math.round(rate * 100) + '%',
+          revenue: pnl.annual.totalRevenue,
+          ebitda: pnl.annual.ebitda,
+          ebitdaMargin: pnl.annual.totalRevenue > 0 ? pnl.annual.ebitda / pnl.annual.totalRevenue : 0,
+          netIncome: pnl.annual.netIncome,
+          patients: pnl.annual.patients
+        });
+      }
+
+      results.push(row);
+    }
+
+    return { rows: results, renewalRates: renewalRates.map(r => Math.round(r * 100) + '%') };
+  }
+
+  // ============================================================
+  // NEW: Full Capacity Plan (combined clinicians + prescribers)
+  // ============================================================
+  generateCapacityPlan(scenario = null) {
+    const scenarioKey = scenario || this.data.activeScenario || 'realistic';
+    const projData = this.data.scenarios[scenarioKey]?.projections_2026;
+    if (!projData) return null;
+
+    const months = ['january','february','march','april','may','june','july','august','september','october','november','december'];
+
+    // Build monthly patient data array
+    const monthlyPatients = months.map(m => {
+      const v = projData[m];
+      return {
+        b2c_adhd: v.b2c_adhd || 0,
+        b2c_asd: v.b2c_asd || 0,
+        nhs_adhd: v.nhs_adhd || 0,
+        nhs_asd: v.nhs_asd || 0,
+        total_patients: (v.b2c_adhd || 0) + (v.b2c_asd || 0) + (v.nhs_adhd || 0) + (v.nhs_asd || 0)
+      };
+    });
+
+    const clinicians = this.calculateClinicianCapacity(monthlyPatients);
+    const prescribers = this.calculatePrescriberDemand(monthlyPatients);
+
+    return { clinicians, prescribers, months };
+  }
+
+  // ============================================================
+  // NEW: Enhanced P&L with Working Capital
+  // ============================================================
+  generateEnhancedPnL2026(scenario = null) {
+    const pnl = this.generatePnL2026(scenario);
+    const workingCapital = this.calculateWorkingCapital(pnl.monthly);
+    const capacityPlan = this.generateCapacityPlan(scenario);
+    const sensitivity = this.generateSensitivityTable(scenario);
+
+    return {
+      ...pnl,
+      workingCapital,
+      capacityPlan,
+      sensitivity
+    };
   }
 }
 
