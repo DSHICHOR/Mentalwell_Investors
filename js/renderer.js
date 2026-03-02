@@ -2170,6 +2170,259 @@ class FinancialRenderer {
     if (additionalFundsContainer) {
       additionalFundsContainer.innerHTML = this.renderAdditionalFunds();
     }
+
+    // New sections from P&L rework
+    const capacityContainer = document.getElementById('capacity-planning-table');
+    if (capacityContainer) {
+      capacityContainer.innerHTML = this.renderCapacityPlanTable();
+    }
+
+    const cashFlowContainer = document.getElementById('working-capital-table');
+    if (cashFlowContainer) {
+      cashFlowContainer.innerHTML = this.renderWorkingCapitalTable();
+    }
+
+    const sensitivityContainer = document.getElementById('sensitivity-table');
+    if (sensitivityContainer) {
+      sensitivityContainer.innerHTML = this.renderSensitivityTable();
+    }
+
+    const opexWaterfallContainer = document.getElementById('opex-waterfall-table');
+    if (opexWaterfallContainer) {
+      opexWaterfallContainer.innerHTML = this.renderOpexWaterfallTable();
+    }
+  }
+
+  // ============================================================
+  // NEW: Capacity Planning Table (Clinicians + Prescribers)
+  // ============================================================
+  renderCapacityPlanTable(scenario = null) {
+    const cap = this.calc.generateCapacityPlan(scenario);
+    if (!cap) return '<p>Capacity data unavailable</p>';
+
+    let html = `
+    <h4 style="margin-top:20px;">Clinician Capacity</h4>
+    <p style="font-size:0.85em;color:#555;">Full-time FTE = 80 assessments/month (4/day). Current team part-time (~0.5 FTE avg). Target: increase to 0.7 FTE.</p>
+    <table>
+      <thead>
+        <tr style="background:#030765;color:white;">
+          <th>Month</th>
+          <th>Patients</th>
+          <th>FTE Required</th>
+          <th>FTE Available<br><small>(current)</small></th>
+          <th>FTE Available<br><small>(target)</small></th>
+          <th>Utilisation</th>
+          <th>Additional<br>Headcount</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>`;
+
+    for (const c of cap.clinicians) {
+      const monthLabel = c.month.charAt(0).toUpperCase() + c.month.slice(1);
+      const statusColor = c.status === 'OVER_CAPACITY' ? '#ff4444' : c.status === 'HIGH' ? '#ff9900' : '#66ec37';
+      const statusBg = c.status === 'OVER_CAPACITY' ? '#fff0f0' : c.status === 'HIGH' ? '#fff8f0' : '#f0fff0';
+      html += `
+        <tr style="background:${statusBg}">
+          <td><strong>${monthLabel}</strong></td>
+          <td>${c.totalPatients}</td>
+          <td>${c.requiredFte}</td>
+          <td>${c.currentFte}</td>
+          <td>${c.targetFte}</td>
+          <td>${c.utilisationTarget}%</td>
+          <td>${c.additionalHeadcount > 0 ? '+' + c.additionalHeadcount : '-'}</td>
+          <td><span style="color:${statusColor};font-weight:bold;">${c.status}</span></td>
+        </tr>`;
+    }
+    html += '</tbody></table>';
+
+    // Prescriber table
+    html += `
+    <h4 style="margin-top:30px;">Prescriber Capacity</h4>
+    <p style="font-size:0.85em;color:#555;">170 follow-ups/prescriber/month. 90% of ADHD patients start titration (1-month delay). 3 months titration + 6 months maintenance.</p>
+    <table>
+      <thead>
+        <tr style="background:#030765;color:white;">
+          <th>Month</th>
+          <th>ADHD Patients</th>
+          <th>Active Titrating</th>
+          <th>Maintenance</th>
+          <th>Follow-up Demand</th>
+          <th>Prescribers Needed</th>
+          <th>Available</th>
+          <th>Deficit</th>
+        </tr>
+      </thead>
+      <tbody>`;
+
+    for (const p of cap.prescribers) {
+      const monthLabel = p.month.charAt(0).toUpperCase() + p.month.slice(1);
+      const bg = p.needsHiring ? '#fff0f0' : '#f0fff0';
+      html += `
+        <tr style="background:${bg}">
+          <td><strong>${monthLabel}</strong></td>
+          <td>${p.adhdPatients}</td>
+          <td>${p.currentTitrating}</td>
+          <td>${p.maintenancePatients}</td>
+          <td>${p.totalDemand.toLocaleString()}</td>
+          <td><strong>${p.requiredPrescribers}</strong></td>
+          <td>${p.available}</td>
+          <td style="color:${p.deficit > 0 ? '#ff4444' : '#333'};font-weight:bold;">${p.deficit > 0 ? '+' + p.deficit + ' needed' : 'OK'}</td>
+        </tr>`;
+    }
+    html += '</tbody></table>';
+
+    return html;
+  }
+
+  // ============================================================
+  // NEW: Working Capital / Cash Flow Table
+  // ============================================================
+  renderWorkingCapitalTable(scenario = null) {
+    const pnl = this.calc.generatePnL2026(scenario);
+    const wc = this.calc.calculateWorkingCapital(pnl.monthly);
+    if (!wc) return '<p>Working capital data unavailable</p>';
+
+    let html = `
+    <p style="font-size:0.85em;color:#555;">B2C revenue collected immediately (Stripe). NHS revenue collected on 60-day terms (2-month lag). Starting cash: £3.25M (seed + Series A).</p>
+    <table>
+      <thead>
+        <tr style="background:#030765;color:white;">
+          <th>Month</th>
+          <th>B2C Cash In</th>
+          <th>NHS Cash In</th>
+          <th>Total Cash In</th>
+          <th>Cash Out</th>
+          <th>Net Flow</th>
+          <th>Cash Position</th>
+          <th>NHS Receivables</th>
+          <th>Runway</th>
+        </tr>
+      </thead>
+      <tbody>`;
+
+    for (const m of wc) {
+      const cashColor = m.runningCash < 2000000 ? '#ff4444' : m.runningCash < 3000000 ? '#ff9900' : '#333';
+      html += `
+        <tr>
+          <td><strong>${m.month}</strong></td>
+          <td>${this.calc.formatCurrency(m.b2cCashIn)}</td>
+          <td>${this.calc.formatCurrency(m.nhsCashIn)}</td>
+          <td>${this.calc.formatCurrency(m.totalCashIn)}</td>
+          <td style="color:#cc0000;">(${this.calc.formatCurrency(m.totalCashOut)})</td>
+          <td style="color:${m.netCashFlow >= 0 ? '#006600' : '#cc0000'}">${this.calc.formatCurrency(m.netCashFlow)}</td>
+          <td style="font-weight:bold;color:${cashColor}">${this.calc.formatCurrency(m.runningCash)}</td>
+          <td style="color:#996600">${this.calc.formatCurrency(m.outstandingReceivables)}</td>
+          <td>${m.monthsOfRunway} mo</td>
+        </tr>`;
+    }
+    html += '</tbody></table>';
+
+    return html;
+  }
+
+  // ============================================================
+  // NEW: Sensitivity Analysis Table
+  // ============================================================
+  renderSensitivityTable(scenario = null) {
+    const sens = this.calc.generateSensitivityTable(scenario);
+    if (!sens) return '<p>Sensitivity data unavailable</p>';
+
+    let html = `
+    <p style="font-size:0.85em;color:#555;">Impact of NHS launch delay and subscription renewal rate on annual revenue and EBITDA margin. Realistic scenario as base.</p>
+    <table>
+      <thead>
+        <tr style="background:#030765;color:white;">
+          <th>NHS Launch Timing</th>`;
+    for (const rate of sens.renewalRates) {
+      html += `<th>Renewal Rate: ${rate}</th>`;
+    }
+    html += '</tr></thead><tbody>';
+
+    for (const row of sens.rows) {
+      html += '<tr>';
+      html += `<td><strong>${row.nhsDelay}</strong></td>`;
+      for (const cell of row.cells) {
+        const margin = Math.round(cell.ebitdaMargin * 100);
+        const bg = margin >= 25 ? '#e6f5e6' : margin >= 15 ? '#fff8e6' : '#ffe6e6';
+        html += `<td style="background:${bg};text-align:center;">
+          <strong>${this.calc.formatCurrency(Math.round(cell.revenue))}</strong><br>
+          <span style="font-size:0.85em;">EBITDA: ${margin}%</span><br>
+          <span style="font-size:0.8em;color:#666;">${cell.patients?.toLocaleString() || '?'} patients</span>
+        </td>`;
+      }
+      html += '</tr>';
+    }
+    html += '</tbody></table>';
+
+    return html;
+  }
+
+  // ============================================================
+  // NEW: OpEx Waterfall Table
+  // ============================================================
+  renderOpexWaterfallTable(scenario = null) {
+    const pnl = this.calc.generatePnL2026(scenario);
+    if (!pnl) return '<p>OpEx data unavailable</p>';
+
+    let html = `
+    <p style="font-size:0.85em;color:#555;">Bottom-up OpEx model. January verified from bank statement. New hires phased from March. Marketing scales with B2C patient volume.</p>
+    <table>
+      <thead>
+        <tr style="background:#030765;color:white;">
+          <th>Month</th>
+          <th>Staff<br>Salaries</th>
+          <th>Marketing</th>
+          <th>Software</th>
+          <th>Insurance<br>+ CQC</th>
+          <th>Rent</th>
+          <th>NI/Pension<br>/Other</th>
+          <th>New Hires</th>
+          <th>Contingency</th>
+          <th><strong>Total</strong></th>
+        </tr>
+      </thead>
+      <tbody>`;
+
+    let annualTotal = 0;
+    for (const m of pnl.monthly) {
+      const b = m.opexBreakdown || {};
+      annualTotal += m.totalOpex;
+      html += `
+        <tr>
+          <td><strong>${m.month}</strong></td>
+          <td>${this.calc.formatCurrency(b.staff_salaries || 0)}</td>
+          <td>${this.calc.formatCurrency(b.marketing || 0)}</td>
+          <td>${this.calc.formatCurrency(b.software || 0)}</td>
+          <td>${this.calc.formatCurrency((b.insurance || 0) + (b.cqc || 0))}</td>
+          <td>${this.calc.formatCurrency(b.rent || 0)}</td>
+          <td>${this.calc.formatCurrency(b.ni_pension_other || 0)}</td>
+          <td>${this.calc.formatCurrency(b.new_hires || 0)}</td>
+          <td>${this.calc.formatCurrency(b.contingency || 0)}</td>
+          <td><strong>${this.calc.formatCurrency(m.totalOpex)}</strong></td>
+        </tr>`;
+    }
+
+    html += `
+        <tr style="background:#030765;color:white;font-weight:bold;">
+          <td>ANNUAL TOTAL</td>
+          <td colspan="8"></td>
+          <td>${this.calc.formatCurrency(annualTotal)}</td>
+        </tr>`;
+    html += '</tbody></table>';
+
+    // New hire detail
+    const hires = this.data.opex_model_2026?.new_hires;
+    if (hires) {
+      html += '<h5 style="margin-top:15px;">Planned Hires</h5><table><thead><tr style="background:#f0f0f0;"><th>Role</th><th>Annual Salary</th><th>Start Month</th><th>Monthly Cost (inc. NI/pension)</th></tr></thead><tbody>';
+      for (const h of hires) {
+        const withOverhead = Math.round(h.monthly_cost * (1 + (this.data.opex_model_2026?.employer_overhead_rate || 0.168)));
+        html += `<tr><td>${h.role}</td><td>${this.calc.formatCurrency(h.annual_salary)}</td><td>${h.start_month.charAt(0).toUpperCase() + h.start_month.slice(1)} 2026</td><td>${this.calc.formatCurrency(withOverhead)}</td></tr>`;
+      }
+      html += '</tbody></table>';
+    }
+
+    return html;
   }
 }
 

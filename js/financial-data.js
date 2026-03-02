@@ -239,22 +239,125 @@ const financialData = {
     }
   },
 
-  // Renewal Pipeline (Stripe verified) - eligible renewal transactions per month
-  // Source: scripts/stripe_kpi_analysis.py
-  // Subscription revenue = eligible × 50% uptake × £750
+  // Renewal Pipeline (Stripe verified for Feb-Jul, cohort-derived for Aug+)
+  // Source: scripts/stripe_kpi_analysis.py (actuals), cohort model (projections)
+  // Eligible = patients who purchased complete_care + premium + 6m/12m plans, 6 months prior
+  // Subscription revenue = eligible × renewal_rate × £750
   renewal_pipeline_2026: {
     january: 0,
-    february: 36,     // From Aug 2025 purchases
-    march: 81,        // From Sep 2025 purchases
-    april: 99,        // From Oct 2025 purchases
-    may: 141,         // From Nov 2025 purchases
-    june: 105,        // From Dec 2025 purchases
-    july: 111,        // From Jan 2026 purchases
-    august: 55,       // From Feb 2026 purchases
-    september: 90,    // Estimated from Mar 2026 projected volumes
-    october: 60,      // Estimated from Apr 2026 B2C volumes
-    november: 70,     // Estimated from May 2026 B2C volumes
-    december: 80      // Estimated from Jun 2026 B2C volumes
+    february: 36,     // From Aug 2025: 26 complete + 6 adult_6m + 4 child_6m = 36 (Stripe verified)
+    march: 81,        // From Sep 2025: 51 complete + 2 premium + 14 adult_6m + 13 child_6m + 1 child_12m = 81 (Stripe verified)
+    april: 99,        // From Oct 2025: 68 complete + 3 premium + 16 adult_6m + 12 child_6m = 99 (Stripe verified)
+    may: 141,         // From Nov 2025: 90 complete + 10 premium + 26 adult_6m + 14 child_6m + 1 adult_12m = 141 (Stripe verified)
+    june: 105,        // From Dec 2025: 54 complete + 6 premium + 30 adult_6m + 14 child_6m + 1 adult_12m = 105 (Stripe verified)
+    july: 111,        // From Jan 2026: 71 complete + 4 premium + 25 adult_6m + 11 child_6m = 111 (Stripe verified)
+    august: 89,       // From Feb 2026: 56 complete + 5 premium + 21 adult_6m + 5 child_6m + 2 adult_12m = 89 (cohort model)
+    september: 99,    // From Mar 2026: ~55% of 180 B2C patients (cohort-derived)
+    october: 66,      // From Apr 2026: ~55% of 120 B2C patients (B2C only, excl NHS)
+    november: 77,     // From May 2026: ~55% of 140 B2C patients
+    december: 88      // From Jun 2026: ~55% of 160 B2C patients
+  },
+
+  // Subscription Cohort Model — replaces static pipeline with dynamic cohort tracking
+  // B2C patients who purchased a plan are eligible for renewal 6 months later
+  // ~55% of B2C patients buy a subscription-eligible product (complete care, premium, plans)
+  // Renewal rate: 55% (midpoint of observed 50-60% range)
+  subscription_model: {
+    eligible_product_share: 0.55,  // % of B2C patients who buy subscription-eligible products
+    renewal_rate: 0.55,            // % of eligible patients who renew (50-60% observed)
+    plan_price: 750,               // Adult 6-month plan price
+    child_plan_price: 1050,        // Child 6-month plan price (not yet modeled separately)
+    // Verified cohorts from Stripe (exact eligible counts by source month)
+    verified_cohorts: {
+      august_2025: 36,     // → eligible Feb 2026
+      september_2025: 81,  // → eligible Mar 2026
+      october_2025: 99,    // → eligible Apr 2026
+      november_2025: 141,  // → eligible May 2026
+      december_2025: 105,  // → eligible Jun 2026
+      january_2026: 111,   // → eligible Jul 2026
+      february_2026: 89    // → eligible Aug 2026
+    }
+  },
+
+  // Prescriber Capacity Model
+  // Each prescriber handles ongoing titration follow-ups for ADHD patients
+  // 90% of new ADHD patients start titration, lasting ~3 months with 2 follow-ups/month
+  // Once stabilised, patients move to shared care (GP) or monthly maintenance (lower demand)
+  prescriber_capacity: {
+    followups_per_prescriber_month: 170,  // Full-time capacity
+    titration_start_rate: 0.90,           // 90% of ADHD patients start medication
+    titration_duration_months: 3,          // Average titration period
+    followups_per_titrating_patient: 2,    // Monthly follow-ups during titration
+    maintenance_rate: 0.30,                // 30% continue post-titration as maintenance
+    maintenance_followups: 1,              // Monthly follow-ups for maintenance patients
+    initial_prescribers: 3,                // Current FT prescribers
+    prescriber_annual_salary: 65000,       // £65K average (NIP salary)
+    // Hiring triggers: when utilisation > 85%, hire additional prescriber
+    hiring_lead_time_months: 2,            // NHS credentialing + onboarding
+    max_utilisation_target: 0.85
+  },
+
+  // Clinician Capacity Model
+  // Full-time clinician: 4 assessments/day × 20 working days = 80/month
+  // Current team works part-time at varying schedules (~0.5 FTE average)
+  clinician_capacity: {
+    assessments_per_fte_month: 80,   // 4/day × 20 days
+    current_adhd_assessors: 12,      // Part-time psychiatrists
+    current_asd_assessors: 3,        // Part-time (psychologist + SLT)
+    current_support_staff: 3,        // QA, patient support
+    effective_fte_ratio: 0.50,       // Current average (part-time)
+    target_fte_ratio: 0.70,          // Achievable with increased hours
+    // Current effective capacity: 12 × 0.5 × 80 = 480 ADHD assessments/month
+    // Target capacity: 12 × 0.7 × 80 = 672 ADHD assessments/month
+    clinician_annual_salary: 85000   // Average psychiatrist contractor cost
+  },
+
+  // Bottom-Up OpEx Model for 2026
+  // Replaces flat opex_monthly_2026 schedule with component-based model
+  // January verified from bank statement (£93K), subsequent months built bottom-up
+  opex_model_2026: {
+    // Base monthly costs (existing team + fixed costs, verified from Jan bank statement)
+    base: {
+      staff_salaries: 45000,    // Existing team payroll (verified Jan)
+      marketing_spend: 18000,   // Google/Facebook ads (verified Jan, scales with B2C volume)
+      software_platforms: 5000, // EMR, telehealth, CRM, Stripe
+      insurance: 3000,          // Professional indemnity
+      office_rent: 8000,        // Facilities
+      cqc_compliance: 500,      // CQC registration + inspection prep
+      ni_pension_other: 13500   // Employer NI, pension contributions, misc (verified Jan)
+    },
+    // January total: £93,000 (bank statement verified)
+    // Base total: £93,000/month
+
+    // New hires planned for 2026 (phased)
+    new_hires: [
+      { role: 'Senior Operations Manager', annual_salary: 70000, start_month: 'march', monthly_cost: 5833 },
+      { role: 'Clinical Governance Lead', annual_salary: 55000, start_month: 'april', monthly_cost: 4583 },
+      { role: 'Customer Support', annual_salary: 32000, start_month: 'april', monthly_cost: 2667 },
+      { role: 'QA Specialist 1', annual_salary: 35000, start_month: 'may', monthly_cost: 2917 },
+      { role: 'QA Specialist 2', annual_salary: 35000, start_month: 'july', monthly_cost: 2917 }
+    ],
+    // Total new hire cost at full run-rate: £18,917/month (£227K annual)
+
+    // Marketing scaling factor: marketing spend increases with B2C patient volume
+    // Base: £18K/month for ~185 patients. Scales proportionally but with diminishing returns
+    marketing_scale_base_patients: 185,
+    marketing_scale_factor: 0.7,  // Elasticity: 70% of patient growth rate
+
+    // Employer NI/pension overhead on new hires (13.8% employer NI + 3% pension)
+    employer_overhead_rate: 0.168,
+
+    // Unexpected overhead buffer
+    contingency_rate: 0.05  // 5% contingency on total (reduced from 15% — now bottom-up)
+  },
+
+  // Payment Terms / Working Capital Assumptions
+  payment_terms: {
+    b2c_dso: 0,          // B2C paid upfront via Stripe (same-day settlement)
+    nhs_dso: 60,         // NHS pays on 60-day terms (2 months)
+    clinician_dpo: 30,   // Clinicians paid monthly (30-day terms)
+    stripe_processing_days: 2,  // Stripe settlement delay (negligible)
+    starting_cash: 3250000      // £250K existing + £3M Series A
   },
 
   // 2025 Annual Summary (calculated from Stripe actuals)
@@ -806,8 +909,8 @@ const financialData = {
 
   // Key Performance Metrics (updated with unit economics)
   metrics: {
-    year_1_revenue_target: 10000000, // £10M target for 2026
-    year_1_patients_target: 6500, // Estimated patients for £10M target
+    year_1_revenue_target: 10000000, // £8-10M target for 2026 (range depends on NHS ramp)
+    year_1_patients_target: 6000, // Estimated patients for £8-10M target (realistic model: ~5,965)
     blended_gross_margin: 0.50, // ~50% blended margin with NHS
     avg_revenue_per_patient: 1540, // Blended average with NHS/Private mix
     monthly_fixed_costs_2026: 8250, // Insurance + CQC + Office + Admin + 10% overhead
